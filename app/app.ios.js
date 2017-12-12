@@ -40,16 +40,7 @@ class App extends Component {
 					title: 'Home',
 					navigatorStyle,
 					navigatorButtons: {}
-                },
-                {
-					label: 'Home1',
-					screen: 'Home',
-					icon: iconsMap['ios-home-outline'],
-					selectedIcon: iconsMap['ios-home'],
-					title: 'Home1',
-					navigatorStyle,
-					navigatorButtons: {}
-				}
+                }
 			],
 			tabsStyle: {
 				tabBarButtonColor: 'white',
