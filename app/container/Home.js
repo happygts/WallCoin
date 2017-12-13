@@ -27,7 +27,6 @@ class Home extends Component {
   }
 
   componentWillMount() {
-    this._onRefresh();
     console.log("componentWillMount");
   }
 

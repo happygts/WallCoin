@@ -21,13 +21,11 @@ import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 
 const Icon = createIconSetFromFontello(fontelloConfig);
 
-const CardCryptoCurrency = ({ cryptoCurrency, pressFav, isFav, checkIfIcon }) => (
+const CardMyCoin = ({ myCoin, augmentation, myCoinValue, myCoinOwn, checkIfIcon }) => (
     <SwipeRow style={styles.listElement}
         rightOpenValue={-75}
         right={
-            <TouchableHighlight onPress={() => pressFav(cryptoCurrency.id)}>
-                {isFav(cryptoCurrency.id) ? <FontAwesomeIcon name="star" color="#FFD700" style={{ marginTop: 45, marginLeft: 11 }} size={30} /> : <FontAwesomeIcon name="star-o" color="#FFD700" style={{ marginTop: 45, marginLeft: 11 }} size={30} />}
-            </TouchableHighlight >
+            <View></View>
         }
         body={
             <Container>
@@ -35,31 +33,33 @@ const CardCryptoCurrency = ({ cryptoCurrency, pressFav, isFav, checkIfIcon }) =>
                     <Card>
                         <CardItem>
                             <Left>
-                                {checkIfIcon(cryptoCurrency.symbol.toLowerCase() + "-alt", fontelloConfig) ?
-                                    <Icon name={cryptoCurrency.symbol.toLowerCase() + "-alt"} size={55} style={{ marginTop: 5, marginBottom: 5 }} /> :
+                                {checkIfIcon(myCoinValue.symbol.toLowerCase() + "-alt", fontelloConfig) ?
+                                    <Icon name={myCoinValue.symbol.toLowerCase() + "-alt"} size={55} style={{ marginTop: 5, marginBottom: 5 }} /> :
                                     <Icon name="coin-2" size={55} style={{ marginTop: 5, marginBottom: 5 }} />
                                 }
                                 <Body>
-                                    <Text>{cryptoCurrency.name}</Text>
-                                    <Text note>{cryptoCurrency.symbol}</Text>
+                                    <Text>{myCoinValue.name}</Text>
+                                    <Text note>{myCoin.quantity} {myCoinValue.symbol}</Text>
                                 </Body>
                             </Left>
                             <Body>
-                                <Body>
-                                    <Text style={{fontSize: 12}}> Price (USD) : {parseFloat(cryptoCurrency.price_usd).toPrecision(8)}</Text>
-                                </Body>
+                                <CardItem>
+                                    <Text style={{fontSize: 12}}> Price (USD) : {myCoinOwn}</Text>
+                                </CardItem>
+                                <CardItem>
+                                    <Text style={{fontSize: 12}}> Beneficial : {(myCoinOwn - (myCoin.quantity * myCoin.buyingPrice)).toPrecision(8) } $</Text>
+                                </CardItem>
                                 <CardItem>
                                     <View style={{
                                         flex: 1,
                                         flexDirection: 'row',
-                                        justifyContent: 'space-between',
+                                        justifyContent: 'center',
                                     }}>
-                                        <Text>Change 24h:</Text>
-                                        {parseInt(cryptoCurrency.percent_change_24h) > 0 ?
-                                            <FontAwesomeIcon name="arrow-up" size={10} color="#090" /> :
-                                            <FontAwesomeIcon name="arrow-down" size={10} color="#900" />
+                                        {augmentation > 0 ?
+                                            <FontAwesomeIcon name="arrow-up" size={40} color="#090" /> :
+                                            <FontAwesomeIcon name="arrow-down" size={40} color="#900" />
                                         }
-                                        <Text>{cryptoCurrency.percent_change_24h}%</Text>
+                                        <Text style={{marginTop: 13, marginLeft: 10}}>{augmentation}%</Text>
                                     </View>
                                 </CardItem>
                             </Body>
@@ -71,11 +71,12 @@ const CardCryptoCurrency = ({ cryptoCurrency, pressFav, isFav, checkIfIcon }) =>
     </SwipeRow>
 )
 
-CardCryptoCurrency.propTypes = {
-    cryptoCurrency: PropTypes.object.isRequired,
-    pressFav: PropTypes.func.isRequired,
-    isFav: PropTypes.func.isRequired,
+CardMyCoin.propTypes = {
+    myCoin: PropTypes.object.isRequired,
+    augmentation: PropTypes.number.isRequired,
+    myCoinValue: PropTypes.number.isRequired,
+    myCoinOwn: PropTypes.number.isRequired,
     checkIfIcon: PropTypes.func.isRequired
 };
 
-export default CardCryptoCurrency;
+export default CardMyCoin;

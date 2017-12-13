@@ -19,11 +19,7 @@ const {
 
 class Favorites extends Component {
     static propTypes = {
-        cryptoCurencies: {
-            loading: PropTypes.bool.require,
-            list: PropTypes.array.required,
-            listFav: PropTypes.array.required
-        }
+        cryptoCurencies: PropTypes.object.required
     };
 
     componentWillMount() {

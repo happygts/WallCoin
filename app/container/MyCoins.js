@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
 import styles from '../styles/AppStyle'
 import { ActionCreators } from '../actions'
 
-import CardCryptoCurrency from '../component/cardCryptoCurrency'
+import CardMyCoin from '../component/cardMyCoin'
 
 const {
   View,
@@ -25,13 +25,19 @@ class MyCoins extends Component {
     };
 
     componentWillMount() {
-        if (this.props.cryptoCurencies.list.length == 0) {
-            this._onRefresh();
+        // To delete
+        if (this.props.myCoins && this.props.myCoins.length == 0) {
+            this.props.createMyCoin({
+                id: "bitcoin",
+                quantity: 1.2341,
+                buyingPrice: 5412.14
+            });
         }
         console.log("componentWillMount");
     }
 
     componentWillReceiveProps() {
+        console.log("this.props.myCoins :", this.props.myCoins);
         console.log("componentWillReceiveProps");
     }
 
@@ -45,6 +51,30 @@ class MyCoins extends Component {
         });
     }
 
+    calculateOwn(myCoin) {
+        let coinValue = this.getCoinValue(myCoin);
+
+        if (coinValue) {
+            return (myCoin.quantity * coinValue.price_usd).toPrecision(8);
+        }
+        return (-1);
+    }
+
+    calculateAugmentation(myCoin) {
+        let coinValue = this.getCoinValue(myCoin);
+
+        if (coinValue) {
+            return ((myCoin.buyingPrice * 100 / coinValue.price_usd).toPrecision(8))
+        }
+        return (-1);
+    }
+
+    getCoinValue(myCoin) {
+        return this.props.cryptoCurencies.list.find((cryptoCurencie) => {
+            return cryptoCurencie.id == myCoin.id;
+        })
+    }
+
     render() {
         return (
             <View style={styles.container}>
@@ -54,7 +84,13 @@ class MyCoins extends Component {
                         onRefresh={this._onRefresh.bind(this)}
                     />
                 }>
-                    <Text>Toto</Text>
+                    {this.props.myCoins && this.props.myCoins.length && this.props.cryptoCurencies && this.props.cryptoCurencies.list.length ? this.props.myCoins.map((myCoin) => (
+                        <CardMyCoin key={myCoin.id} myCoin={myCoin}
+                            augmentation={this.calculateAugmentation(myCoin)}
+                            myCoinValue={this.getCoinValue(myCoin)}
+                            myCoinOwn={this.calculateOwn(myCoin)}
+                            checkIfIcon={this.checkIfIcon.bind(this)} />
+                    )) : null}
                 </ScrollView>
             </View>
         )
@@ -62,7 +98,8 @@ class MyCoins extends Component {
 }
 
 const mapStateToProps = (state) => ({
-    cryptoCurencies: state.cryptoCurencies
+    cryptoCurencies: state.cryptoCurencies,
+    myCoins: state.myCoins
 })
 
 function mapDispachToProps(dispatch) {
