@@ -78,7 +78,7 @@ class Home extends Component {
               rightOpenValue={-75}
               right={
                 <TouchableHighlight onPress={ () => this._pressFav(cryptoCurrency.id) }>
-                  {this._isFav(cryptoCurrency.id) ? <FontAwesomeIcon name="star" color="#FFD700" style={{marginTop: 45}} size={30} /> : <FontAwesomeIcon name="star-o" color="#FFD700" style={{marginTop: 45}} size={30} />}
+                  {this._isFav(cryptoCurrency.id) ? <FontAwesomeIcon name="star" color="#FFD700" style={{marginTop: 45, marginLeft: 11}} size={30} /> : <FontAwesomeIcon name="star-o" color="#FFD700" style={{marginTop: 45, marginLeft: 11}} size={30} />}
                 </TouchableHighlight >
                 
               }
