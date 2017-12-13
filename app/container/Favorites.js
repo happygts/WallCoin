@@ -27,7 +27,9 @@ class Favorites extends Component {
     };
 
     componentWillMount() {
-        this._onRefresh();
+        if (this.props.cryptoCurencies.list.length == 0) {
+            this._onRefresh();            
+        }
         console.log("componentWillMount");
     }
 
@@ -63,7 +65,9 @@ class Favorites extends Component {
                     />
                 }>
                     {!this.props.cryptoCurencies.loading && this.props.cryptoCurencies.list.map((cryptoCurrency) => (
+                        this.isFav(cryptoCurrency.id) ?
                         <CardCryptoCurrency key={cryptoCurrency.id} cryptoCurrency={cryptoCurrency} pressFav={this.pressFav.bind(this)} isFav={this.isFav.bind(this)} checkIfIcon={this.checkIfIcon.bind(this)} />
+                        : null
                     ))}
                 </ScrollView>
             </View>
