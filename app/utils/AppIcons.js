@@ -9,6 +9,8 @@ const icons = {
 	'ios-home-outline': [30],
 	'ios-star': [30],
 	'ios-star-outline': [30],
+	'ios-cart': [30],
+	'ios-cart-outline': [30],
 	'ios-desktop-outline': [30],
 	'ios-desktop': [30],
 	'ios-search': [30],

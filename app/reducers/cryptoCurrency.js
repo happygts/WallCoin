@@ -25,14 +25,22 @@ export const cryptoCurencies = createReducer(initialState, {
         });
     },
     [types.ERROR_FETCH_CRYTPO_CURRENCIES](state, action) {
-        return update(state, { $merge: { loading: false } });        
+        return update(state, {
+            $merge: {
+                loading: false
+            }
+        });
     },
     [types.ADD_FAV_CRYPTO_CURRENCY](state, action) {
-        return newState = update(state, {
+        var newState = update(state, {
             listFav: {
                 $push: [action.payload.id]
             }
         });
+
+        console.log("LA :", newState);
+
+        return newState;
     },
     [types.REMOVE_FAV_CRYPTO_CURRENCY](state, action) {
         return update(state, {
