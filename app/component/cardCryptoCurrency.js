@@ -38,7 +38,7 @@ const CardCryptoCurrency = ({ cryptoCurrency, pressFav, isFav, checkIfIcon }) =>
                     <Card>
                         <CardItem>
                             <Left>
-                                {checkIfIcon(cryptoCurrency.symbol.toLowerCase() + "-alt") ?
+                                {checkIfIcon(cryptoCurrency.symbol.toLowerCase() + "-alt", fontelloConfig) ?
                                     <Icon name={cryptoCurrency.symbol.toLowerCase() + "-alt"} size={55} style={{ marginTop: 5, marginBottom: 5 }} /> :
                                     <Icon name="coin-2" size={55} style={{ marginTop: 5, marginBottom: 5 }} />
                                 }

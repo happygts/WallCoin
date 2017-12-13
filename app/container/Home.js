@@ -2,18 +2,10 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import ReactNative from 'react-native';
 import { bindActionCreators } from 'redux'
-import { Container, Header, Content, List, ListItem, Text, Left, Body, Right, Switch, Card, CardItem, CardSwiper, SwipeRow, Button, Icon as IconNativeBase} from 'native-base';
 import PropTypes from 'prop-types';
 
 import styles from '../styles/AppStyle'
 import { ActionCreators } from '../actions'
-
-import { createIconSetFromFontello } from 'react-native-vector-icons';
-import fontelloConfig from '../../assets/config.json';
-import { cryptoCurencies } from '../reducers/cryptoCurrency';
-
-import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
-const Icon = createIconSetFromFontello(fontelloConfig);
 
 import CardCryptoCurrency from '../component/cardCryptoCurrency'
 
@@ -50,8 +42,8 @@ class Home extends Component {
     this.props.fetchCryptoCurencies();
   }
 
-  checkIfIcon(name) {
-    return !fontelloConfig.glyphs.every(glyph => {
+  checkIfIcon(name, fonteloConfig) {
+    return !fonteloConfig.glyphs.every(glyph => {
       return !(glyph.css == name);
     });
   }
