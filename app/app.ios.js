@@ -40,7 +40,7 @@ class App extends Component {
 					title: 'Home',
 					navigatorStyle,
 					navigatorButtons: {}
-                }
+                },
 			],
 			tabsStyle: {
 				tabBarButtonColor: 'white',

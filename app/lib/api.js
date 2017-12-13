@@ -8,19 +8,19 @@ class Api {
     }
   
     static get(route) {
-      return this.xhr(route, null, 'GET');
+      return Api.xhr(route, null, 'GET');
     }
   
     static put(route, params) {
-      return this.xhr(route, params, 'PUT')
+      return Api.xhr(route, params, 'PUT')
     }
   
     static post(route, params) {
-      return this.xhr(route, params, 'POST')
+      return Api.xhr(route, params, 'POST')
     }
   
     static delete(route, params) {
-      return this.xhr(route, params, 'DELETE')
+      return Api.xhr(route, params, 'DELETE')
     }
   
     static xhr(route, params, verb) {
@@ -28,14 +28,21 @@ class Api {
       const url = `${host}${route}`
       let options = Object.assign({ method: verb }, params ? { body: JSON.stringify(params) } : null );
       options.headers = Api.headers()
+
       return fetch(url, options).then( resp => {
         let json = resp.json();
+
         if (resp.ok) {
           return json
         }
-        return json.then(err => {throw err});
+
+        return json.then(err => {
+          throw err
+        });
+
       }).then( json => json );
     }
   }
+  
   export default Api
   

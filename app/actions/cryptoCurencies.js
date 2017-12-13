@@ -6,17 +6,15 @@ export function fetchCryptoCurencies() {
         dispatch({
             type: types.START_FETCH_CRYTPO_CURRENCIES,
             payload: {}
-        })
-        return Api.get(`/ticker/`).then(resp => {
-            console.log("resp: ", resp);
-            dispatch(receivedCryptoCurencies({cryptoCurrencies: resp}))
-        }).catch((ex) => {
-            dispatch(errorFetchCryptoCurencies({ex}))
         });
+
+        return Api.get('/ticker/')
+            .then(resp => dispatch(receivedCryptoCurencies({cryptoCurrencies: resp})))
+            .catch(error => dispatch(errorFetchCryptoCurencies({ error })));
     }
 }
 
-export function receivedCryptoCurencies( {cryptoCurrencies} ) {
+export function receivedCryptoCurencies({ cryptoCurrencies }) {
     return {
         type: types.END_FETCH_CRYTPO_CURRENCIES,
         payload: {
@@ -25,11 +23,27 @@ export function receivedCryptoCurencies( {cryptoCurrencies} ) {
     }
 }
 
-export function errorFetchCryptoCurencies( {ex} ) {
+export function errorFetchCryptoCurencies({ error }) {
     return {
         type: types.ERROR_FETCH_CRYTPO_CURRENCIES,
+        error
+    }
+}
+
+export function addFavCryptoCurrency(id) {
+    return {
+        type: types.ADD_FAV_CRYPTO_CURRENCY,
         payload: {
-            ex
+            id
         }
     }
+}
+
+export function removeFavCryptoCurrency(id) {
+    return {
+        type: types.REMOVE_FAV_CRYPTO_CURRENCY,
+        payload: {
+            id
+        }
+    }  
 }
