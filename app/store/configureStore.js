@@ -8,6 +8,7 @@ import reducers from '../reducers';
 //middlewares
 import thunkMiddleware from 'redux-thunk';
 import { createLogger } from 'redux-logger';
+import saveInsideLocalStorageMiddleware from '../middleware/localStorageMiddleware'
 
 // middleware that logs actions
 const loggerMiddleware = createLogger({ predicate: (getState, action) => __DEV__ });
@@ -33,6 +34,7 @@ function configureStore(initialState = {}) {
     applyMiddleware(
       thunkMiddleware, // lets us dispatch() functions
       loggerMiddleware,
+      saveInsideLocalStorageMiddleware,
       asyncInitialState.middleware(loadStore)
     ),
   );

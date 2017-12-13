@@ -32,15 +32,11 @@ export const cryptoCurencies = createReducer(initialState, {
         });
     },
     [types.ADD_FAV_CRYPTO_CURRENCY](state, action) {
-        var newState = update(state, {
+        return update(state, {
             listFav: {
                 $push: [action.payload.id]
             }
         });
-
-        console.log("LA :", newState);
-
-        return newState;
     },
     [types.REMOVE_FAV_CRYPTO_CURRENCY](state, action) {
         return update(state, {
