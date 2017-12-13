@@ -1,8 +1,10 @@
 import React from 'react'
 import { createStore, applyMiddleware, compose} from 'redux'
+import reducers from '../reducers'
+
+//middlewares
 import thunkMiddleware from 'redux-thunk'
 import { createLogger } from 'redux-logger'
-import reducers from '../reducers'
 
 import {AsyncStorage} from 'react-native'
 
@@ -18,7 +20,9 @@ const loadStore = () => {
     AsyncStorage.getItem('@store:state')
     .then(response => {
       if (response) {
-        return JSON.parse(response)        
+        const toReturn =  JSON.parse(response);
+        console.log("toReturn :", toReturn);
+        return toReturn;
       }
       return ({})
     })

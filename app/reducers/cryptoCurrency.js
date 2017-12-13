@@ -1,8 +1,6 @@
 import createReducer from '../lib/createReducer'
 import * as types from '../actions/types'
 
-import {AsyncStorage} from 'react-native'
-
 const initialState = {
     loading: false,
     list: [],
@@ -25,7 +23,6 @@ export const cryptoCurencies = createReducer(initialState, {
             list: action.payload.cryptoCurrencies,
             listFav: state.listFav
         };
-        AsyncStorage.setItem('@store:state', JSON.stringify({"cryptoCurencies": newState}));
         return newState;
     },
     [types.ERROR_FETCH_CRYTPO_CURRENCIES](state, action) {
