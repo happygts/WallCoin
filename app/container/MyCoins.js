@@ -28,14 +28,6 @@ class MyCoins extends Component {
     }
 
     componentWillMount() {
-        // To delete
-        if (this.props.myCoins && this.props.myCoins.length == 0) {
-            this.props.createMyCoin({
-                id: "bitcoin",
-                quantity: 1.2341,
-                buyingPrice: 5412.14
-            });
-        }
         console.log("componentWillMount");
     }
 
@@ -89,7 +81,13 @@ class MyCoins extends Component {
         let coinValue = this.getCoinValue(myCoin);
 
         if (coinValue) {
-            return ((myCoin.buyingPrice * 100 / coinValue.price_usd).toPrecision(6))
+            if (myCoin.buyingPrice > coinValue.price_usd) {
+                return -((myCoin.buyingPrice * 100 / coinValue.price_usd).toPrecision(6))
+            }
+            else {
+                return ((coinValue.price_usd * 100 / myCoin.buyingPrice).toPrecision(6))                
+            }
+
         }
         return (-1);
     }

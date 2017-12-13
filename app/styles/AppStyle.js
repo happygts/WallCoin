@@ -13,6 +13,9 @@ const styles = StyleSheet.create({
 	listElement: {
     	height: 120,
 	},
+	listElementMyCoin: {
+    	height: 180,
+	},
 	insidelistElement: {
 		height: 70
 	}

@@ -10,4 +10,8 @@ export const myCoins = createReducer(initialState, {
             $push: [action.payload.myCoin]
         });
     },
+    [types.CREATE_ONE_MY_COIN_ERROR](state, action) {
+        alert(action.error);
+        return state;
+    }
 });

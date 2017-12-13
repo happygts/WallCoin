@@ -7,9 +7,7 @@ export default saveInsideLocalStorageMiddleware = ({ getState }) => next => (act
         return next(action);
     }
 
-    let returnedValue;
-
-    returnedValue = next(action);
+    let returnedValue = next(action);
 
     let nextState = stateTransformer(getState());
 

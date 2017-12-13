@@ -22,7 +22,7 @@ import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 const Icon = createIconSetFromFontello(fontelloConfig);
 
 const CardMyCoin = ({ myCoin, augmentation, myCoinValue, myCoinOwn, checkIfIcon }) => (
-    <SwipeRow style={styles.listElement}
+    <SwipeRow style={styles.listElementMyCoin}
         rightOpenValue={-75}
         right={
             <View></View>
