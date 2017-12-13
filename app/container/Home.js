@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import ReactNative from 'react-native';
 import { bindActionCreators } from 'redux'
-import { Platform } from 'react-native';
 import { Container, Header, Content, List, ListItem, Text, Left, Body, Right, Switch, Card, CardItem, CardSwiper, SwipeRow, Button, Icon as IconNativeBase} from 'native-base';
 import PropTypes from 'prop-types';
 
@@ -15,6 +14,8 @@ import { cryptoCurencies } from '../reducers/cryptoCurrency';
 
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 const Icon = createIconSetFromFontello(fontelloConfig);
+
+import CardCryptoCurrency from '../component/cardCryptoCurrency'
 
 const {
   View,
@@ -49,18 +50,18 @@ class Home extends Component {
     this.props.fetchCryptoCurencies();
   }
 
-  _checkIfIcon(name) {
+  checkIfIcon(name) {
     return !fontelloConfig.glyphs.every(glyph => {
       return !(glyph.css == name);
     });
   }
 
-  _isFav(id) {
+  isFav(id) {
     return this.props.cryptoCurencies.listFav.includes(id);
   }
 
-  _pressFav(id) {
-      this._isFav(id) ? this.props.removeFavCryptoCurrency(id) : this.props.addFavCryptoCurrency(id);
+  pressFav(id) {
+      this.isFav(id) ? this.props.removeFavCryptoCurrency(id) : this.props.addFavCryptoCurrency(id);
   }
 
   render() {
@@ -72,57 +73,9 @@ class Home extends Component {
             onRefresh={this._onRefresh.bind(this)}
           />
         }>
-          {!this.props.cryptoCurencies.loading && this.props.cryptoCurencies.list.map((cryptoCurrency) => {
-            // return <TouchableHighlight key={cryptoCurrency.id} style={styles.listElement}>
-            return <SwipeRow key={cryptoCurrency.id} style={styles.listElement}
-              rightOpenValue={-75}
-              right={
-                <TouchableHighlight onPress={ () => this._pressFav(cryptoCurrency.id) }>
-                  {this._isFav(cryptoCurrency.id) ? <FontAwesomeIcon name="star" color="#FFD700" style={{marginTop: 45, marginLeft: 11}} size={30} /> : <FontAwesomeIcon name="star-o" color="#FFD700" style={{marginTop: 45, marginLeft: 11}} size={30} />}
-                </TouchableHighlight >
-                
-              }
-              body={
-                <Container>
-                  <Content>
-                    <Card>
-                      <CardItem>
-                        <Left>
-                          {this._checkIfIcon(cryptoCurrency.symbol.toLowerCase() + "-alt") ?
-                            <Icon name={cryptoCurrency.symbol.toLowerCase() + "-alt"} size={55} style={{ marginTop: 5, marginBottom: 5 }} /> :
-                            <Icon name="coin-2" size={55} style={{ marginTop: 5, marginBottom: 5 }} />
-                          }
-                          <Body>
-                            <Text>{cryptoCurrency.name}</Text>
-                            <Text note>{cryptoCurrency.symbol}</Text>
-                          </Body>
-                        </Left>
-                        <Body>
-                          <Body>
-                            <Text> Price (USD) : {parseFloat(cryptoCurrency.price_usd).toFixed(2)}</Text>
-                          </Body>
-                          <CardItem>
-                            <View style={{
-                              flex: 1,
-                              flexDirection: 'row',
-                              justifyContent: 'space-between',
-                            }}>
-                              <Text>Change 24h:</Text>
-                              {parseInt(cryptoCurrency.percent_change_24h) > 0 ?
-                                <FontAwesomeIcon name="arrow-up" size={10} color="#090" /> :
-                                <FontAwesomeIcon name="arrow-down" size={10} color="#900" />
-                              }
-                              <Text>{cryptoCurrency.percent_change_24h}%</Text>
-                            </View>
-                          </CardItem>
-                        </Body>
-                      </CardItem>
-                    </Card>
-                  </Content>
-                </Container>
-              }>
-            </SwipeRow>
-          })}
+          {!this.props.cryptoCurencies.loading && this.props.cryptoCurencies.list.map((cryptoCurrency) => (
+            <CardCryptoCurrency key={cryptoCurrency.id}  cryptoCurrency={cryptoCurrency} pressFav={this.pressFav.bind(this)} isFav={this.isFav.bind(this)} checkIfIcon={this.checkIfIcon.bind(this)}/>
+          ))}
         </ScrollView>
       </View>
     )
