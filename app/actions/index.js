@@ -1,5 +1,5 @@
 import * as CryptoCurrencies from './cryptoCurencies'
 
-export const ActionCreators = Object.assign({},
-  CryptoCurrencies
-);
+export const ActionCreators = {
+  ...CryptoCurrencies
+};

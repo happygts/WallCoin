@@ -30,7 +30,7 @@ class Home extends Component {
   }
 
   componentWillMount() {
-    this.props.fetchCryptoCurencies();
+    this._onRefresh();
     console.log("componentWillMount");
   }
 

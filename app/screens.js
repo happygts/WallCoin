@@ -3,6 +3,6 @@ import { Navigation } from 'react-native-navigation';
 
 import Home from './container/Home'
 
-export function registerScreens(store, Provider) {
-	Navigation.registerComponent('Home', () => Home, store, Provider);
+export function registerScreens(store, provider) {
+	Navigation.registerComponent('Home', () => Home, store, provider);
 }
