@@ -18,10 +18,6 @@ const {
 } = ReactNative;
 
 class Favorites extends Component {
-    static propTypes = {
-        cryptoCurencies: PropTypes.object.required
-    };
-
     componentWillMount() {
         if (this.props.cryptoCurencies.list.length == 0) {
             this._onRefresh();            

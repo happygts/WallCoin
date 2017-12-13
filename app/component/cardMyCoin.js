@@ -47,7 +47,7 @@ const CardMyCoin = ({ myCoin, augmentation, myCoinValue, myCoinOwn, checkIfIcon 
                                     <Text style={{fontSize: 12}}> Price (USD) : {myCoinOwn}</Text>
                                 </CardItem>
                                 <CardItem>
-                                    <Text style={{fontSize: 12}}> Beneficial : {(myCoinOwn - (myCoin.quantity * myCoin.buyingPrice)).toPrecision(8) } $</Text>
+                                    <Text style={{fontSize: 12}}> Beneficial : {(myCoinOwn - (myCoin.quantity * myCoin.buyingPrice)).toPrecision(6) }$</Text>
                                 </CardItem>
                                 <CardItem>
                                     <View style={{
@@ -73,9 +73,9 @@ const CardMyCoin = ({ myCoin, augmentation, myCoinValue, myCoinOwn, checkIfIcon 
 
 CardMyCoin.propTypes = {
     myCoin: PropTypes.object.isRequired,
-    augmentation: PropTypes.number.isRequired,
-    myCoinValue: PropTypes.number.isRequired,
-    myCoinOwn: PropTypes.number.isRequired,
+    myCoinValue: PropTypes.object.isRequired,
+    augmentation: PropTypes.string.isRequired,
+    myCoinOwn: PropTypes.string.isRequired,
     checkIfIcon: PropTypes.func.isRequired
 };
 

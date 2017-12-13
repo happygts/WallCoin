@@ -19,11 +19,6 @@ const {
 } = ReactNative;
 
 class MyCoins extends Component {
-    static propTypes = {
-        cryptoCurencies: PropTypes.object.required,
-        myCoins: PropTypes.array.required
-    };
-
     componentWillMount() {
         // To delete
         if (this.props.myCoins && this.props.myCoins.length == 0) {
@@ -37,7 +32,6 @@ class MyCoins extends Component {
     }
 
     componentWillReceiveProps() {
-        console.log("this.props.myCoins :", this.props.myCoins);
         console.log("componentWillReceiveProps");
     }
 
@@ -55,7 +49,7 @@ class MyCoins extends Component {
         let coinValue = this.getCoinValue(myCoin);
 
         if (coinValue) {
-            return (myCoin.quantity * coinValue.price_usd).toPrecision(8);
+            return (myCoin.quantity * coinValue.price_usd).toPrecision(6);
         }
         return (-1);
     }
@@ -64,7 +58,7 @@ class MyCoins extends Component {
         let coinValue = this.getCoinValue(myCoin);
 
         if (coinValue) {
-            return ((myCoin.buyingPrice * 100 / coinValue.price_usd).toPrecision(8))
+            return ((myCoin.buyingPrice * 100 / coinValue.price_usd).toPrecision(6))
         }
         return (-1);
     }

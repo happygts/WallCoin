@@ -18,10 +18,6 @@ const {
 } = ReactNative;
 
 class Home extends Component {
-  static propTypes = {
-    cryptoCurencies: PropTypes.object.required
-  };
-  
   constructor(props) {
     super(props);
   }
