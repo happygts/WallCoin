@@ -7,6 +7,8 @@ const replaceSuffixPattern = /--(active|big|small|very-big)/g;
 const icons = {
 	'ios-home': [30],
 	'ios-home-outline': [30],
+	'ios-star': [30],
+	'ios-star-outline': [30],
 	'ios-desktop-outline': [30],
 	'ios-desktop': [30],
 	'ios-search': [30],

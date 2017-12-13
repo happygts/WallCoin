@@ -40,6 +40,15 @@ class App extends Component {
 					navigatorStyle,
 					navigatorButtons: {}
 				},
+				{
+					label: 'Favorites',
+					screen: 'Favorites',
+					icon: iconsMap['ios-star-outline'],
+					selectedIcon: iconsMap['ios-star'],
+					title: 'Favorites',
+					navigatorStyle,
+					navigatorButtons: {}
+				},
 			],
 			tabsStyle: {
 				tabBarButtonColor: 'white',
