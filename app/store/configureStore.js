@@ -1,34 +1,31 @@
-import React from 'react'
-import { createStore, applyMiddleware, compose} from 'redux'
-import reducers from '../reducers'
-
-//middlewares
-import thunkMiddleware from 'redux-thunk'
-import { createLogger } from 'redux-logger'
-
-import {AsyncStorage} from 'react-native'
-
+import React from 'react';
+import { AsyncStorage } from 'react-native';
+import { createStore, applyMiddleware, compose } from 'redux';
 import * as asyncInitialState from 'redux-async-initial-state';
 
-// // middleware that logs actions
-const loggerMiddleware = createLogger({ predicate: (getState, action) => __DEV__  });
+import reducers from '../reducers';
+
+//middlewares
+import thunkMiddleware from 'redux-thunk';
+import { createLogger } from 'redux-logger';
+
+// middleware that logs actions
+const loggerMiddleware = createLogger({ predicate: (getState, action) => __DEV__ });
 
 // Load state function 
-// Should return promise that resolves application state 
 const loadStore = () => {
   return new Promise(resolve => {
     AsyncStorage.getItem('@store:state')
-    .then(response => {
-      if (response) {
-        const toReturn =  JSON.parse(response);
-        console.log("toReturn :", toReturn);
-        return toReturn;
-      }
-      return ({})
-    })
-    .then(resolve);
+      .then(response => {
+        if (response) {
+          const toReturn = JSON.parse(response);
+          console.log("toReturn :", toReturn);
+          return toReturn;
+        }
+        return ({})
+      })
+      .then(resolve);
   });
-
 }
 
 function configureStore(initialState = {}) {

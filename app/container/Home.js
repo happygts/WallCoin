@@ -24,7 +24,8 @@ class Home extends Component {
       list: PropTypes.array.required,
       listFav: PropTypes.array.required
     }
-  }
+  };
+  
   constructor(props) {
     super(props);
   }
@@ -53,7 +54,7 @@ class Home extends Component {
   }
 
   pressFav(id) {
-      this.isFav(id) ? this.props.removeFavCryptoCurrency(id) : this.props.addFavCryptoCurrency(id);
+    this.isFav(id) ? this.props.removeFavCryptoCurrency(id) : this.props.addFavCryptoCurrency(id);
   }
 
   render() {
@@ -66,7 +67,7 @@ class Home extends Component {
           />
         }>
           {!this.props.cryptoCurencies.loading && this.props.cryptoCurencies.list.map((cryptoCurrency) => (
-            <CardCryptoCurrency key={cryptoCurrency.id}  cryptoCurrency={cryptoCurrency} pressFav={this.pressFav.bind(this)} isFav={this.isFav.bind(this)} checkIfIcon={this.checkIfIcon.bind(this)}/>
+            <CardCryptoCurrency key={cryptoCurrency.id} cryptoCurrency={cryptoCurrency} pressFav={this.pressFav.bind(this)} isFav={this.isFav.bind(this)} checkIfIcon={this.checkIfIcon.bind(this)} />
           ))}
         </ScrollView>
       </View>

@@ -1,5 +1,5 @@
-import createReducer from '../lib/createReducer'
-import * as types from '../actions/types'
+import createReducer from '../lib/createReducer';
+import * as types from '../actions/types';
 
 const initialState = {
     loading: false,
@@ -45,13 +45,13 @@ export const cryptoCurencies = createReducer(initialState, {
             list: state.list,
             listFav: state.listFav
         }
-        
+
         return newState;
     },
     [types.REMOVE_FAV_CRYPTO_CURRENCY](state, action) {
         const index = state.listFav.indexOf(action.payload.id);
         if (index >= 0) {
-            state.listFav.splice(index, 1);            
+            state.listFav.splice(index, 1);
         }
 
         const newState = {
@@ -59,7 +59,7 @@ export const cryptoCurencies = createReducer(initialState, {
             list: state.list,
             listFav: state.listFav
         }
-        
+
         return newState;
     }
 });

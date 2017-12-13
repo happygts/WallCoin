@@ -1,11 +1,10 @@
 
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
 import ReactNative from 'react-native';
-import { bindActionCreators } from 'redux'
 import PropTypes from 'prop-types';
 
 import { Container, Header, Content, List, ListItem, Text, Left, Body, Right, Switch, Card, CardItem, CardSwiper, SwipeRow, Button, Icon as IconNativeBase } from 'native-base';
+
 const {
     View,
     ScrollView,
@@ -14,14 +13,12 @@ const {
     StyleSheet
   } = ReactNative;
 
-
-import { ActionCreators } from '../actions'
 import styles from '../styles/AppStyle'
 
 import { createIconSetFromFontello } from 'react-native-vector-icons';
 import fontelloConfig from '../../assets/config.json';
-
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
+
 const Icon = createIconSetFromFontello(fontelloConfig);
 
 const CardCryptoCurrency = ({ cryptoCurrency, pressFav, isFav, checkIfIcon }) => (

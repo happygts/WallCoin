@@ -1,6 +1,5 @@
 /* eslint-disable no-unused-vars */
-import React, { Component } from 'react';
-import { View } from 'react-native';
+import { Component } from 'react';
 import { Navigation } from 'react-native-navigation';
 import { Provider } from 'react-redux';
 import { registerScreens } from './screens';
@@ -25,7 +24,7 @@ class App extends Component {
 	constructor(props) {
 		super(props);
 		iconsLoaded.then(() => {
-            this.startApp();
+			this.startApp();
 		});
 	}
 
@@ -40,7 +39,7 @@ class App extends Component {
 					title: 'Home',
 					navigatorStyle,
 					navigatorButtons: {}
-                },
+				},
 			],
 			tabsStyle: {
 				tabBarButtonColor: 'white',
