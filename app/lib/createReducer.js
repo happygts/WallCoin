@@ -5,8 +5,8 @@ export default function createReducer(initialState, handlers) {
     if (handlers.hasOwnProperty(action.type)) {
       const stateReturned = handlers[action.type](state, action)
       
-      if (stateReturned && stateReturned.cryptoCurencies && (stateReturned.cryptoCurencies.list.length > 0 || stateReturned.cryptoCurencies.listFav.length > 0)) {
-        AsyncStorage.setItem('@store:state', JSON.stringify({ "cryptoCurencies": stateReturned.cryptoCurencies }))
+      if (stateReturned && stateReturned && (stateReturned.list.length > 0 || stateReturned.listFav.length > 0)) {
+        AsyncStorage.setItem('@store:state', JSON.stringify({ "cryptoCurencies": stateReturned }))
           .then(resp => {
             console.log("resp :", resp);
           })
