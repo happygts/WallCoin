@@ -25,7 +25,7 @@ export const cryptoCurencies = createReducer(initialState, {
             list: action.payload.cryptoCurrencies,
             listFav: state.listFav
         };
-        AsyncStorage.setItem('@MySuperStore:key', JSON.stringify({"cryptoCurencies": newState}));
+        AsyncStorage.setItem('@store:state', JSON.stringify({"cryptoCurencies": newState}));
         return newState;
     },
     [types.ERROR_FETCH_CRYTPO_CURRENCIES](state, action) {
