@@ -56,7 +56,14 @@ class App extends Component {
 					selectedIcon: iconsMap['ios-cart'],
 					title: 'My Coins',
 					navigatorStyle,
-					navigatorButtons: {}
+					navigatorButtons: {
+						rightButtons: [
+							{
+								icon: require('../assets/images/navicon_add.png'), // for icon button, provide the local image asset name
+								id: 'add' // id for this button, given in onNavigatorEvent(event) to help understand which button was clicked
+							}
+						]
+					}
 				}
 			],
 			tabsStyle: {
