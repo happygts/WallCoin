@@ -3,11 +3,12 @@
 This app can be use to see every crypto currencies on the market and create your own wallet.
 Only IOS available for the moment.
 
-# Install
 
-To get started with React Native :
+# Install React Native :
 
 [React Native](https://facebook.github.io/react-native/docs/getting-started.html)
+
+# Install
 
 ```sh
 $ git clone git@github.com:moreaup/WallCoin.git
