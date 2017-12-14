@@ -99,7 +99,6 @@ class MyCoins extends Component {
     }
 
     deleteMyCoin(myCoin) {
-        console.log("WILL DELETE this coin :", myCoin);
         this.props.deleteMyCoin(myCoin.id);
     }
 
