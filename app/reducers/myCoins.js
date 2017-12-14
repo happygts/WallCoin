@@ -10,10 +10,6 @@ export const myCoins = createReducer(initialState, {
             $push: [action.payload.myCoin]
         });
     },
-    [types.CREATE_ONE_MY_COIN_ERROR](state, action) {
-        alert(action.error);
-        return state;
-    },
     [types.EDIT_ONE_MY_COIN](state, action) {
         let index = (state.findIndex((myCoinState) => {
             return myCoinState.id == action.payload.myCoin.id;
@@ -27,10 +23,6 @@ export const myCoins = createReducer(initialState, {
                 }
             }
         })
-    },
-    [types.EDIT_ONE_MY_COIN_ERROR](state, action) {
-        alert(action.error);
-        return state;
     },
     [types.DELETE_ONE_MY_COIN](state, action) {
         var index = (state.findIndex((myCoinState) => {

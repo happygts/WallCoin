@@ -24,7 +24,6 @@ const Icon = createIconSetFromFontello(fontelloConfig);
 const CardMyCoin = ({ myCoin, deleteMyCoin, editMyCoin, augmentation, myCoinValue, myCoinOwn, checkIfIcon }) => (
     <SwipeRow style={styles.listElementMyCoin}
         rightOpenValue={-150}
-        // leftOpenValue={-75}
         right={
             <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center'}}>
                 <TouchableHighlight onPress={() => editMyCoin(myCoin)} style={{flex: 1}}>
@@ -35,11 +34,6 @@ const CardMyCoin = ({ myCoin, deleteMyCoin, editMyCoin, augmentation, myCoinValu
                 </TouchableHighlight >
             </View>
         }
-        // left={
-        //     <TouchableHighlight onPress={() => deleteMyCoin(cryptoCurrency.id)}>
-        //         <FontAwesomeIcon name="trash" color="#FF0000" style={{ marginTop: 70, marginLeft: 11 }} size={30} />
-        //     </TouchableHighlight >
-        // }
         body={
             <Container>
                 <Content>
