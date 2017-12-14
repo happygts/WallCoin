@@ -23,10 +23,11 @@ const {
 class AddEditMyCoins extends Component {
     constructor(props) {
         super(props);
+
         this.state = {
-            currencySelected: "",
-            quantity: "",
-            buyingPrice: "",
+            currencySelected: props.myCoin ? props.myCoin.id.toString() : "",
+            quantity: props.myCoin ? props.myCoin.quantity.toString() : "",
+            buyingPrice: props.myCoin ? props.myCoin.buyingPrice.toString() : "",
             add: props.myCoin == undefined
         };
     }
@@ -103,7 +104,11 @@ class AddEditMyCoins extends Component {
             });
         }
         else {
-            // Edit
+            returnValue = this.props.editMyCoin({
+                id: this.state.currencySelected,
+                quantity: parseFloat(this.state.quantity),
+                buyingPrice: parseFloat(this.state.buyingPrice)
+            });
         }
 
         if (returnValue) {
@@ -118,7 +123,7 @@ class AddEditMyCoins extends Component {
         return (
             <View style={styles.container}>
                 <Form>
-                    <Item>
+                    {this.state.add ? <Item>
                         <Picker
                             iosHeader="Select one"
                             selectedValue={this.state.currencySelected}
@@ -130,7 +135,7 @@ class AddEditMyCoins extends Component {
                                 <PickerItem key={cryptoCurrency.id} label={cryptoCurrency.name} value={cryptoCurrency.id} />
                             ))}
                         </Picker>
-                    </Item>
+                    </Item> : null}
                     <Item>
                         <Input onChangeText={(text) => this.onQuantityChanged(text)} value={this.state.quantity} placeholder="Quantity" />
                     </Item>

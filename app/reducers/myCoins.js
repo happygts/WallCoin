@@ -14,12 +14,29 @@ export const myCoins = createReducer(initialState, {
         alert(action.error);
         return state;
     },
+    [types.EDIT_ONE_MY_COIN](state, action) {
+        let index = (state.findIndex((myCoinState) => {
+            return myCoinState.id == action.payload.myCoin.id;
+        }));
+
+        return update(state, {
+            [index]: {
+                $merge: {
+                    quantity: action.payload.myCoin.quantity,
+                    buyingPrice: action.payload.myCoin.buyingPrice,
+                }
+            }
+        })
+    },
+    [types.EDIT_ONE_MY_COIN_ERROR](state, action) {
+        alert(action.error);
+        return state;
+    },
     [types.DELETE_ONE_MY_COIN](state, action) {
         var index = (state.findIndex((myCoinState) => {
             return myCoinState.id == action.payload.id;
         }))
-        
-        console.log("index :", index)
+
         if (index >= 0) {
             return update(state, {
                 $splice: [[index, 1]]

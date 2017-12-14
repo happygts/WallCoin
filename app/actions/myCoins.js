@@ -44,6 +44,33 @@ export function createMyCoin(myCoin) {
     }
 }
 
+export function editMyCoin(myCoin) {
+    return (dispatch, getState) => {
+        if (myCoin.quantity <= 0) {
+            dispatch({
+                type: types.EDIT_ONE_MY_COIN_ERROR,
+                error: "You need to chose a valid quantity"
+            });
+        }
+        else if (myCoin.buyingPrice <= 0) {
+            dispatch({
+                type: types.EDIT_ONE_MY_COIN_ERROR,
+                error: "You need to chose a valie buyingPrice"
+            });
+        }
+        else {
+            dispatch({
+                type: types.EDIT_ONE_MY_COIN,
+                payload: {
+                    myCoin
+                }
+            });
+            return true;
+        }
+        return false;
+    }
+}
+
 export function deleteMyCoin(id) {
     return {
         type: types.DELETE_ONE_MY_COIN,

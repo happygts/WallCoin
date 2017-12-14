@@ -6,7 +6,8 @@ const styles = StyleSheet.create({
 		flex: 1,
 		...Platform.select({
 			ios: {
-				paddingTop: 64
+				paddingTop: 64,
+				paddingBottom: 44
 			}
 		})
 	},

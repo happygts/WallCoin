@@ -40,8 +40,8 @@ class MyCoins extends Component {
             if (event.id == 'add') {
                 this.props.navigator.push({
                     screen: 'AddEditMyCoins', // unique ID registered with Navigation.registerScreen
-                    title: "Add Wallet", // navigation bar title of the pushed screen (optional)
-                    passProps: { myCoin: undefined }, // Object that will be passed as props to the pushed screen (optional)
+                    title: "Add one MyCoin", // navigation bar title of the pushed screen (optional)
+                    passProps: { }, // Object that will be passed as props to the pushed screen (optional)
                     animated: true, // does the push have transition animation or does it happen immediately (optional)
                     animationType: 'fade', // 'fade' (for both) / 'slide-horizontal' (for android) does the push have different transition animation (optional)
                     navigatorStyle: {
@@ -104,7 +104,25 @@ class MyCoins extends Component {
     }
 
     editMyCoin(myCoin) {
-
+        myCoin.add = false;
+        myCoin.quantity = myCoin.quantity.toString();
+        myCoin.buyingPrice = myCoin.buyingPrice.toString();
+        this.props.navigator.push({
+            screen: 'AddEditMyCoins', // unique ID registered with Navigation.registerScreen
+            title: "Edit " + myCoin.id, // navigation bar title of the pushed screen (optional)
+            passProps: { myCoin }, // Object that will be passed as props to the pushed screen (optional)
+            animated: true, // does the push have transition animation or does it happen immediately (optional)
+            animationType: 'fade', // 'fade' (for both) / 'slide-horizontal' (for android) does the push have different transition animation (optional)
+            navigatorStyle: {
+                navBarTranslucent: true,
+                drawUnderNavBar: true,
+                navBarTextColor: 'white',
+                navBarButtonColor: 'white',
+                statusBarTextColorScheme: 'light',
+                drawUnderTabBar: true
+            }, // override the navigator style for the pushed screen (optional)
+            navigatorButtons: {}, // override the nav buttons for the pushed screen (optional)
+        });
     }
 
     render() {
