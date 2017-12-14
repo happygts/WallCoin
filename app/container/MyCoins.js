@@ -85,7 +85,7 @@ class MyCoins extends Component {
                 return -((myCoin.buyingPrice * 100 / coinValue.price_usd).toPrecision(6))
             }
             else {
-                return ((coinValue.price_usd * 100 / myCoin.buyingPrice).toPrecision(6))                
+                return ((coinValue.price_usd * 100 / myCoin.buyingPrice).toPrecision(6))
             }
 
         }
@@ -96,6 +96,15 @@ class MyCoins extends Component {
         return this.props.cryptoCurencies.list.find((cryptoCurencie) => {
             return cryptoCurencie.id == myCoin.id;
         });
+    }
+
+    deleteMyCoin(myCoin) {
+        console.log("WILL DELETE this coin :", myCoin);
+        this.props.deleteMyCoin(myCoin.id);
+    }
+
+    editMyCoin(myCoin) {
+
     }
 
     render() {
@@ -109,6 +118,8 @@ class MyCoins extends Component {
                 }>
                     {this.props.myCoins && this.props.myCoins.length && this.props.cryptoCurencies && this.props.cryptoCurencies.list.length ? this.props.myCoins.map((myCoin) => (
                         <CardMyCoin key={myCoin.id} myCoin={myCoin}
+                            deleteMyCoin={this.deleteMyCoin.bind(this)}
+                            editMyCoin={this.editMyCoin.bind(this)}
                             augmentation={this.calculateAugmentation(myCoin)}
                             myCoinValue={this.getCoinValue(myCoin)}
                             myCoinOwn={this.calculateOwn(myCoin)}

@@ -43,3 +43,12 @@ export function createMyCoin(myCoin) {
         return false;
     }
 }
+
+export function deleteMyCoin(id) {
+    return {
+        type: types.DELETE_ONE_MY_COIN,
+        payload: {
+            id
+        }
+    }
+}

@@ -21,12 +21,25 @@ import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 
 const Icon = createIconSetFromFontello(fontelloConfig);
 
-const CardMyCoin = ({ myCoin, augmentation, myCoinValue, myCoinOwn, checkIfIcon }) => (
+const CardMyCoin = ({ myCoin, deleteMyCoin, editMyCoin, augmentation, myCoinValue, myCoinOwn, checkIfIcon }) => (
     <SwipeRow style={styles.listElementMyCoin}
-        rightOpenValue={-75}
+        rightOpenValue={-150}
+        // leftOpenValue={-75}
         right={
-            <View></View>
+            <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center'}}>
+                <TouchableHighlight onPress={() => editMyCoin(myCoin)} style={{flex: 1}}>
+                    <FontAwesomeIcon name="pencil" color="#FFD700" style={{ marginTop: 70, marginLeft: 10 }} size={30} />
+                </TouchableHighlight >
+                <TouchableHighlight onPress={() => deleteMyCoin(myCoin)} style={{flex: 1}}>
+                    <FontAwesomeIcon name="trash" color="#FF0000" style={{ marginTop: 70 }} size={30} />
+                </TouchableHighlight >
+            </View>
         }
+        // left={
+        //     <TouchableHighlight onPress={() => deleteMyCoin(cryptoCurrency.id)}>
+        //         <FontAwesomeIcon name="trash" color="#FF0000" style={{ marginTop: 70, marginLeft: 11 }} size={30} />
+        //     </TouchableHighlight >
+        // }
         body={
             <Container>
                 <Content>
@@ -44,10 +57,10 @@ const CardMyCoin = ({ myCoin, augmentation, myCoinValue, myCoinOwn, checkIfIcon 
                             </Left>
                             <Body>
                                 <CardItem>
-                                    <Text style={{fontSize: 12}}> Price (USD) : {myCoinOwn}</Text>
+                                    <Text style={{ fontSize: 12 }}> Price (USD) : {myCoinOwn}</Text>
                                 </CardItem>
                                 <CardItem>
-                                    <Text style={{fontSize: 12}}> Beneficial : {(myCoinOwn - (myCoin.quantity * myCoin.buyingPrice)).toPrecision(6) }$</Text>
+                                    <Text style={{ fontSize: 12 }}> Beneficial : {(myCoinOwn - (myCoin.quantity * myCoin.buyingPrice)).toPrecision(6)}$</Text>
                                 </CardItem>
                                 <CardItem>
                                     <View style={{
@@ -59,7 +72,7 @@ const CardMyCoin = ({ myCoin, augmentation, myCoinValue, myCoinOwn, checkIfIcon 
                                             <FontAwesomeIcon name="arrow-up" size={40} color="#090" /> :
                                             <FontAwesomeIcon name="arrow-down" size={40} color="#900" />
                                         }
-                                        <Text style={{marginTop: 13, marginLeft: 10}}>{augmentation}%</Text>
+                                        <Text style={{ marginTop: 13, marginLeft: 10 }}>{augmentation}%</Text>
                                     </View>
                                 </CardItem>
                             </Body>
@@ -72,6 +85,8 @@ const CardMyCoin = ({ myCoin, augmentation, myCoinValue, myCoinOwn, checkIfIcon 
 )
 
 CardMyCoin.propTypes = {
+    editMyCoin: PropTypes.func.isRequired,
+    deleteMyCoin: PropTypes.func.isRequired,
     myCoin: PropTypes.object.isRequired,
     myCoinValue: PropTypes.object.isRequired,
     augmentation: PropTypes.string.isRequired,
