@@ -3,7 +3,9 @@ import React, { Component } from 'react';
 import ReactNative from 'react-native';
 import PropTypes from 'prop-types';
 
-import { Container, Text, Left, Body, Right, Switch, Card, CardItem, CardSwiper, SwipeRow, Button, Icon as IconNativeBase } from 'native-base';
+import { Container, Content, Text, Left, Body, Right, Switch, Card, CardItem, CardSwiper, SwipeRow, Button, Icon as IconNativeBase } from 'native-base';
+import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
+import { FontelloIcon, checkFontelloIconExist} from '../utils/AppIcons'
 
 const {
     View,
@@ -14,12 +16,6 @@ const {
   } = ReactNative;
 
 import styles from '../styles/AppStyle'
-
-import { createIconSetFromFontello } from 'react-native-vector-icons';
-import fontelloConfig from '../../assets/config.json';
-import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
-
-const Icon = createIconSetFromFontello(fontelloConfig);
 
 class CardCryptoCurrency extends React.Component {
     constructor(props) {
@@ -37,7 +33,7 @@ class CardCryptoCurrency extends React.Component {
 
         this.props.pressFav(this.props.cryptoCurrency.id)
     }
-    
+
     shouldComponentUpdate(nextProps, nextState) {
         return this.props.isFav(nextProps.cryptoCurrency.id) !== this.state.isFav;
     }
@@ -60,9 +56,9 @@ class CardCryptoCurrency extends React.Component {
                             <Card>
                                 <CardItem>
                                     <Left>
-                                        {this.props.checkIfIcon(this.props.cryptoCurrency.symbol.toLowerCase() + "-alt", fontelloConfig) ?
-                                            <Icon name={this.props.cryptoCurrency.symbol.toLowerCase() + "-alt"} size={55} style={{ marginTop: 5, marginBottom: 5 }} /> :
-                                            <Icon name="coin-2" size={55} style={{ marginTop: 5, marginBottom: 5 }} />
+                                        {checkFontelloIconExist(this.props.cryptoCurrency.symbol.toLowerCase() + "-alt") ?
+                                            <FontelloIcon name={this.props.cryptoCurrency.symbol.toLowerCase() + "-alt"} size={55} style={{ marginTop: 5, marginBottom: 5 }} /> :
+                                            <FontelloIcon name="coin-2" size={55} style={{ marginTop: 5, marginBottom: 5 }} />
                                         }
                                         <Body>
                                             <Text>{this.props.cryptoCurrency.name}</Text>

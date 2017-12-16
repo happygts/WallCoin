@@ -34,18 +34,11 @@ class Home extends Component {
     this.props.fetchCryptoCurencies();
   }
 
-  checkIfIcon(name, fonteloConfig) {
-    return !fonteloConfig.glyphs.every(glyph => {
-      return !(glyph.css == name);
-    });
-  }
-
   isFav(id) {
     return this.props.cryptoCurencies.listFav.includes(id);
   }
 
   pressFav(id) {
-    console.log('press fav parent');
     this.isFav(id) ? this.props.removeFavCryptoCurrency(id) : this.props.addFavCryptoCurrency(id);
   }
 
@@ -59,7 +52,7 @@ class Home extends Component {
           />
         }>
           {!this.props.cryptoCurencies.loading && this.props.cryptoCurencies.list.map((cryptoCurrency) => (
-            <CardCryptoCurrency key={cryptoCurrency.id} cryptoCurrency={cryptoCurrency} pressFav={this.pressFav.bind(this)} isFav={this.isFav.bind(this)} checkIfIcon={this.checkIfIcon.bind(this)} />
+            <CardCryptoCurrency key={cryptoCurrency.id} cryptoCurrency={cryptoCurrency} pressFav={this.pressFav.bind(this)} isFav={this.isFav.bind(this)} />
           ))}
         </ScrollView>
       </View>
