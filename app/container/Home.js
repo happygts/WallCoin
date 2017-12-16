@@ -45,6 +45,7 @@ class Home extends Component {
   }
 
   pressFav(id) {
+    console.log('press fav parent');
     this.isFav(id) ? this.props.removeFavCryptoCurrency(id) : this.props.addFavCryptoCurrency(id);
   }
 

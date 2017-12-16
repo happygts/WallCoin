@@ -18,11 +18,11 @@ const loadStore = () => {
   return new Promise(resolve => {
     AsyncStorage.getItem('@store:state')
       .then(response => {
-        // if (response) {
-        //   const toReturn = JSON.parse(response);
-        //   console.log("toReturn :", toReturn);
-        //   return toReturn;
-        // }
+        if (response) {
+          const toReturn = JSON.parse(response);
+          console.log("toReturn :", toReturn);
+          return toReturn;
+        }
         return ({})
       })
       .then(resolve);
