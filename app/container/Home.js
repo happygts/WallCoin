@@ -26,33 +26,17 @@ class Home extends Component {
     super(props);
     this.state = {
       searchText: '',
-      cryptoCurrencyToDisplay: []
     }
   }
 
   componentDidMount() {
-    if (this.props.cryptoCurencies.list.length > 0) {
-      this.setState(() => {
-        return {
-          cryptoCurrencyToDisplay: this.props.cryptoCurencies.list.slice(0, 9)// display 10
-        }
-      })
-    }
-    else {
+    if (this.props.cryptoCurencies.list.length <= 0) {
       this._onRefresh();
     }
-    console.log("componentDidMount", this.props.cryptoCurencies.list.slice(0, 9))
   }
 
   _onRefresh() {
-    this.props.fetchCryptoCurencies().then(
-      () => {
-        this.setState(() => {
-          return {
-            cryptoCurrencyToDisplay: this.props.cryptoCurencies.list.slice(0, 9)// display 10
-          }
-        })
-      });
+    this.props.fetchCryptoCurencies();
   }
 
   _onSearchTextChanged(newText) {
