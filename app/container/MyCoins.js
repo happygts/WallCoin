@@ -62,12 +62,6 @@ class MyCoins extends Component {
         this.props.fetchCryptoCurencies();
     }
 
-    checkIfIcon(name, fonteloConfig) {
-        return !fonteloConfig.glyphs.every(glyph => {
-            return !(glyph.css == name);
-        });
-    }
-
     calculateOwn(myCoin) {
         let coinValue = this.getCoinValue(myCoin);
 
@@ -139,8 +133,7 @@ class MyCoins extends Component {
                             editMyCoin={this.editMyCoin.bind(this)}
                             augmentation={this.calculateAugmentation(myCoin)}
                             myCoinValue={this.getCoinValue(myCoin)}
-                            myCoinOwn={this.calculateOwn(myCoin)}
-                            checkIfIcon={this.checkIfIcon.bind(this)} />
+                            myCoinOwn={this.calculateOwn(myCoin)} />
                     )) : null}
                 </ScrollView>
             </View>

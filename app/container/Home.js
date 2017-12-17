@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import ReactNative from 'react-native';
 import { bindActionCreators } from 'redux'
 import PropTypes from 'prop-types';
+import Search from 'react-native-search-box';
 
 import styles from '../styles/AppStyle'
 import { ActionCreators } from '../actions'
@@ -12,26 +13,64 @@ import CardCryptoCurrency from '../component/cardCryptoCurrency'
 const {
   View,
   ScrollView,
+  FlatList,
   RefreshControl,
   TouchableHighlight,
-  StyleSheet
+  StyleSheet,
+  Text,
+  ActivityIndicator
 } = ReactNative;
 
 class Home extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      searchText: '',
+      cryptoCurrencyToDisplay: []
+    }
   }
 
-  componentWillMount() {
-    console.log("componentWillMount");
-  }
-
-  componentWillReceiveProps() {
-    console.log("componentWillReceiveProps");
+  componentDidMount() {
+    if (this.props.cryptoCurencies.list.length > 0) {
+      this.setState(() => {
+        return {
+          cryptoCurrencyToDisplay: this.props.cryptoCurencies.list.slice(0, 9)// display 10
+        }
+      })
+    }
+    else {
+      this._onRefresh();
+    }
+    console.log("componentDidMount", this.props.cryptoCurencies.list.slice(0, 9))
   }
 
   _onRefresh() {
-    this.props.fetchCryptoCurencies();
+    this.props.fetchCryptoCurencies().then(
+      () => {
+        this.setState(() => {
+          return {
+            cryptoCurrencyToDisplay: this.props.cryptoCurencies.list.slice(0, 9)// display 10
+          }
+        })
+      });
+  }
+
+  _onSearchTextChanged(newText) {
+    console.log("_onSearchTextChanged")
+    this.setState(() => {
+      return {
+        searchText: newText
+      }
+    })
+  }
+
+  _onSearchCancel() {
+    console.log("_onSearchCancel")
+    this.setState(() => {
+      return {
+        searchText: ''
+      }
+    })
   }
 
   isFav(id) {
@@ -45,23 +84,41 @@ class Home extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <ScrollView refreshControl={
-          <RefreshControl
-            refreshing={this.props.cryptoCurencies.loading}
-            onRefresh={this._onRefresh.bind(this)}
-          />
-        }>
-          {!this.props.cryptoCurencies.loading && this.props.cryptoCurencies.list.map((cryptoCurrency) => (
-            <CardCryptoCurrency key={cryptoCurrency.id} cryptoCurrency={cryptoCurrency} pressFav={this.pressFav.bind(this)} isFav={this.isFav.bind(this)} />
-          ))}
-        </ScrollView>
+        {this.props.asyncInitialState.loading ?
+          <View style={{ flex: 1, justifyContent: 'center', flexDirection: 'row', justifyContent: 'space-around' }}>
+            <ActivityIndicator size="large" color="#0000ff" />
+          </View>
+          :
+          <View >
+            <Search
+              ref="search_box"
+              onChangeText={(newText) => this._onSearchTextChanged(newText)}
+              onCancel={this._onSearchCancel.bind(this)}
+              onDelete={this._onSearchCancel.bind(this)}
+            />
+            <FlatList
+              data={this.props.cryptoCurencies.list.filter(cryptoCurrency => cryptoCurrency.name.includes(this.state.searchText))}
+              renderItem={({ item }) => <CardCryptoCurrency
+                key={item.id}
+                cryptoCurrency={item}
+                pressFav={this.pressFav.bind(this)}
+                isFav={this.isFav.bind(this)}
+              />}>
+              <RefreshControl
+                refreshing={this.props.cryptoCurencies.loading}
+                onRefresh={this._onRefresh.bind(this)}
+              />
+            </FlatList>
+          </View>
+        }
       </View>
     )
   }
 }
 
 const mapStateToProps = (state) => ({
-  cryptoCurencies: state.cryptoCurencies
+  cryptoCurencies: state.cryptoCurencies,
+  asyncInitialState: state.asyncInitialState
 })
 
 function mapDispachToProps(dispatch) {

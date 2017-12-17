@@ -20,7 +20,7 @@ const loadStore = () => {
       .then(response => {
         if (response) {
           const toReturn = JSON.parse(response);
-          console.log("toReturn :", toReturn);
+
           return toReturn;
         }
         return ({})

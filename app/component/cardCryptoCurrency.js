@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 
 import { Container, Content, Text, Left, Body, Right, Switch, Card, CardItem, CardSwiper, SwipeRow, Button, Icon as IconNativeBase } from 'native-base';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
-import { FontelloIcon, checkFontelloIconExist} from '../utils/AppIcons'
+import { FontelloIcon, checkFontelloIconExist } from '../utils/AppIcons'
 
 const {
     View,
@@ -39,7 +39,6 @@ class CardCryptoCurrency extends React.Component {
     }
 
     render() {
-        console.log(this.props.cryptoCurrency.name, 'render fav', this.state.isFav);
         return (
             <SwipeRow style={styles.listElement}
                 rightOpenValue={-75}
@@ -56,7 +55,7 @@ class CardCryptoCurrency extends React.Component {
                             <Card>
                                 <CardItem>
                                     <Left>
-                                        {checkFontelloIconExist(this.props.cryptoCurrency.symbol.toLowerCase() + "-alt") ?
+                                        {checkFontelloIconExist(this.props.cryptoCurrency.symbol && this.props.cryptoCurrency.symbol.toLowerCase() + "-alt") ?
                                             <FontelloIcon name={this.props.cryptoCurrency.symbol.toLowerCase() + "-alt"} size={55} style={{ marginTop: 5, marginBottom: 5 }} /> :
                                             <FontelloIcon name="coin-2" size={55} style={{ marginTop: 5, marginBottom: 5 }} />
                                         }
@@ -98,7 +97,6 @@ CardCryptoCurrency.propTypes = {
     cryptoCurrency: PropTypes.object.isRequired,
     pressFav: PropTypes.func.isRequired,
     isFav: PropTypes.func.isRequired,
-    checkIfIcon: PropTypes.func.isRequired
 };
 
 export default CardCryptoCurrency;

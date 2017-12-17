@@ -5,6 +5,9 @@ import PropTypes from 'prop-types';
 
 import { Container, Header, Content, List, ListItem, Text, Left, Body, Right, Switch, Card, CardItem, CardSwiper, SwipeRow, Button, Icon as IconNativeBase } from 'native-base';
 
+import { FontelloIcon, checkFontelloIconExist} from '../utils/AppIcons'
+import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
+
 const {
     View,
     ScrollView,
@@ -15,13 +18,7 @@ const {
 
 import styles from '../styles/AppStyle'
 
-import { createIconSetFromFontello } from 'react-native-vector-icons';
-import fontelloConfig from '../../assets/config.json';
-import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
-
-const Icon = createIconSetFromFontello(fontelloConfig);
-
-const CardMyCoin = ({ myCoin, deleteMyCoin, editMyCoin, augmentation, myCoinValue, myCoinOwn, checkIfIcon }) => (
+const CardMyCoin = ({ myCoin, deleteMyCoin, editMyCoin, augmentation, myCoinValue, myCoinOwn }) => (
     <SwipeRow style={styles.listElementMyCoin}
         rightOpenValue={-150}
         right={
@@ -40,9 +37,9 @@ const CardMyCoin = ({ myCoin, deleteMyCoin, editMyCoin, augmentation, myCoinValu
                     <Card>
                         <CardItem>
                             <Left>
-                                {checkIfIcon(myCoinValue.symbol.toLowerCase() + "-alt", fontelloConfig) ?
-                                    <Icon name={myCoinValue.symbol.toLowerCase() + "-alt"} size={55} style={{ marginTop: 5, marginBottom: 5 }} /> :
-                                    <Icon name="coin-2" size={55} style={{ marginTop: 5, marginBottom: 5 }} />
+                                {checkFontelloIconExist(myCoinValue.symbol.toLowerCase() + "-alt") ?
+                                    <FontelloIcon name={myCoinValue.symbol.toLowerCase() + "-alt"} size={55} style={{ marginTop: 5, marginBottom: 5 }} /> :
+                                    <FontelloIcon name="coin-2" size={55} style={{ marginTop: 5, marginBottom: 5 }} />
                                 }
                                 <Body>
                                     <Text>{myCoinValue.name}</Text>
@@ -83,9 +80,8 @@ CardMyCoin.propTypes = {
     deleteMyCoin: PropTypes.func.isRequired,
     myCoin: PropTypes.object.isRequired,
     myCoinValue: PropTypes.object.isRequired,
-    augmentation: PropTypes.string.isRequired,
-    myCoinOwn: PropTypes.string.isRequired,
-    checkIfIcon: PropTypes.func.isRequired
+    augmentation: PropTypes.number.isRequired,
+    myCoinOwn: PropTypes.string.isRequired
 };
 
 export default CardMyCoin;

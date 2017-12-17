@@ -6,5 +6,6 @@ import * as asyncInitialState from 'redux-async-initial-state';
 
 export default asyncInitialState.outerReducer(combineReducers({
     ...cryptoCurrenciesReducer,
-    ...myCoins
+    ...myCoins,
+    asyncInitialState: asyncInitialState.innerReducer
 }));

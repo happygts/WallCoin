@@ -59,8 +59,8 @@ class App extends Component {
 					navigatorButtons: {
 						rightButtons: [
 							{
-								icon: require('../assets/images/navicon_add.png'), // for icon button, provide the local image asset name
-								id: 'add' // id for this button, given in onNavigatorEvent(event) to help understand which button was clicked
+								icon: require('../assets/images/navicon_add.png'),
+								id: 'add'
 							}
 						]
 					}
