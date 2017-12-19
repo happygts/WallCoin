@@ -12,7 +12,14 @@ const styles = StyleSheet.create({
 		})
 	},
 	listElement: {
-		height: 120,
+		...Platform.select({
+			ios: {
+				height: 120
+			},
+			android: {
+				height: 140
+			}
+		}),
 	},
 	listElementMyCoin: {
 		height: 180,
