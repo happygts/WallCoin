@@ -10,6 +10,8 @@ import { ActionCreators } from '../actions'
 
 import CardCryptoCurrency from '../component/cardCryptoCurrency'
 
+export let rootNavigator = null;
+
 const {
   View,
   ScrollView,
@@ -27,10 +29,12 @@ class Home extends Component {
     this.state = {
       searchText: '',
     }
+
+    rootNavigator = this.props.navigator
   }
 
   componentDidMount() {
-    if (this.props.cryptoCurencies.list.length <= 0) {
+    if (this.props.cryptoCurencies.list.length <= 0 && this.props.asyncInitialState.loading == false) {
       this._onRefresh();
     }
   }
