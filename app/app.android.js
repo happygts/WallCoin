@@ -64,7 +64,10 @@ class App extends Component {
 						]
 					}
 				}
-			]
+			],
+			appStyle: {
+				tabBarSelectedButtonColor: '#EEEE00',
+			}
 		});
 	}
 }
