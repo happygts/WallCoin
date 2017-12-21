@@ -10,15 +10,15 @@ const replaceSuffixPattern = /--(active|big|small|very-big)/g;
 const icons = {
 	'ios-home': [30],
 	'ios-home-outline': [30],
+	'md-home' : [30],
 	'ios-star': [30],
 	'ios-star-outline': [30],
+	'md-star': [30],
 	'ios-cart': [30],
 	'ios-cart-outline': [30],
-	'ios-desktop-outline': [30],
-	'ios-desktop': [30],
-	'ios-search': [30],
-	'ios-arrow-round-down': [navIconSize],
-	'ios-close': [40]
+	'md-cart': [30],
+	'ios-add-outline' : [30],
+	'md-add' : [30],
 };
 
 const iconsMap = {};
@@ -42,11 +42,11 @@ const iconsLoaded = new Promise((resolve, reject) => {
 
 const FontelloIcon = createIconSetFromFontello(fontelloConfig);
 
-const checkFontelloIconExist = function(name) {
-    return !fontelloConfig.glyphs.every(glyph => {
-      return !(glyph.css == name);
-    });
-  }
+const checkFontelloIconExist = function (name) {
+	return !fontelloConfig.glyphs.every(glyph => {
+		return !(glyph.css == name);
+	});
+}
 
 export {
 	iconsMap,

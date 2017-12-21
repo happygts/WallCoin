@@ -74,12 +74,24 @@ class CardCryptoCurrency extends React.Component {
                                                 flexDirection: 'row',
                                                 justifyContent: 'space-between',
                                             }}>
-                                                <Text>Change 24h:</Text>
-                                                {parseInt(this.props.cryptoCurrency.percent_change_24h) > 0 ?
-                                                    <FontAwesomeIcon name="arrow-up" size={10} color="#090" /> :
-                                                    <FontAwesomeIcon name="arrow-down" size={10} color="#900" />
-                                                }
-                                                <Text>{this.props.cryptoCurrency.percent_change_24h}%</Text>
+                                                <View style={{
+                                                    flex: 1,
+                                                    flexDirection: 'row',
+                                                    justifyContent: 'center',
+                                                }}>
+                                                    <Text>24h: </Text>
+                                                </View>
+                                                <View style={{
+                                                    flex: 1,
+                                                    flexDirection: 'row',
+                                                    justifyContent: 'center',
+                                                }}>
+                                                    {parseInt(this.props.cryptoCurrency.percent_change_24h) > 0 ?
+                                                        <FontAwesomeIcon name="arrow-up" size={10} color="#090" /> :
+                                                        <FontAwesomeIcon name="arrow-down" size={10} color="#900" />
+                                                    }
+                                                    <Text>{this.props.cryptoCurrency.percent_change_24h}%</Text>
+                                                </View>
                                             </View>
                                         </CardItem>
                                     </Body>
