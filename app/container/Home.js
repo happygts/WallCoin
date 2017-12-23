@@ -80,6 +80,7 @@ class Home extends Component {
   }
 
   render() {
+    console.log("render home");
     return (
       <View style={styles.container}>
         {this.props.asyncInitialState.loading ?

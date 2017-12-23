@@ -23,16 +23,8 @@ const {
 class MyCoins extends Component {
     constructor(props) {
         super(props);
-        // if you want to listen on navigator events, set this up
+        console.log("props myCoins :", props);
         this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
-    }
-
-    componentWillMount() {
-        console.log("componentWillMount");
-    }
-
-    componentWillReceiveProps() {
-        console.log("componentWillReceiveProps");
     }
 
     onNavigatorEvent(event) {
@@ -72,28 +64,6 @@ class MyCoins extends Component {
         this.props.deleteMyCoin(myCoinId);
     }
 
-    editMyCoin(myCoin) {
-        myCoin.add = false;
-        myCoin.quantity = myCoin.quantity.toString();
-        myCoin.buyingPrice = myCoin.buyingPrice.toString();
-        this.props.navigator.push({
-            screen: 'AddEditMyCoins', // unique ID registered with Navigation.registerScreen
-            title: "Edit " + myCoin.id, // navigation bar title of the pushed screen (optional)
-            passProps: { myCoin }, // Object that will be passed as props to the pushed screen (optional)
-            animated: true, // does the push have transition animation or does it happen immediately (optional)
-            animationType: 'fade', // 'fade' (for both) / 'slide-horizontal' (for android) does the push have different transition animation (optional)
-            navigatorStyle: {
-                navBarTranslucent: true,
-                drawUnderNavBar: true,
-                navBarTextColor: 'white',
-                navBarButtonColor: 'white',
-                statusBarTextColorScheme: 'light',
-                drawUnderTabBar: true
-            }, // override the navigator style for the pushed screen (optional)
-            navigatorButtons: {}, // override the nav buttons for the pushed screen (optional)
-        });
-    }
-
     render() {
         return (
             <View style={styles.container}>
@@ -106,8 +76,11 @@ class MyCoins extends Component {
                     {this.props.myCoins && this.props.myCoins.length && this.props.cryptoCurencies && this.props.cryptoCurencies.list.length ? this.props.myCoins.map((myCoin) => (
                         <CardMyCoin key={myCoin.id}
                             deleteMyCoin={this.deleteMyCoin.bind(this)}
-                            myCoin={myCoin}
-                            myCoinValue={this.getCoinValue(myCoin)} />
+                            myCoinValue={this.getCoinValue(myCoin)}
+                            nbCoins={myCoin.nbCoins}
+                            totalMonneyInDollar={myCoin.totalMonneyInDollar}
+                            differencePercentage={myCoin.differencePercentage}
+                            beneficial={myCoin.beneficial} />
                     )) : null}
                 </ScrollView>
             </View>
@@ -115,10 +88,46 @@ class MyCoins extends Component {
     }
 }
 
-const mapStateToProps = (state) => ({
-    cryptoCurencies: state.cryptoCurencies,
-    myCoins: state.myCoins
-})
+const mapStateToProps = (state) => {
+    const cryptoCurencies = state.cryptoCurencies;
+    const myCoins = state.myCoins;
+
+    return {
+        cryptoCurencies,
+        myCoins: myCoins.map(myCoin => {
+            var nbCoins = 0;
+            var ratioBoughtPrice = 0;
+            var totalMonneyInDollar = 0;
+            var differencePercentage = 0;
+            var beneficial = 0;
+
+            myCoin.operations.forEach(element => {
+                nbCoins = (element.bought ? nbCoins - element.number : nbCoins + element.number);
+                if (element.bought) {
+                    ratioBoughtPrice += (element.number * element.price);
+                }
+            });
+
+            if (nbCoins > 0) {
+                ratioBoughtPrice /= nbCoins;
+
+                var cryptoValueOfMyCoin = cryptoCurencies.list.find((cryptoCurencie) => {
+                    return cryptoCurencie.id == myCoin.id;
+                });
+
+                totalMonneyInDollar = nbCoins * cryptoValueOfMyCoin.price_usd;
+                differencePercentage = (ratioBoughtPrice > cryptoValueOfMyCoin.price_usd) ?
+                    -((ratioBoughtPrice * 100 / cryptoValueOfMyCoin.price_usd).toPrecision(6)) :
+                    ((cryptoValueOfMyCoin.price_usd * 100 / ratioBoughtPrice).toPrecision(6))
+                beneficial = totalMonneyInDollar - ratioBoughtPrice * nbCoins;
+            }
+
+            console.log("nbCoins :", nbCoins, "totalMonneyInDollar :", totalMonneyInDollar, "differencePercentage :", differencePercentage, "beneficial :", beneficial);
+
+            return { ...myCoin, nbCoins, totalMonneyInDollar, differencePercentage, beneficial }
+        })
+    }
+}
 
 function mapDispachToProps(dispatch) {
     return bindActionCreators(ActionCreators, dispatch);

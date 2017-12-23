@@ -18,14 +18,7 @@ const {
 
 import styles from '../styles/AppStyle'
 
-class CardMyCoin extends Component {
-    constructor(props) {
-        super(props)
-        this.state = {
-
-        }
-    }
-    
+class CardMyCoin extends Component { 
     goToOneMyCoins() {
         console.log("Go to oneMyCoins");
     }
@@ -43,15 +36,15 @@ class CardMyCoin extends Component {
                                 }
                                 <Body>
                                     <Text>{this.props.myCoinValue.name}</Text>
-                                    <Text note>10 {this.props.myCoinValue.symbol}</Text>
+                                    <Text note>{this.props.nbCoins} {this.props.myCoinValue.symbol}</Text>
                                 </Body>
                             </Left>
                             <Body>
                                 <CardItem>
-                                    <Text style={{ fontSize: 12 }}> Price (USD) : 10</Text>
+                                    <Text style={{ fontSize: 12 }}> Price (USD) : {this.props.totalMonneyInDollar}</Text>
                                 </CardItem>
                                 <CardItem>
-                                    <Text style={{ fontSize: 12 }}> Beneficial : 10$</Text>
+                                    <Text style={{ fontSize: 12 }}> Beneficial : {this.props.beneficial}$</Text>
                                 </CardItem>
                                 <CardItem>
                                     <View style={{
@@ -63,7 +56,7 @@ class CardMyCoin extends Component {
                                             <FontAwesomeIcon name="arrow-up" size={40} color="#090" /> :
                                             <FontAwesomeIcon name="arrow-down" size={40} color="#900" />
                                         }
-                                        <Text style={{ marginTop: 13, marginLeft: 10 }}>{10}%</Text>
+                                        <Text style={{ marginTop: 13, marginLeft: 10 }}>{this.props.differencePercentage}%</Text>
                                     </View>
                                 </CardItem>
                             </Body>
@@ -77,8 +70,11 @@ class CardMyCoin extends Component {
 
 CardMyCoin.propTypes = {
     deleteMyCoin: PropTypes.func.isRequired,
-    myCoin: PropTypes.object.isRequired,
-    myCoinValue: PropTypes.object.isRequired
+    myCoinValue: PropTypes.object.isRequired,
+    nbCoins: PropTypes.number.isRequired,
+    totalMonneyInDollar: PropTypes.number.isRequired,
+    differencePercentage: PropTypes.number.isRequired,
+    beneficial: PropTypes.number.isRequired
 };
 
 export default CardMyCoin;
