@@ -69,6 +69,16 @@ class Home extends Component {
     this.isFav(id) ? this.props.removeFavCryptoCurrency(id) : this.props.addFavCryptoCurrency(id);
   }
 
+  isMyCoins(id) {
+    return this.props.myCoins.find((item) => {
+      return item.id == id
+    });
+  }
+
+  pressMyCoins(id) {
+    this.isMyCoins(id) ? this.props.deleteMyCoin(id) : this.props.createMyCoin(id);
+  }
+
   render() {
     return (
       <View style={styles.container}>
@@ -77,7 +87,7 @@ class Home extends Component {
             <ActivityIndicator size="large" color="#0000ff" />
           </View>
           :
-          <View >
+          <View>
             <Search
               ref="search_box"
               onChangeText={(newText) => this._onSearchTextChanged(newText)}
@@ -90,7 +100,9 @@ class Home extends Component {
                 key={item.id}
                 cryptoCurrency={item}
                 pressFav={this.pressFav.bind(this)}
+                pressMyCoins={this.pressMyCoins.bind(this)}
                 isFav={this.isFav.bind(this)}
+                isMyCoins={this.isMyCoins.bind(this)}
               />}>
               <RefreshControl
                 refreshing={this.props.cryptoCurencies.loading}
@@ -106,6 +118,7 @@ class Home extends Component {
 
 const mapStateToProps = (state) => ({
   cryptoCurencies: state.cryptoCurencies,
+  myCoins: state.myCoins,
   asyncInitialState: state.asyncInitialState
 })
 

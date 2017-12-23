@@ -30,7 +30,6 @@ class AddEditMyCoins extends Component {
             buyingPrice: props.myCoin ? props.myCoin.buyingPrice.toString() : "",
             add: props.myCoin == undefined,
             error: {
-                currencySelected: false,
                 quantity: false,
                 buyingPrice: false
             }
@@ -93,7 +92,6 @@ class AddEditMyCoins extends Component {
         this.setState((state) => {
             return {
                 error: {
-                    currencySelected: !this.state.currencySelected,
                     quantity: !this.state.quantity,
                     buyingPrice: !this.state.buyingPrice
                 }
@@ -101,20 +99,7 @@ class AddEditMyCoins extends Component {
         });
 
         if (this.state.currencySelected && this.state.quantity && this.state.buyingPrice) {
-            if (this.state.add) {
-                this.props.createMyCoin({
-                    id: this.state.currencySelected,
-                    quantity: parseFloat(this.state.quantity),
-                    buyingPrice: parseFloat(this.state.buyingPrice)
-                });
-            }
-            else {
-                this.props.editMyCoin({
-                    id: this.state.currencySelected,
-                    quantity: parseFloat(this.state.quantity),
-                    buyingPrice: parseFloat(this.state.buyingPrice)
-                });
-            }
+            // ajouter un achat.
             this.props.navigator.pop({
                 animated: true,
                 animationType: 'fade',
@@ -122,31 +107,10 @@ class AddEditMyCoins extends Component {
         }
     }
 
-    alreadyExist(id) {
-        return this.props.myCoins.find((myCoin) => {
-            return myCoin.id == id;
-        })
-    }
-
     render() {
         return (
             <View style={styles.container}>
                 <Form>
-                    {this.state.add ? <Item error={this.state.error.currencySelected}>
-                        <Picker
-                            iosHeader="Select one"
-                            selectedValue={this.state.currencySelected}
-                            onValueChange={this.onCurrencySelected.bind(this)}
-                            mode="dropdown"
-                            placeholder="CryptoCurrency">
-                            {!this.props.cryptoCurencies.loading && this.props.cryptoCurencies.list
-                                .filter(cryptoCurrency => !this.alreadyExist(cryptoCurrency.id))
-                                .map(cryptoCurrency => (
-                                    <PickerItem key={cryptoCurrency.id} label={cryptoCurrency.name} value={cryptoCurrency.id} />
-                                ))
-                            }
-                        </Picker>
-                    </Item> : null}
                     <Item error={this.state.error.quantity} >
                         <Input onChangeText={(text) => this.onQuantityChanged(text)} value={this.state.quantity} placeholder="Quantity" />
                     </Item>

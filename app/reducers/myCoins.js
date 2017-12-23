@@ -7,7 +7,9 @@ const initialState = []
 export const myCoins = createReducer(initialState, {
     [types.CREATE_ONE_MY_COIN](state, action) {
         return update(state, {
-            $push: [action.payload.myCoin]
+            $push: [{
+                id: action.payload.id
+            }]
         });
     },
     [types.EDIT_ONE_MY_COIN](state, action) {

@@ -6,48 +6,80 @@ import PropTypes from 'prop-types';
 import { Container, Content, Text, Left, Body, Right, Switch, Card, CardItem, CardSwiper, SwipeRow, Button, Icon as IconNativeBase } from 'native-base';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import { FontelloIcon, checkFontelloIconExist } from '../utils/AppIcons'
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const {
     View,
     ScrollView,
     RefreshControl,
     TouchableHighlight,
-    StyleSheet
+    StyleSheet,
+    Alert
   } = ReactNative;
 
 import styles from '../styles/AppStyle'
 
-class CardCryptoCurrency extends React.Component {
+class CardCryptoCurrency extends Component {
     constructor(props) {
         super(props)
 
         this.pressFav = this.pressFav.bind(this)
         this.state = {
-            isFav: props.isFav(this.props.cryptoCurrency.id)
+            isFav: props.isFav(this.props.cryptoCurrency.id),
+            isMyCoins: props.isMyCoins(this.props.cryptoCurrency.id)
         };
     }
 
     pressFav() {
-        const wasFav = this.state.isFav;
         this.setState({ isFav: !this.state.isFav });
+        this.props.pressFav(this.props.cryptoCurrency.id);
+    }
 
-        this.props.pressFav(this.props.cryptoCurrency.id)
+    pressMyCoins() {
+        if (this.state.isMyCoins) {
+            Alert.alert(
+                'Are you sure ?',
+                'You are going to lose all your data',
+                [
+                    { text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
+                    { text: 'OK', onPress: () => {
+                        this.setState({ isMyCoins: !this.state.isMyCoins })
+                        this.props.pressMyCoins(this.props.cryptoCurrency.id);
+                    }},
+                ],
+            )
+        }
+        else {
+            this.setState({ isMyCoins: !this.state.isMyCoins })
+            this.props.pressMyCoins(this.props.cryptoCurrency.id);
+        }
     }
 
     shouldComponentUpdate(nextProps, nextState) {
-        return this.props.isFav(nextProps.cryptoCurrency.id) !== this.state.isFav;
+        return this.props.isFav(nextProps.cryptoCurrency.id) !== this.state.isFav || this.props.isMyCoins(nextProps.cryptoCurrency.id) !== this.state.isMyCoins;
     }
 
     render() {
+        console.log("render :", this.props.cryptoCurrency.id)
         return (
             <SwipeRow style={styles.listElement}
-                rightOpenValue={-75}
+                rightOpenValue={-100}
                 right={
-                    <TouchableHighlight onPress={() => this.pressFav(this.props.cryptoCurrency.id)}>
-                        {this.state.isFav ?
-                            <FontAwesomeIcon name="star" color="#FFD700" style={{ marginTop: 45, marginLeft: 11 }} size={30} /> :
-                            <FontAwesomeIcon name="star-o" color="#FFD700" style={{ marginTop: 45, marginLeft: 11 }} size={30} />}
-                    </TouchableHighlight >
+                    <View style={{ flex: 1, flexDirection: 'row' }}>
+                        <TouchableHighlight onPress={() => this.pressFav(this.props.cryptoCurrency.id)}>
+                            {this.state.isFav ?
+                                <FontAwesomeIcon name="star" color="#FFD700" style={{ marginTop: 45, marginLeft: 11 }} size={30} /> :
+                                <FontAwesomeIcon name="star-o" color="#000000" style={{ marginTop: 45, marginLeft: 11 }} size={30} />
+                            }
+                        </TouchableHighlight>
+                        <TouchableHighlight onPress={() => this.pressMyCoins(this.props.cryptoCurrency.id)}>
+                            {this.state.isMyCoins ?
+                                <Ionicons name="ios-cart" color="#FFD700" style={{ marginTop: 45, marginLeft: 11 }} size={30} />
+                                :
+                                <Ionicons name="ios-cart-outline" color="#000000" style={{ marginTop: 45, marginLeft: 11 }} size={30} />
+                            }
+                        </TouchableHighlight >
+                    </View>
                 }
                 body={
                     <Container>
@@ -108,7 +140,9 @@ class CardCryptoCurrency extends React.Component {
 CardCryptoCurrency.propTypes = {
     cryptoCurrency: PropTypes.object.isRequired,
     pressFav: PropTypes.func.isRequired,
+    pressMyCoins: PropTypes.func.isRequired,
     isFav: PropTypes.func.isRequired,
+    isMyCoins: PropTypes.func.isRequired
 };
 
 export default CardCryptoCurrency;

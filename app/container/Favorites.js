@@ -25,7 +25,7 @@ class Favorites extends Component {
             searchText: ''
         }
     }
-    
+
     componentWillMount() {
         if (this.props.cryptoCurencies.list.length == 0) {
             this._onRefresh();
@@ -62,6 +62,16 @@ class Favorites extends Component {
         this.isFav(id) ? this.props.removeFavCryptoCurrency(id) : this.props.addFavCryptoCurrency(id);
     }
 
+    isMyCoins(id) {
+        return this.props.cryptoCurencies.listFav.find((item) => {
+            return item.id == id
+        });
+    }
+
+    pressMyCoins(id) {
+        this.isMyCoins(id) ? alert('Was already my coin') : alert('is not my coin anymore');
+    }
+
     render() {
         return (
             <View style={styles.container}>
@@ -81,7 +91,13 @@ class Favorites extends Component {
                         .filter(cryptoCurrency => cryptoCurrency.name.includes(this.state.searchText))
                         .map((cryptoCurrency) => (
                             this.isFav(cryptoCurrency.id) ?
-                                <CardCryptoCurrency key={cryptoCurrency.id} cryptoCurrency={cryptoCurrency} pressFav={this.pressFav.bind(this)} isFav={this.isFav.bind(this)} />
+                                <CardCryptoCurrency
+                                    key={cryptoCurrency.id}
+                                    cryptoCurrency={cryptoCurrency}
+                                    pressFav={this.pressFav.bind(this)}
+                                    isFav={this.isFav.bind(this)}
+                                    pressMyCoins={this.pressMyCoins.bind(this)}
+                                    isMyCoins={this.isMyCoins.bind(this)} />
                                 : null
                         ))}
                 </ScrollView>

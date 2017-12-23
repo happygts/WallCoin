@@ -35,15 +35,15 @@ class MyCoins extends Component {
         console.log("componentWillReceiveProps");
     }
 
-    onNavigatorEvent(event) { // this is the onPress handler for the two buttons together
-        if (event.type == 'NavBarButtonPress') { // this is the event type for button presses
+    onNavigatorEvent(event) {
+        if (event.type == 'NavBarButtonPress') {
             if (event.id == 'add') {
                 this.props.navigator.push({
-                    screen: 'AddEditMyCoins', // unique ID registered with Navigation.registerScreen
-                    title: "Add one MyCoin", // navigation bar title of the pushed screen (optional)
-                    passProps: { }, // Object that will be passed as props to the pushed screen (optional)
-                    animated: true, // does the push have transition animation or does it happen immediately (optional)
-                    animationType: 'fade', // 'fade' (for both) / 'slide-horizontal' (for android) does the push have different transition animation (optional)
+                    screen: 'AddEditMyCoins',
+                    title: "Add one MyCoin",
+                    passProps: {},
+                    animated: true,
+                    animationType: 'fade',
                     navigatorStyle: {
                         navBarTranslucent: true,
                         drawUnderNavBar: true,
@@ -51,8 +51,8 @@ class MyCoins extends Component {
                         navBarButtonColor: 'white',
                         statusBarTextColorScheme: 'light',
                         drawUnderTabBar: true
-                    }, // override the navigator style for the pushed screen (optional)
-                    navigatorButtons: {}, // override the nav buttons for the pushed screen (optional)
+                    },
+                    navigatorButtons: {},
                 });
             }
         }
@@ -62,38 +62,14 @@ class MyCoins extends Component {
         this.props.fetchCryptoCurencies();
     }
 
-    calculateOwn(myCoin) {
-        let coinValue = this.getCoinValue(myCoin);
-
-        if (coinValue) {
-            return (myCoin.quantity * coinValue.price_usd).toPrecision(6);
-        }
-        return (-1);
-    }
-
-    calculateAugmentation(myCoin) {
-        let coinValue = this.getCoinValue(myCoin);
-
-        if (coinValue) {
-            if (myCoin.buyingPrice > coinValue.price_usd) {
-                return -((myCoin.buyingPrice * 100 / coinValue.price_usd).toPrecision(6))
-            }
-            else {
-                return ((coinValue.price_usd * 100 / myCoin.buyingPrice).toPrecision(6))
-            }
-
-        }
-        return (-1);
-    }
-
     getCoinValue(myCoin) {
         return this.props.cryptoCurencies.list.find((cryptoCurencie) => {
             return cryptoCurencie.id == myCoin.id;
         });
     }
 
-    deleteMyCoin(myCoin) {
-        this.props.deleteMyCoin(myCoin.id);
+    deleteMyCoin(myCoinId) {
+        this.props.deleteMyCoin(myCoinId);
     }
 
     editMyCoin(myCoin) {
@@ -128,12 +104,10 @@ class MyCoins extends Component {
                     />
                 }>
                     {this.props.myCoins && this.props.myCoins.length && this.props.cryptoCurencies && this.props.cryptoCurencies.list.length ? this.props.myCoins.map((myCoin) => (
-                        <CardMyCoin key={myCoin.id} myCoin={myCoin}
+                        <CardMyCoin key={myCoin.id}
                             deleteMyCoin={this.deleteMyCoin.bind(this)}
-                            editMyCoin={this.editMyCoin.bind(this)}
-                            augmentation={this.calculateAugmentation(myCoin)}
-                            myCoinValue={this.getCoinValue(myCoin)}
-                            myCoinOwn={this.calculateOwn(myCoin)} />
+                            myCoin={myCoin}
+                            myCoinValue={this.getCoinValue(myCoin)} />
                     )) : null}
                 </ScrollView>
             </View>
