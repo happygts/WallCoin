@@ -18,17 +18,13 @@ const {
 
 import styles from '../styles/AppStyle'
 
-class CardMyCoin extends Component { 
-    goToOneMyCoins() {
-        console.log("Go to oneMyCoins");
-    }
-
+class CardMyCoin extends Component {
     render() {
         return (
             <Container>
                 <Content>
                     <Card>
-                        <CardItem button={true} onPress={() => this.goToOneMyCoins()}>
+                        <CardItem button={true} onPress={() => this.props.goToOneMyCoins(this.props.myCoinValue.id)}>
                             <Left>
                                 {checkFontelloIconExist(this.props.myCoinValue.symbol.toLowerCase() + "-alt") ?
                                     <FontelloIcon name={this.props.myCoinValue.symbol.toLowerCase() + "-alt"} size={55} style={{ marginTop: 5, marginBottom: 5 }} /> :
@@ -70,11 +66,12 @@ class CardMyCoin extends Component {
 
 CardMyCoin.propTypes = {
     deleteMyCoin: PropTypes.func.isRequired,
+    goToOneMyCoins: PropTypes.func.isRequired,
     myCoinValue: PropTypes.object.isRequired,
     nbCoins: PropTypes.number.isRequired,
     totalMonneyInDollar: PropTypes.number.isRequired,
     differencePercentage: PropTypes.number.isRequired,
-    beneficial: PropTypes.number.isRequired
+    beneficial: PropTypes.number.isRequired,
 };
 
 export default CardMyCoin;

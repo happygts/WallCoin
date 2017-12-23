@@ -54,14 +54,39 @@ class MyCoins extends Component {
         this.props.fetchCryptoCurencies();
     }
 
-    getCoinValue(myCoin) {
+    getCoinValue(id) {
         return this.props.cryptoCurencies.list.find((cryptoCurencie) => {
-            return cryptoCurencie.id == myCoin.id;
+            return cryptoCurencie.id == id;
         });
     }
 
     deleteMyCoin(myCoinId) {
         this.props.deleteMyCoin(myCoinId);
+    }
+
+    goToOneMyCoins(id) {
+        var myCoin = this.props.myCoins.find((myCoin) => {
+            return id == myCoin.id;
+        });
+
+        var myCoinValue = this.getCoinValue(id);
+        
+        this.props.navigator.push({
+            screen: 'OneMyCoins',
+            title: "MyCoin " + myCoinValue.name,
+            passProps: { myCoin, myCoinValue },
+            animated: true,
+            animationType: 'fade',
+            navigatorStyle: {
+                navBarTranslucent: true,
+                drawUnderNavBar: true,
+                navBarTextColor: 'white',
+                navBarButtonColor: 'white',
+                statusBarTextColorScheme: 'light',
+                drawUnderTabBar: true
+            },
+            navigatorButtons: {},
+        });
     }
 
     render() {
@@ -76,7 +101,8 @@ class MyCoins extends Component {
                     {this.props.myCoins && this.props.myCoins.length && this.props.cryptoCurencies && this.props.cryptoCurencies.list.length ? this.props.myCoins.map((myCoin) => (
                         <CardMyCoin key={myCoin.id}
                             deleteMyCoin={this.deleteMyCoin.bind(this)}
-                            myCoinValue={this.getCoinValue(myCoin)}
+                            goToOneMyCoins={this.goToOneMyCoins.bind(this)}
+                            myCoinValue={this.getCoinValue(myCoin.id)}
                             nbCoins={myCoin.nbCoins}
                             totalMonneyInDollar={myCoin.totalMonneyInDollar}
                             differencePercentage={myCoin.differencePercentage}
