@@ -24,7 +24,7 @@ class AddEditOneOperation extends Component {
         super(props);
         this.state = {
             operation: {
-                id: props.operation? props.operation.id : null,
+                id: props.operation ? props.operation.id : null,
                 bought: props.operation ? props.operation.bought : true,
                 quantity: props.operation ? props.operation.quantity : "",
                 buyingPrice: props.operation ? props.operation.buyingPrice : "",
@@ -133,24 +133,26 @@ class AddEditOneOperation extends Component {
     render() {
         return (
             <View style={styles.containerPush}>
-                <Form>
-                    <Picker
-                        style={styles.pickerInsideForm}
-                        selectedValue={this.state.operation.bought}
-                        onValueChange={this.onOperationSelected.bind(this)}>
-                        <Picker.Item label="Bought" value={true} />
-                        <Picker.Item label="Sold" value={false} />
-                    </Picker>
-                    <Item error={this.state.error.quantity} >
-                        <Input onChangeText={(text) => this.onQuantityChanged(text)} value={this.state.operation.quantity.toString()} placeholder="Quantity" />
-                    </Item>
-                    <Item error={this.state.error.buyingPrice} >
-                        <Input onChangeText={(text) => this.onBuyingPriceChanged(text)} value={this.state.operation.buyingPrice.toString()} placeholder="Buying price" />
-                    </Item>
-                    <Button style={{ marginTop: 10 }} full success onPress={() => this.createEditOperation()}>
-                        <Text>{this.state.add ? "Add" : "Edit"}</Text>
-                    </Button>
-                </Form>
+                <ScrollView>
+                    <Form>
+                        <Picker
+                            style={styles.pickerInsideForm}
+                            selectedValue={this.state.operation.bought}
+                            onValueChange={this.onOperationSelected.bind(this)}>
+                            <Picker.Item label="Bought" value={true} />
+                            <Picker.Item label="Sold" value={false} />
+                        </Picker>
+                        <Item error={this.state.error.quantity} >
+                            <Input onChangeText={(text) => this.onQuantityChanged(text)} value={this.state.operation.quantity.toString()} placeholder="Quantity" />
+                        </Item>
+                        <Item error={this.state.error.buyingPrice} >
+                            <Input onChangeText={(text) => this.onBuyingPriceChanged(text)} value={this.state.operation.buyingPrice.toString()} placeholder="Buying price" />
+                        </Item>
+                        <Button style={{ marginTop: 10 }} full success onPress={() => this.createEditOperation()}>
+                            <Text>{this.state.add ? "Add" : "Edit"}</Text>
+                        </Button>
+                    </Form>
+                </ScrollView>
             </View>
         )
     }

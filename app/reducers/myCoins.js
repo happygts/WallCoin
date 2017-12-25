@@ -36,16 +36,13 @@ export const myCoins = createReducer(initialState, {
             return myCoinState.id == myCoinId;
         }));
 
-        var updateReturn = update(state, {
+        return update(state, {
             [index]: {
                 operations: {
                     $push: [newOperation]
                 }
             }
         });
-
-        console.log("udpdateReturn :", updateReturn);
-        return updateReturn;
     },
     [types.DELETE_OPERATION_FROM_ONE_MY_COIN](state, action) {
         let myCoinId = action.payload.myCoinId;

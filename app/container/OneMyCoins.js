@@ -94,18 +94,18 @@ class OneMyCoins extends Component {
         console.log("Render mycoin :", this.props.myCoin.id, this.props.myCoin)
         return (
             <View style={styles.containerPush}>
-                <View style={{ flex: 0.1, flexDirection: 'row', height: 50 }}>
-                    <ViewFlexWidthCenterHeight height={50}>
+                <View style={{ flexDirection: 'row', height: 40 }}>
+                    <ViewFlexWidthCenterHeight height={40}>
                         {checkFontelloIconExist(this.props.myCoinValue.symbol.toLowerCase() + "-alt") ?
                             <FontelloIcon name={this.props.myCoinValue.symbol.toLowerCase() + "-alt"} size={20} style={{ marginTop: 5, marginBottom: 5 }} /> :
                             <FontelloIcon name="coin-2" size={20} style={{ marginTop: 5, marginBottom: 5 }} />
                         }
                         <Text>{this.props.myCoin.nbCoins}</Text>
                     </ViewFlexWidthCenterHeight>
-                    <ViewFlexWidthCenterHeight height={50}>
+                    <ViewFlexWidthCenterHeight height={40}>
                         <Text>{this.props.myCoin.totalMonneyInDollar} $</Text>
                     </ViewFlexWidthCenterHeight>
-                    <ViewFlexWidthCenterHeight height={50}>
+                    <ViewFlexWidthCenterHeight height={40}>
                         {this.props.myCoin.beneficial >= 0 ?
                             <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
                                 <FontAwesomeIcon name="arrow-up" size={10} color="#090" />
@@ -118,7 +118,7 @@ class OneMyCoins extends Component {
                             </View>
                         }
                     </ViewFlexWidthCenterHeight>
-                    <ViewFlexWidthCenterHeight height={50}>
+                    <ViewFlexWidthCenterHeight height={40}>
                         {this.props.myCoin.differencePercentage >= 0 ?
                             <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
                                 <FontAwesomeIcon name="arrow-up" size={10} color="#090" />
@@ -132,7 +132,7 @@ class OneMyCoins extends Component {
                         }
                     </ViewFlexWidthCenterHeight>
                 </View>
-                <View style={{ flex: 0.9 }}>
+                <View style={{ flex: 1 }}>
                     <FlatList
                         data={this.props.myCoin.operations}
                         renderItem={({ item }) => <CardOneOperation
