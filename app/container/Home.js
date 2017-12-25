@@ -26,6 +26,7 @@ const {
 class Home extends Component {
   constructor(props) {
     super(props);
+    console.log("props Home : ", props.favoritesOnly);
     this.state = {
       searchText: '',
     }
@@ -95,7 +96,9 @@ class Home extends Component {
               onDelete={this._onSearchCancel.bind(this)}
             />
             <FlatList
-              data={this.props.cryptoCurencies.list.filter(cryptoCurrency => cryptoCurrency.name.includes(this.state.searchText))}
+              data={this.props.cryptoCurencies.list.filter(cryptoCurrency => {
+                return cryptoCurrency.name.includes(this.state.searchText) && (this.props.favoritesOnly ? this.isFav(cryptoCurrency.id) : true)
+              })}
               renderItem={({ item }) => <CardCryptoCurrency
                 key={item.id}
                 cryptoCurrency={item}
