@@ -22,34 +22,6 @@ const {
 class Favorites extends Component {
     render() {
         return (
-            // <View style={styles.container}>
-            //     <Search
-            //         ref="search_box"
-            //         onChangeText={(newText) => this._onSearchTextChanged(newText)}
-            //         onCancel={this._onSearchCancel.bind(this)}
-            //         onDelete={this._onSearchCancel.bind(this)}
-            //     />
-            //     <ScrollView refreshControl={
-            //         <RefreshControl
-            //             refreshing={this.props.cryptoCurencies.loading}
-            //             onRefresh={this._onRefresh.bind(this)}
-            //         />
-            //     }>
-            //         {!this.props.cryptoCurencies.loading && this.props.cryptoCurencies.list
-            //             .filter(cryptoCurrency => cryptoCurrency.name.includes(this.state.searchText))
-            //             .map((cryptoCurrency) => (
-            //                 this.isFav(cryptoCurrency.id) ?
-            //                     <CardCryptoCurrency
-            //                         key={cryptoCurrency.id}
-            //                         cryptoCurrency={cryptoCurrency}
-            //                         pressFav={this.pressFav.bind(this)}
-            //                         isFav={this.isFav.bind(this)}
-            //                         pressMyCoins={this.pressMyCoins.bind(this)}
-            //                         isMyCoins={this.isMyCoins.bind(this)} />
-            //                     : null
-            //             ))}
-            //     </ScrollView>
-            // </View>
             <Home favoritesOnly={true}></Home>
         )
     }
