@@ -55,14 +55,7 @@ class App extends Component {
 					icon: iconsMap['md-cart'],
 					title: 'My Coins',
 					navigatorStyle: {},
-					navigatorButtons: {
-						rightButtons: [
-							{
-								icon: iconsMap['md-add'],
-								id: 'add'
-							}
-						]
-					}
+					navigatorButtons: {}
 				}
 			],
 			appStyle: {
