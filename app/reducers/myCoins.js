@@ -90,7 +90,7 @@ export const myCoins = createReducer(initialState, {
                 return update(state, {
                     [indexMyCoin]: {
                         operations: {
-                            [indexMyCoin]: {
+                            [indexOperation]: {
                                 $merge: newOperation
                             }
                         }
