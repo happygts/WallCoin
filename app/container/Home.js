@@ -103,11 +103,13 @@ class Home extends Component {
                 pressMyCoins={this.pressMyCoins.bind(this)}
                 isFav={this.isFav.bind(this)}
                 isMyCoins={this.isMyCoins.bind(this)}
-              />}>
-              <RefreshControl
-                refreshing={this.props.cryptoCurencies.loading}
-                onRefresh={this._onRefresh.bind(this)}
-              />
+              />}
+              refreshControl={
+                <RefreshControl
+                  refreshing={this.props.cryptoCurencies.loading}
+                  onRefresh={this._onRefresh.bind(this)}
+                />
+              }>
             </FlatList>
           </View>
         }
