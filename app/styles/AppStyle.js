@@ -11,6 +11,19 @@ const styles = StyleSheet.create({
 			}
 		})
 	},
+	containerPush: {
+		flex: 1,
+		flexDirection: 'column',
+		...Platform.select({
+			android: {
+				paddingTop: 64
+			},
+			ios: {
+				paddingTop: 64,
+				paddingBottom: 74
+			}
+		})
+	},
 	listElement: {
 		...Platform.select({
 			ios: {
@@ -22,10 +35,17 @@ const styles = StyleSheet.create({
 		}),
 	},
 	listElementMyCoin: {
-		height: 180,
+		height: 200,
 	},
 	insidelistElement: {
 		height: 70
+	},
+	pickerInsideForm: {
+		...Platform.select({
+			android: {
+				marginLeft : 10
+			}
+		})
 	}
 })
 

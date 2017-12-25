@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import ReactNative from 'react-native';
 import PropTypes from 'prop-types';
 
-import { Container, Content, Text, Left, Body, Right, Switch, Card, CardItem, CardSwiper, SwipeRow, Button, Icon as IconNativeBase } from 'native-base';
+import { Container, Content, Text, Left, Body, Card, CardItem, CardSwiper, SwipeRow, Icon as IconNativeBase } from 'native-base';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import { FontelloIcon, checkFontelloIconExist } from '../utils/AppIcons'
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -60,7 +60,6 @@ class CardCryptoCurrency extends Component {
     }
 
     render() {
-        console.log("render :", this.props.cryptoCurrency.id)
         return (
             <SwipeRow style={styles.listElement}
                 rightOpenValue={-100}

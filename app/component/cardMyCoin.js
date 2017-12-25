@@ -21,7 +21,7 @@ import styles from '../styles/AppStyle'
 class CardMyCoin extends Component {
     render() {
         return (
-            <Container>
+            <Container style={styles.listElementMyCoin}>
                 <Content>
                     <Card>
                         <CardItem button={true} onPress={() => this.props.goToOneMyCoins(this.props.myCoinValue.id)}>
@@ -37,10 +37,13 @@ class CardMyCoin extends Component {
                             </Left>
                             <Body>
                                 <CardItem>
-                                    <Text style={{ fontSize: 12 }}> Price (USD) : {this.props.totalMonneyInDollar}</Text>
-                                </CardItem>
-                                <CardItem>
-                                    <Text style={{ fontSize: 12 }}> Beneficial : {this.props.beneficial}$</Text>
+                                    <View style={{
+                                        flex: 1,
+                                        flexDirection: 'row',
+                                        justifyContent: 'center',
+                                    }}>
+                                        <Text style={{ fontSize: 12 }}>Price (USD){this.props.totalMonneyInDollar}</Text>
+                                    </View>
                                 </CardItem>
                                 <CardItem>
                                     <View style={{
@@ -48,7 +51,16 @@ class CardMyCoin extends Component {
                                         flexDirection: 'row',
                                         justifyContent: 'center',
                                     }}>
-                                        {10 > 0 ?
+                                        <Text style={{ fontSize: 12 }}>Beneficial{this.props.beneficial}$</Text>
+                                    </View>
+                                </CardItem>
+                                <CardItem>
+                                    <View style={{
+                                        flex: 1,
+                                        flexDirection: 'row',
+                                        justifyContent: 'center',
+                                    }}>
+                                        {this.props.differencePercentage >= 0 ?
                                             <FontAwesomeIcon name="arrow-up" size={40} color="#090" /> :
                                             <FontAwesomeIcon name="arrow-down" size={40} color="#900" />
                                         }
@@ -68,10 +80,10 @@ CardMyCoin.propTypes = {
     deleteMyCoin: PropTypes.func.isRequired,
     goToOneMyCoins: PropTypes.func.isRequired,
     myCoinValue: PropTypes.object.isRequired,
-    nbCoins: PropTypes.number.isRequired,
-    totalMonneyInDollar: PropTypes.number.isRequired,
-    differencePercentage: PropTypes.number.isRequired,
-    beneficial: PropTypes.number.isRequired,
+    nbCoins: PropTypes.string.isRequired,
+    totalMonneyInDollar: PropTypes.string.isRequired,
+    differencePercentage: PropTypes.string.isRequired,
+    beneficial: PropTypes.string.isRequired,
 };
 
 export default CardMyCoin;

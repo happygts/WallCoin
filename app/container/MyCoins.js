@@ -23,31 +23,6 @@ const {
 class MyCoins extends Component {
     constructor(props) {
         super(props);
-        console.log("props myCoins :", props);
-        this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
-    }
-
-    onNavigatorEvent(event) {
-        if (event.type == 'NavBarButtonPress') {
-            if (event.id == 'add') {
-                this.props.navigator.push({
-                    screen: 'AddEditMyCoins',
-                    title: "Add one MyCoin",
-                    passProps: {},
-                    animated: true,
-                    animationType: 'fade',
-                    navigatorStyle: {
-                        navBarTranslucent: true,
-                        drawUnderNavBar: true,
-                        navBarTextColor: 'white',
-                        navBarButtonColor: 'white',
-                        statusBarTextColorScheme: 'light',
-                        drawUnderTabBar: true
-                    },
-                    navigatorButtons: {},
-                });
-            }
-        }
     }
 
     _onRefresh() {
@@ -70,11 +45,11 @@ class MyCoins extends Component {
         });
 
         var myCoinValue = this.getCoinValue(id);
-        
+
         this.props.navigator.push({
             screen: 'OneMyCoins',
             title: "MyCoin " + myCoinValue.name,
-            passProps: { myCoin, myCoinValue },
+            passProps: { myCoinId: myCoin.id, myCoinValue },
             animated: true,
             animationType: 'fade',
             navigatorStyle: {
@@ -85,11 +60,19 @@ class MyCoins extends Component {
                 statusBarTextColorScheme: 'light',
                 drawUnderTabBar: true
             },
-            navigatorButtons: {},
+            navigatorButtons: {
+                rightButtons: [
+                    {
+                        icon: iconsMap['md-add'],
+                        id: 'add'
+                    }
+                ]
+            }
         });
     }
 
     render() {
+        console.log("Render MyCoins.js")
         return (
             <View style={styles.container}>
                 <ScrollView refreshControl={
@@ -115,6 +98,7 @@ class MyCoins extends Component {
 }
 
 const mapStateToProps = (state) => {
+    console.log("mapStateToProps of MyCoins");
     const cryptoCurencies = state.cryptoCurencies;
     const myCoins = state.myCoins;
 
@@ -122,35 +106,38 @@ const mapStateToProps = (state) => {
         cryptoCurencies,
         myCoins: myCoins.map(myCoin => {
             var nbCoins = 0;
-            var ratioBoughtPrice = 0;
+            var ratioBuyingPrice = 0;
             var totalMonneyInDollar = 0;
             var differencePercentage = 0;
             var beneficial = 0;
-
-            myCoin.operations.forEach(element => {
-                nbCoins = (element.bought ? nbCoins - element.number : nbCoins + element.number);
-                if (element.bought) {
-                    ratioBoughtPrice += (element.number * element.price);
+            
+            myCoin.operations.forEach(operation => {
+                nbCoins = (operation.bought ? nbCoins + operation.quantity : nbCoins - operation.quantity);
+                if (operation.bought) {
+                    ratioBuyingPrice += (operation.quantity * operation.buyingPrice);
                 }
             });
 
+            console.log("MyCoin " + myCoin.id + ": ", myCoin.operations);
+
             if (nbCoins > 0) {
-                ratioBoughtPrice /= nbCoins;
+                ratioBuyingPrice /= nbCoins;
 
                 var cryptoValueOfMyCoin = cryptoCurencies.list.find((cryptoCurencie) => {
                     return cryptoCurencie.id == myCoin.id;
                 });
 
                 totalMonneyInDollar = nbCoins * cryptoValueOfMyCoin.price_usd;
-                differencePercentage = (ratioBoughtPrice > cryptoValueOfMyCoin.price_usd) ?
-                    -((ratioBoughtPrice * 100 / cryptoValueOfMyCoin.price_usd).toPrecision(6)) :
-                    ((cryptoValueOfMyCoin.price_usd * 100 / ratioBoughtPrice).toPrecision(6))
-                beneficial = totalMonneyInDollar - ratioBoughtPrice * nbCoins;
+                differencePercentage = (cryptoValueOfMyCoin.price_usd - ratioBuyingPrice) * 100 / ratioBuyingPrice
+                beneficial = totalMonneyInDollar - ratioBuyingPrice * nbCoins;
             }
 
-            console.log("nbCoins :", nbCoins, "totalMonneyInDollar :", totalMonneyInDollar, "differencePercentage :", differencePercentage, "beneficial :", beneficial);
+            // console.log("nbCoins :", nbCoins, "totalMonneyInDollar :", totalMonneyInDollar, "differencePercentage :", differencePercentage, "beneficial :", beneficial);
 
-            return { ...myCoin, nbCoins, totalMonneyInDollar, differencePercentage, beneficial }
+            return { ...myCoin, nbCoins: nbCoins.toPrecision(6).toString(),
+                                totalMonneyInDollar: totalMonneyInDollar.toPrecision(6).toString(),
+                                differencePercentage: differencePercentage.toPrecision(6).toString(),
+                                beneficial: beneficial.toPrecision(6).toString() }
         })
     }
 }
