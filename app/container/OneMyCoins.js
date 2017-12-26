@@ -10,6 +10,7 @@ import { FontelloIcon, checkFontelloIconExist } from '../utils/AppIcons'
 
 import styles from '../styles/AppStyle'
 import { ActionCreators } from '../actions'
+import { makeComputeMyCoin } from '../selectors/myCoinsSelectors'
 
 import ViewFlexWidthCenterHeight from '../component/ViewFlexWidthCenterHeight'
 import CardOneOperation from '../component/CardOneOperation'
@@ -109,12 +110,12 @@ class OneMyCoins extends Component {
                         {this.props.myCoin.beneficial >= 0 ?
                             <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
                                 <FontAwesomeIcon name="arrow-up" size={10} color="#090" />
-                                <Text style={{ color: '#090' }}>  {this.props.myCoin.beneficial} $</Text>
+                                <Text style={{ color: '#090' }}>{this.props.myCoin.beneficial} $</Text>
                             </View>
                             :
                             <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
                                 <FontAwesomeIcon name="arrow-down" size={10} color="#900" />
-                                <Text style={{ color: '#900' }}>  {this.props.myCoin.beneficial} $</Text>
+                                <Text style={{ color: '#900' }}>{this.props.myCoin.beneficial} $</Text>
                             </View>
                         }
                     </ViewFlexWidthCenterHeight>
@@ -122,12 +123,12 @@ class OneMyCoins extends Component {
                         {this.props.myCoin.differencePercentage >= 0 ?
                             <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
                                 <FontAwesomeIcon name="arrow-up" size={10} color="#090" />
-                                <Text style={{ color: '#090' }}>  {this.props.myCoin.differencePercentage} %</Text>
+                                <Text style={{ color: '#090' }}>{this.props.myCoin.differencePercentage} %</Text>
                             </View>
                             :
                             <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
                                 <FontAwesomeIcon name="arrow-down" size={10} color="#900" />
-                                <Text style={{ color: '#900' }}>  {this.props.myCoin.differencePercentage} %</Text>
+                                <Text style={{ color: '#900' }}>{this.props.myCoin.differencePercentage} %</Text>
                             </View>
                         }
                     </ViewFlexWidthCenterHeight>
@@ -157,48 +158,11 @@ OneMyCoins.propTypes = {
 };
 
 const mapStateToProps = (state, ownProps) => {
-    const cryptoCurencies = state.cryptoCurencies;
-    const myCoins = state.myCoins;
-    var myCoin = myCoins.find((myCoin) => (myCoin.id == ownProps.myCoinId));
-
-    var nbCoins = 0;
-    var ratioBuyingPrice = 0;
-    var totalMonneyInDollar = 0;
-    var differencePercentage = 0;
-    var beneficial = 0;
-
-    myCoin.operations.forEach(operation => {
-        nbCoins = (operation.bought ? nbCoins + operation.quantity : nbCoins - operation.quantity);
-        if (operation.bought) {
-            ratioBuyingPrice += (operation.quantity * operation.buyingPrice);
-        }
-    });
-
-    if (nbCoins > 0) {
-        ratioBuyingPrice /= nbCoins;
-
-        var cryptoValueOfMyCoin = cryptoCurencies.list.find((cryptoCurencie) => {
-            return cryptoCurencie.id == myCoin.id;
-        });
-
-        totalMonneyInDollar = nbCoins * cryptoValueOfMyCoin.price_usd;
-        differencePercentage = (cryptoValueOfMyCoin.price_usd - ratioBuyingPrice) * 100 / ratioBuyingPrice
-        beneficial = totalMonneyInDollar - ratioBuyingPrice * nbCoins;
-    }
-
-    // console.log("nbCoins :", nbCoins, "totalMonneyInDollar :", totalMonneyInDollar, "differencePercentage :", differencePercentage, "beneficial :", beneficial);
-    myCoin = update(myCoin, {
-        $merge: {
-            nbCoins: nbCoins.toPrecision(6).toString(),
-            totalMonneyInDollar: totalMonneyInDollar.toPrecision(6).toString(),
-            differencePercentage: differencePercentage.toPrecision(6).toString(),
-            beneficial: beneficial.toPrecision(6).toString()
-        }
-    });
+    const getMyCoin = makeComputeMyCoin();
 
     return {
         myCoins: state.myCoins,
-        myCoin
+        myCoin: getMyCoin(state, ownProps)
     }
 }
 

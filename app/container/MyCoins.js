@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 
 import styles from '../styles/AppStyle'
 import { ActionCreators } from '../actions'
+import { makeComputeMyCoins } from '../selectors/myCoinsSelectors'
 
 import CardMyCoin from '../component/cardMyCoin'
 
@@ -97,48 +98,15 @@ class MyCoins extends Component {
     }
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state, ownProps) => {
     console.log("mapStateToProps of MyCoins");
     const cryptoCurencies = state.cryptoCurencies;
-    const myCoins = state.myCoins;
+
+    const getMyCoins = makeComputeMyCoins();
 
     return {
         cryptoCurencies,
-        myCoins: myCoins.map(myCoin => {
-            var nbCoins = 0;
-            var ratioBuyingPrice = 0;
-            var totalMonneyInDollar = 0;
-            var differencePercentage = 0;
-            var beneficial = 0;
-            
-            myCoin.operations.forEach(operation => {
-                nbCoins = (operation.bought ? nbCoins + operation.quantity : nbCoins - operation.quantity);
-                if (operation.bought) {
-                    ratioBuyingPrice += (operation.quantity * operation.buyingPrice);
-                }
-            });
-
-            console.log("MyCoin " + myCoin.id + ": ", myCoin.operations);
-
-            if (nbCoins > 0) {
-                ratioBuyingPrice /= nbCoins;
-
-                var cryptoValueOfMyCoin = cryptoCurencies.list.find((cryptoCurencie) => {
-                    return cryptoCurencie.id == myCoin.id;
-                });
-
-                totalMonneyInDollar = nbCoins * cryptoValueOfMyCoin.price_usd;
-                differencePercentage = (cryptoValueOfMyCoin.price_usd - ratioBuyingPrice) * 100 / ratioBuyingPrice
-                beneficial = totalMonneyInDollar - ratioBuyingPrice * nbCoins;
-            }
-
-            // console.log("nbCoins :", nbCoins, "totalMonneyInDollar :", totalMonneyInDollar, "differencePercentage :", differencePercentage, "beneficial :", beneficial);
-
-            return { ...myCoin, nbCoins: nbCoins.toPrecision(6).toString(),
-                                totalMonneyInDollar: totalMonneyInDollar.toPrecision(6).toString(),
-                                differencePercentage: differencePercentage.toPrecision(6).toString(),
-                                beneficial: beneficial.toPrecision(6).toString() }
-        })
+        myCoins: getMyCoins(state, ownProps)
     }
 }
 
