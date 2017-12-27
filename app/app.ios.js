@@ -5,9 +5,12 @@ import { Provider } from 'react-redux';
 import { registerScreens } from './screens';
 
 import { iconsMap, iconsLoaded } from './utils/AppIcons';
-import configureStore from './store/configureStore';
+import { configureStore, sagaMiddleware} from './store/configureStore';
+import rootSaga from './sagas/rootSagas'
 
 const store = configureStore();
+
+sagaMiddleware.run(rootSaga)
 
 registerScreens(store, Provider);
 

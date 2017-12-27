@@ -6,7 +6,7 @@ import uuidv4 from 'uuid/v4'
 const initialState = false
 
 export const connected = createReducer(initialState, {
-    [types.START_LOGIN](state, action) {
+    [types.SUCCESS_LOGIN](state, action) {
        return true; //tmp
     }
 });
