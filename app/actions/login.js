@@ -10,3 +10,13 @@ export function login(username, password) {
         }
     }
 }
+
+export function register(username, password) {
+    return {
+        type: types.START_REGISTER,
+        payload: {
+            username,
+            password
+        }
+    }
+}

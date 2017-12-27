@@ -1,7 +1,11 @@
-// user
+// login
 export const START_LOGIN = 'START_LOGIN'
 export const SUCCESS_LOGIN = 'SUCCESS_LOGIN'
 export const ERROR_LOGIN = 'ERROR_LOGIN'
+
+export const START_REGISTER = 'START_REGISTER'
+export const SUCCESS_REGISTER = 'SUCCESS_REGISTER'
+export const ERROR_REGISTER = 'ERROR_REGISTER'
 
 // cryptoCurrencies
 export const START_FETCH_CRYTPO_CURRENCIES = 'START_FETCH_CRYTPO_CURRENCIES';

@@ -11,6 +11,9 @@ const styles = StyleSheet.create({
 			}
 		})
 	},
+	containerLogin: {
+		flex: 1,
+	},
 	containerPush: {
 		flex: 1,
 		flexDirection: 'column',
@@ -46,6 +49,23 @@ const styles = StyleSheet.create({
 				marginLeft : 10
 			}
 		})
+	},
+	itemForm: {
+		marginTop: 5,
+		marginBottom: 5
+	},
+
+	// TEXT
+	title:{
+		fontWeight: 'bold',
+		fontSize: 30,
+		marginBottom: 30,
+		color: '#ffd700'
+	},
+
+	// Button
+	buttonCreateAccount: {
+		backgroundColor: '#ffd700'
 	}
 })
 
