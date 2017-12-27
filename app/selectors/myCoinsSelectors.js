@@ -57,7 +57,7 @@ const getOneMyCoins = (state, props) => (
     state.myCoins.find((myCoin) => (myCoin.id == props.myCoinId))
 )
 
-export const makeComputeMyCoin = () => {
+export const makeComputeOneMyCoin = () => {
     return createSelector(
         [getOneMyCoins, getCryptoCurencies],
         (myCoin, cryptoCurencies) => getInfoMyCoin(myCoin, cryptoCurencies)

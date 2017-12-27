@@ -1,3 +1,5 @@
+import Api2 from '../api/api'
+
 class Api {
     static headers() {
       return {

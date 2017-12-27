@@ -10,7 +10,7 @@ import { FontelloIcon, checkFontelloIconExist } from '../utils/AppIcons'
 
 import styles from '../styles/AppStyle'
 import { ActionCreators } from '../actions'
-import { makeComputeMyCoin } from '../selectors/myCoinsSelectors'
+import { makeComputeOneMyCoin } from '../selectors/myCoinsSelectors'
 
 import ViewFlexWidthCenterHeight from '../component/ViewFlexWidthCenterHeight'
 import CardOneOperation from '../component/CardOneOperation'
@@ -158,11 +158,11 @@ OneMyCoins.propTypes = {
 };
 
 const mapStateToProps = (state, ownProps) => {
-    const getMyCoin = makeComputeMyCoin();
+    const getOneMyCoin = makeComputeOneMyCoin();
 
     return {
         myCoins: state.myCoins,
-        myCoin: getMyCoin(state, ownProps)
+        myCoin: getOneMyCoin(state, ownProps)
     }
 }
 
