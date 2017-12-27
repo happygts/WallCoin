@@ -1,174 +1,51 @@
 import { API_URL } from './env'
+import myFetch from './fetch'
 
 const portfoliosApi = {
-    getPortfolios(page = 0) {
-        fetch(API_URL + "/portfolios?page=" + page, {
-            method: "GET",
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            }
-        }).then((response) => {
-            console.log("response :", response);
-        }).catch((error) => {
-            console.log("error :", error);
-        });
+    getPortfolios: (page = 0) => {
+        myFetch(API_URL + "/portfolios?page=" + page, "GET");
     },
-    createPortfolios(name) {
-        fetch(API_URL + "/portfolios", {
-            method: "POST",
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                name
-            })
-        }).then((response) => {
-            console.log("response :", response);
-        }).catch((error) => {
-            console.log("error :", error);
-        });
+    createPortfolios: (name) => {
+        myFetch(API_URL + "/portfolios", "POST", JSON.stringify({
+            name
+        }));
     },
-    editPortfolios(id, name) {
-        fetch(API_URL + "/portfolios/" + id, {
-            method: "PUT",
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                name
-            })
-        }).then((response) => {
-            console.log("response :", response);
-        }).catch((error) => {
-            console.log("error :", error);
-        });
+    editPortfolios: (id, name) => {
+        myFetch(API_URL + "/portfolios/" + id, "PUT", JSON.stringify({
+            name
+        }));
     },
-    deletePortfolios(id) {
-        fetch(API_URL + "/portfolios/" + id, {
-            method: "DELETE",
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            }
-        }).then((response) => {
-            console.log("response :", response);
-        }).catch((error) => {
-            console.log("error :", error);
-        });
+    deletePortfolios: (id) => {
+        myFetch(API_URL + "/portfolios/" + id, "DELETE");
     },
-    getPortfoliosMyCoins(idPortfolios, page = 0) {
-        fetch(API_URL + "/portfolios/" + idPortfolios + "/coins?page=" + page, {
-            method: "GET",
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            }
-        }).then((response) => {
-            console.log("response :", response);
-        }).catch((error) => {
-            console.log("error :", error);
-        });
+    getPortfoliosMyCoins: (idPortfolios, page = 0) => {
+        myFetch(API_URL + "/portfolios/" + idPortfolios + "/coins?page=" + page, "GET");
     },
-    getPortfoliosMyCoinsFavorites(idPortfolios, page = 0) {
-        fetch(API_URL + "/portfolios/" + idPortfolios + "/coins?isFavorite=true&page=" + page, {
-            method: "GET",
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            }
-        }).then((response) => {
-            console.log("response :", response);
-        }).catch((error) => {
-            console.log("error :", error);
-        });
+    getPortfoliosMyCoinsFavorites: (idPortfolios, page = 0) => {
+        myFetch(API_URL + "/portfolios/" + idPortfolios + "/coins?isFavorite=true&page=" + page, "GET");
     },
-    getPortfoliosMyCoinsWithOperations(idPortfolios, page = 0) {
-        fetch(API_URL + "/portfolios/" + idPortfolios + "/coins?hasOperations=true&page=" + page, {
-            method: "GET",
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            }
-        }).then((response) => {
-            console.log("response :", response);
-        }).catch((error) => {
-            console.log("error :", error);
-        });
+    getPortfoliosMyCoinsWithOperations: (idPortfolios, page = 0) => {
+        myFetch(API_URL + "/portfolios/" + idPortfolios + "/coins?hasOperations=true&page=" + page, "GET");
     },
-    createPortfoliosMyCoins(idPortfolios, coinId, isFavorite) {
-        fetch(API_URL + "/portfolios/" + idPortfolios + "/coins", {
-            method: "POST",
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                coinId,
-                isFavorite
-            })
-        }).then((response) => {
-            console.log("response :", response);
-        }).catch((error) => {
-            console.log("error :", error);
-        });
+    createPortfoliosMyCoins: (idPortfolios, coinId, isFavorite) => {
+        myFetch(API_URL + "/portfolios/" + idPortfolios + "/coins", "POST", JSON.stringify({
+            coinId,
+            isFavorite
+        }));
     },
-    editPortfoliosMyCoins(idPortfolios, myCoinId, isFavorite) {
-        fetch(API_URL + "/portfolios/" + idPortfolios + "/coins/" + myCoinId, {
-            method: "PUT",
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                isFavorite
-            })
-        }).then((response) => {
-            console.log("response :", response);
-        }).catch((error) => {
-            console.log("error :", error);
-        });
+    editPortfoliosMyCoins: (idPortfolios, myCoinId, isFavorite) => {
+        myFetch(API_URL + "/portfolios/" + idPortfolios + "/coins/" + myCoinId, "PUT", JSON.stringify({
+            isFavorite
+        }));
     },
-    getPortfoliosMyCoins(idPortfolios, myCoinId) {
-        fetch(API_URL + "/portfolios/" + idPortfolios + "/coins/" + myCoinId, {
-            method: "GET",
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            }
-        }).then((response) => {
-            console.log("response :", response);
-        }).catch((error) => {
-            console.log("error :", error);
-        });
+    getPortfoliosMyCoins: (idPortfolios, myCoinId) => {
+        myFetch(API_URL + "/portfolios/" + idPortfolios + "/coins/" + myCoinId, "GET");
     },
-    deletePortfoliosMyCoins(idPortfolios, myCoinId) {
-        fetch(API_URL + "/portfolios/" + idPortfolios + "/coins/" + myCoinId, {
-            method: "DELETE",
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            }
-        }).then((response) => {
-            console.log("response :", response);
-        }).catch((error) => {
-            console.log("error :", error);
-        });
+    deletePortfoliosMyCoins: (idPortfolios, myCoinId) => {
+        myFetch(API_URL + "/portfolios/" + idPortfolios + "/coins/" + myCoinId, "DELETE");
     },
-    getPortfoliosMyCoinsOperations(idPortfolios, idMyCoins, page = 0) {
-        fetch(API_URL + "/portfolios/" + idPortfolios + "/coins/" + idMyCoins + "/operations?page=" + page, {
-            method: "GET",
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            }
-        }).then((response) => {
-            console.log("response :", response);
-        }).catch((error) => {
-            console.log("error :", error);
-        });
+    getPortfoliosMyCoinsOperations: (idPortfolios, idMyCoins, page = 0) => {
+        myFetch(API_URL + "/portfolios/" + idPortfolios + "/coins/" + idMyCoins + "/operations?page=" + page, "GET");
     },
     /**
      * 
@@ -178,23 +55,12 @@ const portfoliosApi = {
      * @param {string} price 
      * @param {string} quantity 
     */
-    createPortfoliosMyCoinsOperations(idPortfolios, idMyCoins, type, price, quantity) {
-        fetch(API_URL + "/portfolios/" + idPortfolios + "/coins/" + idMyCoins + "/operations", {
-            method: "POST",
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                type,
-                price,
-                quantity
-            })
-        }).then((response) => {
-            console.log("response :", response);
-        }).catch((error) => {
-            console.log("error :", error);
-        });
+    createPortfoliosMyCoinsOperations: (idPortfolios, idMyCoins, type, price, quantity) => {
+        myFetch(API_URL + "/portfolios/" + idPortfolios + "/coins/" + idMyCoins + "/operations", "POST", JSON.stringify({
+            type,
+            price,
+            quantity
+        }));
     },
     /**
      * 
@@ -203,32 +69,11 @@ const portfoliosApi = {
      * @param {string} idOperation
      * @param {object} operation
     */
-    editPortfoliosMyCoinsOperations(idPortfolios, idMyCoins, idOperation, operation) {
-        fetch(API_URL + "/portfolios/" + idPortfolios + "/coins/" + idMyCoins + "/operations/" + idOperation, {
-            method: "PATCH",
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(operation)
-        }).then((response) => {
-            console.log("response :", response);
-        }).catch((error) => {
-            console.log("error :", error);
-        });
+    editPortfoliosMyCoinsOperations: (idPortfolios, idMyCoins, idOperation, operation) => {
+        myFetch(API_URL + "/portfolios/" + idPortfolios + "/coins/" + idMyCoins + "/operations/" + idOperation, "PATCH", JSON.stringify(operation));
     },
-    deletePortfoliosMyCoinsOperations(idPortfolios, idMyCoins, idOperation) {
-        fetch(API_URL + "/portfolios/" + idPortfolios + "/coins/" + idMyCoins + "/operations/" + idOperation, {
-            method: "DELETE",
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            }
-        }).then((response) => {
-            console.log("response :", response);
-        }).catch((error) => {
-            console.log("error :", error);
-        });
+    deletePortfoliosMyCoinsOperations: (idPortfolios, idMyCoins, idOperation) => {
+        myFetch(API_URL + "/portfolios/" + idPortfolios + "/coins/" + idMyCoins + "/operations/" + idOperation, "DELETE");
     },
 };
 
