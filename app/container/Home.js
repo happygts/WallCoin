@@ -3,14 +3,13 @@ import { connect } from 'react-redux';
 import ReactNative from 'react-native';
 import { bindActionCreators } from 'redux'
 import PropTypes from 'prop-types';
+
 import Search from 'react-native-search-box';
 
 import styles from '../styles/AppStyle'
 import { ActionCreators } from '../actions'
 
 import CardCryptoCurrency from '../component/cardCryptoCurrency'
-
-export let rootNavigator = null;
 
 const {
   View,
@@ -30,8 +29,6 @@ class Home extends Component {
     this.state = {
       searchText: '',
     }
-
-    rootNavigator = this.props.navigator
   }
 
   componentDidMount() {
