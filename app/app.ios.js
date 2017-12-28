@@ -34,7 +34,7 @@ class App {
 	}
 
 	onStoreUpdate() {
-		const connected = store.getState().connected;
+		const connected = store.getState().user.connected;
 		if (this.connected != connected) {
 			this.connected = connected;
 			this.startApp();

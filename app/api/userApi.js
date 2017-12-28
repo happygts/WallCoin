@@ -3,16 +3,17 @@ import myFetch from './fetch'
 
 const userApi = {
     me: () => {
-        myFetch(API_URL + "/me", "GET");
+        return myFetch(API_URL + "/me", "GET");
     },
     login: (email, password) => {
-        myFetch(API_URL + "/login", "POST", JSON.stringify({
+        console.log("email :", email, "password :", password);
+        return myFetch(API_URL + "/login", "POST", JSON.stringify({
             "email": email,
             "password": password
         }));
     },
     createUser: (email, password) => {
-        myFetch(API_URL + "/users", "POST", JSON.stringify({
+        return myFetch(API_URL + "/users", "POST", JSON.stringify({
             "email": email,
             "password": password
         }));

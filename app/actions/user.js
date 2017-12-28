@@ -1,21 +1,21 @@
 import * as types from './types'
 import Api from '../lib/api'
 
-export function login(username, password) {
+export function login(email, password) {
     return {
         type: types.START_LOGIN,
         payload: {
-            username,
+            email,
             password
         }
     }
 }
 
-export function register(username, password) {
+export function register(email, password) {
     return {
         type: types.START_REGISTER,
         payload: {
-            username,
+            email,
             password
         }
     }

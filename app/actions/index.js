@@ -1,9 +1,9 @@
-import * as Login from './login'
-import * as CryptoCurrencies from './cryptoCurencies'
-import * as MyCoins from './myCoins'
+import * as user from './user'
+import * as cryptoCurrencies from './cryptoCurencies'
+import * as myCoins from './myCoins'
 
 export const ActionCreators = {
-  ...Login,
-  ...CryptoCurrencies,
-  ...MyCoins  
+  ...user,
+  ...cryptoCurrencies,
+  ...myCoins  
 };

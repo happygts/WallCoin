@@ -23,13 +23,33 @@ const {
 } = ReactNative;
 
 class Login extends Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
             email: "",
             password: ""
         }
+        console.log("this.props :", props)
     }
+
+    componentWillReceiveProps(nextProps) {
+        this.displayErrorMessage(nextProps);
+    }
+
+    displayErrorMessage(nextProps) {
+        const errorMessage = nextProps.user.error.isError;
+
+        if (!errorMessage) {
+          return
+        }
+        Toast.show({
+            text: nextProps.user.error.message,
+            position: 'bottom',
+            type: 'warning',
+            buttonText: 'Okay'
+        })
+    }
+
     validateEmail(email) {
         var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
@@ -37,7 +57,7 @@ class Login extends Component {
     }
 
     checkError() {
-        var errors = false;
+        var error = false;
 
         if (this.state.password.length <= 0) {
             Toast.show({
@@ -46,7 +66,7 @@ class Login extends Component {
                 type: 'warning',
                 buttonText: 'Okay'
             })
-            errors = true;
+            error = true;
         }
         if (!this.validateEmail(this.state.email)) {
             Toast.show({
@@ -55,10 +75,10 @@ class Login extends Component {
                 type: 'warning',
                 buttonText: 'Okay'
             })
-            errors = true;
+            error = true;
         }
 
-        return errors;
+        return error;
     }
 
     login() {
@@ -68,9 +88,9 @@ class Login extends Component {
     }
 
     register() {
-        if (!this.checkError()) {
-            this.props.register(this.state.email, this.state.password);
-        }
+        // if (!this.checkError()) {
+        this.props.register(this.state.email, this.state.password);
+        // }
     }
 
     render() {
@@ -104,23 +124,29 @@ class Login extends Component {
                             <Label>Password</Label>
                             <Input autoCapitalize="none" secureTextEntry={true} value={this.state.password} onChangeText={(password) => this.setState({ password })} />
                         </Item>
-                        <Button full light style={styles.itemForm} onPress={() => this.login()}>
-                            <Text>Connect</Text>
-                        </Button>
-                        <Button full style={[styles.itemForm, styles.buttonCreateAccount]} onPress={() => this.register()}>
-                            <Text>Create account</Text>
-                        </Button>
+                        {this.props.user.connecting ? (
+                            <ActivityIndicator style={[styles.itemForm, styles.activityIndicatorLogin]}  size="large" color="#ffd700" />
+                        ) : null}
+                        {!this.props.user.connecting ? (
+                            <Button full light style={styles.itemForm} onPress={() => this.login()}>
+                                <Text>Connect</Text>
+                            </Button>
+                        ) : null}
+                        {!this.props.user.connecting ? (
+                            <Button full style={[styles.itemForm, styles.buttonCreateAccount]} onPress={() => this.register()}>
+                                <Text>Create account</Text>
+                            </Button>
+                        ) : null}
                     </View>
                 </View>
+
             </Root>
         )
     }
 }
 
 const mapStateToProps = (state) => ({
-    cryptoCurencies: state.cryptoCurencies,
-    myCoins: state.myCoins,
-    asyncInitialState: state.asyncInitialState
+    user: state.user
 })
 
 function mapDispachToProps(dispatch) {

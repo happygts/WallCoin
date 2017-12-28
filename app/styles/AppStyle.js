@@ -1,6 +1,7 @@
 import { StyleSheet, Platform } from 'react-native';
 
 const styles = StyleSheet.create({
+	// Container
 	container: {
 		backgroundColor: 'white',
 		flex: 1,
@@ -27,6 +28,16 @@ const styles = StyleSheet.create({
 			}
 		})
 	},
+	containerAbsolute: {
+		position: 'absolute',
+		flex: 1
+	},
+	// Element
+	horizontal: {
+		flexDirection: 'row',
+		justifyContent: 'space-around',
+		padding: 10
+	},
 	listElement: {
 		...Platform.select({
 			ios: {
@@ -46,7 +57,7 @@ const styles = StyleSheet.create({
 	pickerInsideForm: {
 		...Platform.select({
 			android: {
-				marginLeft : 10
+				marginLeft: 10
 			}
 		})
 	},
@@ -54,9 +65,12 @@ const styles = StyleSheet.create({
 		marginTop: 5,
 		marginBottom: 5
 	},
+	activityIndicatorLogin: {
+		height: 100
+	},
 
 	// TEXT
-	title:{
+	title: {
 		fontWeight: 'bold',
 		fontSize: 30,
 		marginBottom: 30,
