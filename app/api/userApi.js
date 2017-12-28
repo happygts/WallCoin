@@ -1,52 +1,22 @@
 import { API_URL } from './env'
+import myFetch from './fetch'
 
 const userApi = {
-    me() {
-        fetch(API_URL + "/me", {
-            method: "GET",
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            }
-        }).then((response) => {
-            console.log("response :", response);
-        }).catch((error) => {
-            console.log("error :", error);
-        });
+    me: () => {
+        return myFetch(API_URL + "/me", "GET");
     },
-    login(email, password) {
-        fetch(API_URL + "/login", {
-            method: "POST",
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                "email": email,
-                "password": password
-            })
-        }).then((response) => {
-            console.log("response :", response);
-        }).catch((error) => {
-            console.log("error :", error);
-        });
+    login: (email, password) => {
+        console.log("email :", email, "password :", password);
+        return myFetch(API_URL + "/login", "POST", JSON.stringify({
+            "email": email,
+            "password": password
+        }));
     },
-    createUser(email, password) {
-        fetch(API_URL + "/users", {
-            method: "POST",
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                "email": email,
-                "password": password
-            })
-        }).then((response) => {
-            console.log("response :", response);
-        }).catch((error) => {
-            console.log("error :", error);
-        });
+    createUser: (email, password) => {
+        return myFetch(API_URL + "/users", "POST", JSON.stringify({
+            "email": email,
+            "password": password
+        }));
     }
 }
 

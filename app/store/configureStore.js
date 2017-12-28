@@ -2,8 +2,10 @@ import React from 'react';
 import { AsyncStorage } from 'react-native';
 import { createStore, applyMiddleware, compose } from 'redux';
 import * as asyncInitialState from 'redux-async-initial-state';
+import createSagaMiddleware from 'redux-saga'
 
 import reducers from '../reducers';
+import rootSaga from '../sagas/rootSagas'
 
 //middlewares
 import thunkMiddleware from 'redux-thunk';
@@ -12,17 +14,18 @@ import saveInsideLocalStorageMiddleware from '../middleware/localStorageMiddlewa
 
 // middleware that logs actions
 const loggerMiddleware = createLogger({ predicate: (getState, action) => __DEV__ });
+const sagaMiddleware = createSagaMiddleware();
 
 // Load state function 
 const loadStore = () => {
   return new Promise(resolve => {
     AsyncStorage.getItem('@store:state')
       .then(response => {
-        if (response) {
-          const toReturn = JSON.parse(response);
+        // if (response) {
+        //   const toReturn = JSON.parse(response);
 
-          return toReturn;
-        }
+        //   return toReturn;
+        // }
         return ({})
       })
       .then(resolve);
@@ -32,6 +35,7 @@ const loadStore = () => {
 function configureStore(initialState = {}) {
   const enhancer = compose(
     applyMiddleware(
+      sagaMiddleware,
       thunkMiddleware, // lets us dispatch() functions
       loggerMiddleware,
       saveInsideLocalStorageMiddleware,
@@ -41,4 +45,4 @@ function configureStore(initialState = {}) {
   return createStore(reducers, initialState, enhancer);
 }
 
-export default configureStore;
+export {configureStore, sagaMiddleware};

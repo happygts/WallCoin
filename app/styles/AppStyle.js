@@ -1,6 +1,7 @@
 import { StyleSheet, Platform } from 'react-native';
 
 const styles = StyleSheet.create({
+	// Container
 	container: {
 		backgroundColor: 'white',
 		flex: 1,
@@ -10,6 +11,9 @@ const styles = StyleSheet.create({
 				paddingBottom: 74
 			}
 		})
+	},
+	containerLogin: {
+		flex: 1,
 	},
 	containerPush: {
 		flex: 1,
@@ -23,6 +27,16 @@ const styles = StyleSheet.create({
 				paddingBottom: 74
 			}
 		})
+	},
+	containerAbsolute: {
+		position: 'absolute',
+		flex: 1
+	},
+	// Element
+	horizontal: {
+		flexDirection: 'row',
+		justifyContent: 'space-around',
+		padding: 10
 	},
 	listElement: {
 		...Platform.select({
@@ -43,9 +57,29 @@ const styles = StyleSheet.create({
 	pickerInsideForm: {
 		...Platform.select({
 			android: {
-				marginLeft : 10
+				marginLeft: 10
 			}
 		})
+	},
+	itemForm: {
+		marginTop: 5,
+		marginBottom: 5
+	},
+	activityIndicatorLogin: {
+		height: 100
+	},
+
+	// TEXT
+	title: {
+		fontWeight: 'bold',
+		fontSize: 30,
+		marginBottom: 30,
+		color: '#ffd700'
+	},
+
+	// Button
+	buttonCreateAccount: {
+		backgroundColor: '#ffd700'
 	}
 })
 
