@@ -2,13 +2,19 @@ import createReducer from '../lib/createReducer';
 import * as types from '../actions/types';
 import update from 'immutability-helper';
 
+/**
+ *  loading: Boolean,
+ * list : [id]
+ */
 const initialState = {
     loading: false,
     list: [],
-    listFav: []
+    listFav: [],
+    listV2: [],
+    pagination: {}
 };
 
-export const cryptoCurencies = createReducer(initialState, {
+export const coins = createReducer(initialState, {
     [types.START_FETCH_CRYTPO_CURRENCIES](state, action) {
         return update(state, {
             $merge: {
@@ -31,19 +37,20 @@ export const cryptoCurencies = createReducer(initialState, {
             }
         });
     },
-    [types.ADD_FAV_CRYPTO_CURRENCY](state, action) {
-        return update(state, {
-            listFav: {
-                $push: [action.payload.id]
+    [types.SUCCESS_FETCH_PAGE_COINS](state, action) {
+        var coins = action.payload.coins.map(coin => (coin.id));
+        var pagination = action.payload.pagination;
+
+        state = update(state, {
+            listV2: {
+                $merge: coins
+            },
+            pagination: {
+                $merge: pagination
             }
-        });
-    },
-    [types.REMOVE_FAV_CRYPTO_CURRENCY](state, action) {
-        return update(state, {
-            listFav: {
-                $splice: [[state.listFav.indexOf(action.payload.id), 1]]
-            }
-        });
+        })
+        console.log("state2 :", state);
+        return state;
     }
 });
 

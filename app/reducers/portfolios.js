@@ -13,4 +13,3 @@ export const portfolios = createReducer(initialState, {
         return state;
     },
 });
-

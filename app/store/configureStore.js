@@ -21,11 +21,11 @@ const loadStore = () => {
   return new Promise(resolve => {
     AsyncStorage.getItem('@store:state')
       .then(response => {
-        // if (response) {
-        //   const toReturn = JSON.parse(response);
+        if (response) {
+          const toReturn = JSON.parse(response);
 
-        //   return toReturn;
-        // }
+          return toReturn;
+        }
         return ({})
       })
       .then(resolve);

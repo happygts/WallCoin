@@ -32,9 +32,11 @@ class Home extends Component {
   }
 
   componentDidMount() {
-    if (this.props.cryptoCurencies.list.length <= 0 && this.props.asyncInitialState.loading == false) {
+    console.log("this.props :", this.props)
+    if (this.props.coins.list.length <= 0 && this.props.asyncInitialState.loading == false) {
       this._onRefresh();
     }
+    this.props.fetchPageCoins(0);
   }
 
   _onRefresh() {
@@ -60,7 +62,7 @@ class Home extends Component {
   }
 
   isFav(id) {
-    return this.props.cryptoCurencies.listFav.includes(id);
+    return this.props.coins.listFav.includes(id);
   }
 
   pressFav(id) {
@@ -93,20 +95,23 @@ class Home extends Component {
               onDelete={this._onSearchCancel.bind(this)}
             />
             <FlatList
-              data={this.props.cryptoCurencies.list.filter(cryptoCurrency => {
-                return cryptoCurrency.name.includes(this.state.searchText) && (this.props.favoritesOnly ? this.isFav(cryptoCurrency.id) : true)
-              })}
+              data={this.props.store.coins && this.props.coins && this.props.coins.listV2 ? this.props.coins.listV2.filter(coinId => {
+                var coin = this.props.store.coins[coinId].value;
+                console.log("Flatlist coin :", coin);
+                return coin && coin.name && coin.name.includes(this.state.searchText) && (this.props.favoritesOnly ? this.isFav(coin.id) : true)
+              }) : []}
               renderItem={({ item }) => <CardCryptoCurrency
-                key={item.id}
-                cryptoCurrency={item}
+                key={item}
+                cryptoCurrency={this.props.store.coins[item].value}
                 pressFav={this.pressFav.bind(this)}
                 pressMyCoins={this.pressMyCoins.bind(this)}
                 isFav={this.isFav.bind(this)}
                 isMyCoins={this.isMyCoins.bind(this)}
               />}
+              keyExtractor={(item, index) => index}
               refreshControl={
                 <RefreshControl
-                  refreshing={this.props.cryptoCurencies.loading}
+                  refreshing={this.props.coins.loading}
                   onRefresh={this._onRefresh.bind(this)}
                 />
               }>
@@ -119,7 +124,8 @@ class Home extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  cryptoCurencies: state.cryptoCurencies,
+  store: state.store,
+  coins: state.coins,
   myCoins: state.myCoins,
   asyncInitialState: state.asyncInitialState
 })

@@ -31,7 +31,7 @@ class MyCoins extends Component {
     }
 
     getCoinValue(id) {
-        return this.props.cryptoCurencies.list.find((cryptoCurencie) => {
+        return this.props.coins.list.find((cryptoCurencie) => {
             return cryptoCurencie.id == id;
         });
     }
@@ -78,11 +78,11 @@ class MyCoins extends Component {
             <View style={styles.container}>
                 <ScrollView refreshControl={
                     <RefreshControl
-                        refreshing={this.props.cryptoCurencies.loading}
+                        refreshing={this.props.coins.loading}
                         onRefresh={this._onRefresh.bind(this)}
                     />
                 }>
-                    {this.props.myCoins && this.props.myCoins.length && this.props.cryptoCurencies && this.props.cryptoCurencies.list.length ? this.props.myCoins.map((myCoin) => (
+                    {this.props.myCoins && this.props.myCoins.length && this.props.coins && this.props.coins.list.length ? this.props.myCoins.map((myCoin) => (
                         <CardMyCoin key={myCoin.id}
                             deleteMyCoin={this.deleteMyCoin.bind(this)}
                             goToOneMyCoins={this.goToOneMyCoins.bind(this)}
@@ -100,12 +100,12 @@ class MyCoins extends Component {
 
 const mapStateToProps = (state, ownProps) => {
     console.log("mapStateToProps of MyCoins");
-    const cryptoCurencies = state.cryptoCurencies;
+    const coins = state.coins;
 
     const getMyCoins = makeComputeMyCoins();
 
     return {
-        cryptoCurencies,
+        coins,
         myCoins: getMyCoins(state, ownProps)
     }
 }

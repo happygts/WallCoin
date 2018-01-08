@@ -10,7 +10,7 @@ function* getPortfolios() {
     // yield put({ type: types.SUCCESS_GET_PORTFOLIOS, portfolios})
 }
 
-// Our watcher Saga: spawn a new incrementAsync task on each INCREMENT_ASYNC
+// Our watcher Saga: spawn a new incrementAsync task on each START_GET_PORTFOLIOS
 function* portfoliosSaga() {
     yield takeEvery(types.START_GET_PORTFOLIOS, getPortfolios);
 }

@@ -4,7 +4,7 @@ import update from 'immutability-helper';
 import uuidv4 from 'uuid/v4'
 
 const initialState = {
-    connected: false,
+    connected: true,
     connecting: false,
     error: {
         isError: false,
