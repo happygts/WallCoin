@@ -36,6 +36,7 @@ class Home extends Component {
     if (this.props.coins.list.length <= 0 && this.props.asyncInitialState.loading == false) {
       this._onRefresh();
     }
+
     this.props.fetchPageCoins(0);
   }
 
@@ -97,7 +98,7 @@ class Home extends Component {
             <FlatList
               data={this.props.store.coins && this.props.coins && this.props.coins.listV2 ? this.props.coins.listV2.filter(coinId => {
                 var coin = this.props.store.coins[coinId].value;
-                console.log("Flatlist coin :", coin);
+                // console.log("Flatlist coin :", coin);
                 return coin && coin.name && coin.name.includes(this.state.searchText) && (this.props.favoritesOnly ? this.isFav(coin.id) : true)
               }) : []}
               renderItem={({ item }) => <CardCryptoCurrency
