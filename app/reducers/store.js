@@ -56,7 +56,25 @@ export const store = createReducer(initialState, {
                 }
             })
         });
-        
+
+        return state;
+    },
+    [types.SUCCESS_REFRESH_COINS](state, action) {
+        var coins = action.payload.coins;
+
+        coins.forEach(coin => {
+            state = update(state, {
+                coins: {
+                    $merge: {
+                        [coin.id]: {
+                            value: coin,
+                            experiedDate: Date.now() + (2 * 60 * 1000)
+                        }
+                    }
+                }
+            })
+        });
+
         return state;
     },
 });

@@ -60,3 +60,12 @@ export function fetchNextPageCoins() {
         }
     }
 }
+
+export function refreshCoins() {
+    return {
+        type: types.START_REFRESH_COINS,
+        header: {
+            callback: Api2.getOneCoins
+        }
+    }
+}

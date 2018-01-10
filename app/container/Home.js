@@ -39,6 +39,11 @@ class Home extends Component {
     this.props.fetchNextPageCoins();
   }
 
+  handleRefresh() {
+    console.log("handleRefresh");
+    this.props.refreshCoins();  
+  }
+
   _onSearchTextChanged(newText) {
     this.setState(() => {
       return {
@@ -72,6 +77,22 @@ class Home extends Component {
   pressMyCoins(id) {
     this.isMyCoins(id) ? this.props.deleteMyCoin(id) : this.props.createMyCoin(id);
   }
+
+  renderFooter = () => {
+    if (!this.props.coins.loading) return null;
+
+    return (
+      <View
+        style={{
+          paddingVertical: 20,
+          borderTopWidth: 1,
+          borderColor: "#CED0CE"
+        }}
+      >
+        <ActivityIndicator animating size="large" />
+      </View>
+    );
+  };
 
   render() {
     return (
@@ -107,9 +128,12 @@ class Home extends Component {
                   isMyCoins={this.isMyCoins.bind(this)}
                 />
               )}
+              ListFooterComponent={this.renderFooter}
               keyExtractor={(item, index) => index}
               onEndReached={this.handleLoadMore.bind(this)}
               onEndReachedThreshold={0}
+              onRefresh={this.handleRefresh.bind(this)}
+              refreshing={this.props.coins.refreshing}
             />
           </View>
         }

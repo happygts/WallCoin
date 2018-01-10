@@ -3,10 +3,10 @@ import { put, takeEvery, takeLatest, all, call, select } from 'redux-saga/effect
 import * as types from '../actions/types'
 import Api from '../api/api';
 
-import { coinsPagination } from '../selectors/sagaStateSelectors'
+import { coinsPaginationSelector, coinsSelector, storeSelector} from '../selectors/sagaStateSelectors'
 
 function* fetchNextPageCoins({ header }) {
-    const pagination = yield select(coinsPagination);
+    const pagination = yield select(coinsPaginationSelector);
 
     if (!pagination.current || pagination.current * pagination.size < pagination.totalItems) {
         try {
@@ -29,8 +29,42 @@ function* fetchNextPageCoins({ header }) {
     }
 }
 
+function* refreshCoins({ header }) {
+    const coins = yield select(coinsSelector);
+    const coinsStore = (yield select(storeSelector)).coins;
+
+    console.log("coins :", coins, "coinsStore :", coinsStore);
+    var coinsToRefresh = [];
+
+    coins.list.forEach(coinId => {
+        console.log("coinsStore[" + coinId + "].experiedDate :", coinsStore[coinId].experiedDate);
+        if (coinsStore[coinId].experiedDate <= Date.now()) {
+            coinsToRefresh.push(coinId);
+        }
+    });
+    
+    console.log("coinsToRefresh :", coinsToRefresh)
+    try {
+        var updated = []
+        for (let index = 0; index < coinsToRefresh.length; index++) {
+            response = yield call(header.callback, coinsToRefresh[index]);
+            updated.push(response);
+        }
+        yield put({ type: types.SUCCESS_REFRESH_COINS, payload: {
+            coins: updated
+        }});
+    }
+    catch (error) {
+        yield put({ type: types.ERROR_REFRESH_COINS, error });   
+    }
+   
+}
+
 function* coinsSaga() {
-    yield takeLatest(types.START_FETCH_NEXT_PAGE_COINS, fetchNextPageCoins);
+    yield all([
+        takeLatest(types.START_FETCH_NEXT_PAGE_COINS, fetchNextPageCoins),
+        takeLatest(types.START_REFRESH_COINS, refreshCoins)
+    ])
 }
 
 export default coinsSaga;

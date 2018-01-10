@@ -8,6 +8,7 @@ import update from 'immutability-helper';
  */
 const initialState = {
     loading: false,
+    refreshing: false,
     list: [],
     listFav: [],
     pagination: {}
@@ -41,6 +42,21 @@ export const coins = createReducer(initialState, {
                 loading: false
             }
         })
-    }
+    },
+    [types.START_REFRESH_COINS](state, action) {
+        return update(state, {
+            $merge: {
+                refreshing: true
+            }
+        });
+    },
+    [types.SUCCESS_REFRESH_COINS](state, action) {
+        console.log("action :", action);
+        return update(state, {
+            $merge: {
+                refreshing: false
+            }
+        });
+    },
 });
 
