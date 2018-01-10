@@ -40,34 +40,16 @@ const initialState = {
 };
 
 export const store = createReducer(initialState, {
-    [types.SUCCESS_FETCH_NEXT_PAGE_COINS](state, action) {
-        var coins = action.payload.coins;
-        var pagination = action.payload.pagination;
-
-        coins.forEach(coin => {
+    [types.UPDATE_STORE](state, action) {
+        var data = action.payload.data;
+        var toUpdate = action.payload.toUpdate;
+        
+        data.forEach(element => {
             state = update(state, {
-                coins: {
+                [toUpdate]: {
                     $merge: {
-                        [coin.id]: {
-                            value: coin,
-                            experiedDate: Date.now() + (2 * 60 * 1000)
-                        }
-                    }
-                }
-            })
-        });
-
-        return state;
-    },
-    [types.SUCCESS_REFRESH_COINS](state, action) {
-        var coins = action.payload.coins;
-
-        coins.forEach(coin => {
-            state = update(state, {
-                coins: {
-                    $merge: {
-                        [coin.id]: {
-                            value: coin,
+                        [element.id]: {
+                            value: element,
                             experiedDate: Date.now() + (2 * 60 * 1000)
                         }
                     }
