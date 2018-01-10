@@ -27,7 +27,7 @@ class MyCoins extends Component {
     }
 
     _onRefresh() {
-        this.props.fetchCryptoCurencies();
+        // this.props.fetchCryptoCurencies();
     }
 
     getCoinValue(id) {
@@ -73,7 +73,6 @@ class MyCoins extends Component {
     }
 
     render() {
-        console.log("Render MyCoins.js")
         return (
             <View style={styles.container}>
                 <ScrollView refreshControl={
@@ -99,7 +98,6 @@ class MyCoins extends Component {
 }
 
 const mapStateToProps = (state, ownProps) => {
-    console.log("mapStateToProps of MyCoins");
     const coins = state.coins;
 
     const getMyCoins = makeComputeMyCoins();

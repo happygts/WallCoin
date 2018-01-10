@@ -35,7 +35,6 @@ class App {
 
 	onStoreUpdate() {
 		const connected = store.getState().user.connected;
-		console.log("connected :", connected, "store.getState().user :",  store.getState().user);
 		if (this.connected != connected) {
 			this.connected = connected;
 			this.startApp();
@@ -43,7 +42,6 @@ class App {
 	}
 
 	startApp = () => {
-		console.log("startApp, connected :", this.connected);
 		if (this.connected) {
 			Navigation.startTabBasedApp({
 				tabs: [

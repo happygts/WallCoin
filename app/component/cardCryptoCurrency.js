@@ -51,10 +51,12 @@ class CardCryptoCurrency extends Component {
                 'You are going to lose all your data',
                 [
                     { text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
-                    { text: 'OK', onPress: () => {
-                        this.setState({ isMyCoins: !this.state.isMyCoins })
-                        this.props.pressMyCoins(this.props.cryptoCurrency.id);
-                    }},
+                    {
+                        text: 'OK', onPress: () => {
+                            this.setState({ isMyCoins: !this.state.isMyCoins })
+                            this.props.pressMyCoins(this.props.cryptoCurrency.id);
+                        }
+                    },
                 ],
             )
         }
@@ -70,28 +72,28 @@ class CardCryptoCurrency extends Component {
 
     render() {
         return (
-            <SwipeRow style={styles.listElement}
-                rightOpenValue={-100}
-                right={
-                    <View style={{ flex: 1, flexDirection: 'row' }}>
-                        <TouchableHighlight onPress={() => this.pressFav(this.props.cryptoCurrency.id)}>
-                            {this.state.isFav ?
-                                <FontAwesomeIcon name="star" color="#FFD700" style={{ marginTop: 45, marginLeft: 11 }} size={30} /> :
-                                <FontAwesomeIcon name="star-o" color="#000000" style={{ marginTop: 45, marginLeft: 11 }} size={30} />
-                            }
-                        </TouchableHighlight>
-                        <TouchableHighlight onPress={() => this.pressMyCoins(this.props.cryptoCurrency.id)}>
-                            {this.state.isMyCoins ?
-                                <Ionicons name="ios-cart" color="#FFD700" style={{ marginTop: 45, marginLeft: 11 }} size={30} />
-                                :
-                                <Ionicons name="ios-cart-outline" color="#000000" style={{ marginTop: 45, marginLeft: 11 }} size={30} />
-                            }
-                        </TouchableHighlight >
-                    </View>
-                }
-                body={
-                    <Container>
-                        <Content>
+            <Container style={styles.listElement}>
+                <Content>
+                    <SwipeRow style={styles.listElement}
+                        rightOpenValue={-100}
+                        right={
+                            <View style={{ flex: 1, flexDirection: 'row' }}>
+                                <TouchableHighlight onPress={() => this.pressFav(this.props.cryptoCurrency.id)}>
+                                    {this.state.isFav ?
+                                        <FontAwesomeIcon name="star" color="#FFD700" style={{ marginTop: 45, marginLeft: 11 }} size={30} /> :
+                                        <FontAwesomeIcon name="star-o" color="#000000" style={{ marginTop: 45, marginLeft: 11 }} size={30} />
+                                    }
+                                </TouchableHighlight>
+                                <TouchableHighlight onPress={() => this.pressMyCoins(this.props.cryptoCurrency.id)}>
+                                    {this.state.isMyCoins ?
+                                        <Ionicons name="ios-cart" color="#FFD700" style={{ marginTop: 45, marginLeft: 11 }} size={30} />
+                                        :
+                                        <Ionicons name="ios-cart-outline" color="#000000" style={{ marginTop: 45, marginLeft: 11 }} size={30} />
+                                    }
+                                </TouchableHighlight >
+                            </View>
+                        }
+                        body={
                             <Card>
                                 <CardItem>
                                     <Left>
@@ -137,10 +139,11 @@ class CardCryptoCurrency extends Component {
                                     </Body>
                                 </CardItem>
                             </Card>
-                        </Content>
-                    </Container>
-                }>
-            </SwipeRow>
+                        }>
+                    </SwipeRow>
+                </Content>
+            </Container>
+
         )
     }
 }

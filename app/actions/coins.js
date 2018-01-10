@@ -52,12 +52,9 @@ export function removeFavCryptoCurrency(id) {
 
 import Api2 from '../api/api'
 
-export function fetchPageCoins(page) {
+export function fetchNextPageCoins() {
     return {
-        type: types.START_FETCH_PAGE_COINS,
-        payload: {
-            page
-        },
+        type: types.START_FETCH_NEXT_PAGE_COINS,
         header: {
             callback: Api2.getCoins
         }

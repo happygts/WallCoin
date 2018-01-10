@@ -14,7 +14,6 @@ const initialState = {
 
 export const user = createReducer(initialState, {
     [types.START_LOGIN](state, action) {
-        console.log("START_LOGIN inside reducer");
         return update(state, {
             $merge: {
                 connected: false,

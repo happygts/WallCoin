@@ -29,7 +29,6 @@ class Login extends Component {
             email: "",
             password: ""
         }
-        console.log("this.props :", props)
     }
 
     componentWillReceiveProps(nextProps) {

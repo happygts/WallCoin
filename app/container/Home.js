@@ -25,27 +25,21 @@ const {
 class Home extends Component {
   constructor(props) {
     super(props);
-    console.log("props Home : ", props.favoritesOnly);
     this.state = {
-      searchText: '',
+      searchText: ''
     }
   }
 
   componentDidMount() {
-    console.log("this.props :", this.props)
-    if (this.props.coins.list.length <= 0 && this.props.asyncInitialState.loading == false) {
-      this._onRefresh();
-    }
-
-    this.props.fetchPageCoins(0);
+    if (this.props.coins.list.length <= 0)
+      this.props.fetchNextPageCoins();
   }
 
-  _onRefresh() {
-    this.props.fetchCryptoCurencies();
+  handleLoadMore(params) {
+    this.props.fetchNextPageCoins();
   }
 
   _onSearchTextChanged(newText) {
-    console.log("_onSearchTextChanged")
     this.setState(() => {
       return {
         searchText: newText
@@ -54,7 +48,6 @@ class Home extends Component {
   }
 
   _onSearchCancel() {
-    console.log("_onSearchCancel")
     this.setState(() => {
       return {
         searchText: ''
@@ -96,31 +89,32 @@ class Home extends Component {
               onDelete={this._onSearchCancel.bind(this)}
             />
             <FlatList
-              data={this.props.store.coins && this.props.coins && this.props.coins.listV2 ? this.props.coins.listV2.filter(coinId => {
-                var coin = this.props.store.coins[coinId].value;
-                // console.log("Flatlist coin :", coin);
-                return coin && coin.name && coin.name.includes(this.state.searchText) && (this.props.favoritesOnly ? this.isFav(coin.id) : true)
+              data={this.props.store.coins && this.props.coins && this.props.coins.list ? this.props.coins.list.filter(coinId => {
+                if (this.props.store.coins[coinId]) {
+                  var coin = this.props.store.coins[coinId].value;
+          
+                  return coin && coin.name && coin.name.includes(this.state.searchText)
+                }
+                return false;
               }) : []}
-              renderItem={({ item }) => <CardCryptoCurrency
-                key={item}
-                cryptoCurrency={this.props.store.coins[item].value}
-                pressFav={this.pressFav.bind(this)}
-                pressMyCoins={this.pressMyCoins.bind(this)}
-                isFav={this.isFav.bind(this)}
-                isMyCoins={this.isMyCoins.bind(this)}
-              />}
-              keyExtractor={(item, index) => index}
-              refreshControl={
-                <RefreshControl
-                  refreshing={this.props.coins.loading}
-                  onRefresh={this._onRefresh.bind(this)}
+              renderItem={({ item }) => (
+                <CardCryptoCurrency
+                  key={item}
+                  cryptoCurrency={this.props.store.coins[item].value}
+                  pressFav={this.pressFav.bind(this)}
+                  pressMyCoins={this.pressMyCoins.bind(this)}
+                  isFav={this.isFav.bind(this)}
+                  isMyCoins={this.isMyCoins.bind(this)}
                 />
-              }>
-            </FlatList>
+              )}
+              keyExtractor={(item, index) => index}
+              onEndReached={this.handleLoadMore.bind(this)}
+              onEndReachedThreshold={0}
+            />
           </View>
         }
       </View>
-    )
+    );
   }
 }
 

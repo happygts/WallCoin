@@ -40,15 +40,15 @@ const initialState = {
 };
 
 export const store = createReducer(initialState, {
-    [types.SUCCESS_FETCH_PAGE_COINS](state, action) {
+    [types.SUCCESS_FETCH_NEXT_PAGE_COINS](state, action) {
         var coins = action.payload.coins;
         var pagination = action.payload.pagination;
 
         coins.forEach(coin => {
             state = update(state, {
                 coins: {
-                    [coin.id]: {
-                        $set: {
+                    $merge: {
+                        [coin.id]: {
                             value: coin,
                             experiedDate: Date.now() + (2 * 60 * 1000)
                         }
@@ -56,7 +56,7 @@ export const store = createReducer(initialState, {
                 }
             })
         });
-        console.log("state :", state);
+        
         return state;
     },
 });
