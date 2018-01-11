@@ -1,8 +1,9 @@
 import { combineReducers } from 'redux';
 import * as store from './store';
 import * as user from './user';
-import * as coins from './coins';
+// import * as coins from './coins';
 import * as myCoins from './myCoins';
+import * as coins from './pagination'
 
 // TO DELETE
 import * as cryptoCurencies from './cryptoCurencies'
