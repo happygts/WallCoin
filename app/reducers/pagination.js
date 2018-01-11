@@ -25,12 +25,12 @@ function createOnePaginationReducer(name) {
             });
         },
         [types.SUCCESS_FETCH_NEXT_PAGE](state, action) {
-            var list = action.payload.list.map(element => (element.id));
+            var data = action.payload.data.map(element => (element.id));
             var pagination = action.payload.pagination;
     
             return update(state, {
                 list: {
-                    $push: list
+                    $push: data
                 },
                 pagination: {
                     $merge: pagination

@@ -19,7 +19,7 @@ function* fetchNextPage({ header }) {
                 type: types.SUCCESS_FETCH_NEXT_PAGE,
                 payload: {
                     name: name,
-                    list: response[name],
+                    data: response[name],
                     pagination: response.pagination
                 }
             });
@@ -43,22 +43,18 @@ function* fetchNextPage({ header }) {
 
 function* refreshPagination({ header }) {
     const name = header.name;
-    console.log("Header :", header, header.storeSelector);
     const sagaSelector = yield select(header.selector);
     const storeSelector = yield select(header.storeSelector)
     const storeElements = storeSelector[name];
 
-    console.log("sagaSelector :",sagaSelector, "storeElements :", storeElements);
     var elementsToRefresh = [];
 
     sagaSelector.list.forEach(id => {
-        console.log("storeElements[" + id + "].experiedDate :", storeElements[id].experiedDate);
         if (storeElements[id].experiedDate <= Date.now()) {
             elementsToRefresh.push(id);
         }
     });
 
-    console.log("elementsToRefresh :", elementsToRefresh)
     try {
         var updated = []
         for (let index = 0; index < elementsToRefresh.length; index++) {
