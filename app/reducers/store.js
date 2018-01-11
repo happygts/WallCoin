@@ -44,6 +44,7 @@ export const store = createReducer(initialState, {
         var data = action.payload.data;
         var toUpdate = action.payload.toUpdate;
         
+        console.log("data :", data, "toUpdate :", toUpdate);
         data.forEach(element => {
             state = update(state, {
                 [toUpdate]: {
@@ -56,6 +57,8 @@ export const store = createReducer(initialState, {
                 }
             })
         });
+
+        console.log("State :", state);
 
         return state;
     },

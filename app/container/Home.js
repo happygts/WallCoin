@@ -61,7 +61,7 @@ class Home extends Component {
   }
 
   isFav(id) {
-    return this.props.coins.listFav.includes(id);
+    return false
   }
 
   pressFav(id) {
@@ -113,7 +113,7 @@ class Home extends Component {
               data={this.props.store.coins && this.props.coins && this.props.coins.list ? this.props.coins.list.filter(coinId => {
                 if (this.props.store.coins[coinId]) {
                   var coin = this.props.store.coins[coinId].value;
-          
+
                   return coin && coin.name && coin.name.includes(this.state.searchText)
                 }
                 return false;

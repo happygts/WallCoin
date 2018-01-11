@@ -1,6 +1,8 @@
 import * as types from './types'
 import Api from '../lib/api'
 
+import { coinsSelector, storeSelector } from '../selectors/sagaStateSelectors'
+
 export function fetchCryptoCurencies() {
     return (dispatch, getState) => {
         dispatch({
@@ -54,18 +56,23 @@ import Api2 from '../api/api'
 
 export function fetchNextPageCoins() {
     return {
-        type: types.START_FETCH_NEXT_PAGE_COINS,
+        type: types.START_FETCH_NEXT_PAGE,
         header: {
-            callback: Api2.getCoins
+            callback: Api2.getCoins,
+            name: 'coins',
+            selector: coinsSelector
         }
     }
 }
 
 export function refreshCoins() {
     return {
-        type: types.START_REFRESH_COINS,
+        type: types.START_REFRESH_PAGINATION,
         header: {
-            callback: Api2.getOneCoins
+            callback: Api2.getOneCoins,
+            name: 'coins',
+            selector: coinsSelector,
+            storeSelector: storeSelector
         }
     }
 }
