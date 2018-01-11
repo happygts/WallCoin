@@ -24,11 +24,11 @@ const navigatorStyle = {
 };
 
 class App {
-	connected = false;
+	connected = true;
 
 	constructor() {
-		store.subscribe(this.onStoreUpdate.bind(this));
 		iconsLoaded.then(() => {
+			store.subscribe(this.onStoreUpdate.bind(this));
 			this.startApp();
 		});
 	}

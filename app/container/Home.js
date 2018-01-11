@@ -25,24 +25,26 @@ const {
 class Home extends Component {
   constructor(props) {
     super(props);
-    console.log("props Home : ", props.favoritesOnly);
     this.state = {
-      searchText: '',
+      searchText: ''
     }
   }
 
   componentDidMount() {
-    if (this.props.cryptoCurencies.list.length <= 0 && this.props.asyncInitialState.loading == false) {
-      this._onRefresh();
-    }
+    if (this.props.coins.list.length <= 0)
+      this.props.fetchNextPageCoins();
   }
 
-  _onRefresh() {
-    this.props.fetchCryptoCurencies();
+  handleLoadMore(params) {
+    this.props.fetchNextPageCoins();
+  }
+
+  handleRefresh() {
+    console.log("handleRefresh");
+    this.props.refreshCoins();  
   }
 
   _onSearchTextChanged(newText) {
-    console.log("_onSearchTextChanged")
     this.setState(() => {
       return {
         searchText: newText
@@ -51,7 +53,6 @@ class Home extends Component {
   }
 
   _onSearchCancel() {
-    console.log("_onSearchCancel")
     this.setState(() => {
       return {
         searchText: ''
@@ -60,7 +61,7 @@ class Home extends Component {
   }
 
   isFav(id) {
-    return this.props.cryptoCurencies.listFav.includes(id);
+    return this.props.coins.listFav.includes(id);
   }
 
   pressFav(id) {
@@ -76,6 +77,22 @@ class Home extends Component {
   pressMyCoins(id) {
     this.isMyCoins(id) ? this.props.deleteMyCoin(id) : this.props.createMyCoin(id);
   }
+
+  renderFooter = () => {
+    if (!this.props.coins.loading) return null;
+
+    return (
+      <View
+        style={{
+          paddingVertical: 20,
+          borderTopWidth: 1,
+          borderColor: "#CED0CE"
+        }}
+      >
+        <ActivityIndicator animating size="large" />
+      </View>
+    );
+  };
 
   render() {
     return (
@@ -93,33 +110,41 @@ class Home extends Component {
               onDelete={this._onSearchCancel.bind(this)}
             />
             <FlatList
-              data={this.props.cryptoCurencies.list.filter(cryptoCurrency => {
-                return cryptoCurrency.name.includes(this.state.searchText) && (this.props.favoritesOnly ? this.isFav(cryptoCurrency.id) : true)
-              })}
-              renderItem={({ item }) => <CardCryptoCurrency
-                key={item.id}
-                cryptoCurrency={item}
-                pressFav={this.pressFav.bind(this)}
-                pressMyCoins={this.pressMyCoins.bind(this)}
-                isFav={this.isFav.bind(this)}
-                isMyCoins={this.isMyCoins.bind(this)}
-              />}
-              refreshControl={
-                <RefreshControl
-                  refreshing={this.props.cryptoCurencies.loading}
-                  onRefresh={this._onRefresh.bind(this)}
+              data={this.props.store.coins && this.props.coins && this.props.coins.list ? this.props.coins.list.filter(coinId => {
+                if (this.props.store.coins[coinId]) {
+                  var coin = this.props.store.coins[coinId].value;
+          
+                  return coin && coin.name && coin.name.includes(this.state.searchText)
+                }
+                return false;
+              }) : []}
+              renderItem={({ item }) => (
+                <CardCryptoCurrency
+                  key={item}
+                  cryptoCurrency={this.props.store.coins[item].value}
+                  pressFav={this.pressFav.bind(this)}
+                  pressMyCoins={this.pressMyCoins.bind(this)}
+                  isFav={this.isFav.bind(this)}
+                  isMyCoins={this.isMyCoins.bind(this)}
                 />
-              }>
-            </FlatList>
+              )}
+              ListFooterComponent={this.renderFooter}
+              keyExtractor={(item, index) => index}
+              onEndReached={this.handleLoadMore.bind(this)}
+              onEndReachedThreshold={0}
+              onRefresh={this.handleRefresh.bind(this)}
+              refreshing={this.props.coins.refreshing}
+            />
           </View>
         }
       </View>
-    )
+    );
   }
 }
 
 const mapStateToProps = (state) => ({
-  cryptoCurencies: state.cryptoCurencies,
+  store: state.store,
+  coins: state.coins,
   myCoins: state.myCoins,
   asyncInitialState: state.asyncInitialState
 })

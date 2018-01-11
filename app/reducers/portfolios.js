@@ -9,8 +9,6 @@ const initialState = {
 
 export const portfolios = createReducer(initialState, {
     [types.SUCCESS_GET_PORTFOLIOS](state, action) {
-        console.log("action :", action);
         return state;
     },
 });
-

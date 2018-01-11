@@ -4,7 +4,7 @@ import update from 'immutability-helper';
 import uuidv4 from 'uuid/v4'
 
 const initialState = {
-    connected: false,
+    connected: true,
     connecting: false,
     error: {
         isError: false,
@@ -14,7 +14,6 @@ const initialState = {
 
 export const user = createReducer(initialState, {
     [types.START_LOGIN](state, action) {
-        console.log("START_LOGIN inside reducer");
         return update(state, {
             $merge: {
                 connected: false,

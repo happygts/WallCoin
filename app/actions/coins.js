@@ -47,3 +47,25 @@ export function removeFavCryptoCurrency(id) {
         }
     }  
 }
+
+//
+
+import Api2 from '../api/api'
+
+export function fetchNextPageCoins() {
+    return {
+        type: types.START_FETCH_NEXT_PAGE_COINS,
+        header: {
+            callback: Api2.getCoins
+        }
+    }
+}
+
+export function refreshCoins() {
+    return {
+        type: types.START_REFRESH_COINS,
+        header: {
+            callback: Api2.getOneCoins
+        }
+    }
+}

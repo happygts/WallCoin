@@ -1,0 +1,163 @@
+{
+  "HTTP": {
+    "BAD_REQUEST": {
+      "status": 400,
+      "id": 0,
+      "message": "Bad request"
+    },
+    "FORBIDDEN": {
+      "status": 403,
+      "id": 1,
+      "message": "Forbidden"
+    },
+    "NOT_FOUND": {
+      "status": 404,
+      "id": 2,
+      "message": "Not found"
+    },
+    "INTERNAL_ERROR": {
+      "status": 500,
+      "id": 3,
+      "message": "Internal error"
+    },
+    "NOT_IMPLEMENTED": {
+      "status": 501,
+      "id": 4,
+      "message": "Not Implemented"
+    }
+  },
+  "COMMON": {
+    "MALFORMED_JSON": {
+      "status": 400,
+      "id": 10,
+      "message": "Malformed JSON"
+    }
+  },
+  "VALIDATION": {
+    "REQUIRED_FIELD": {
+      "status": 400,
+      "id": 1000,
+      "message": "Required field"
+    },
+    "INCORRECT_FORMAT": {
+      "status": 400,
+      "id": 1001,
+      "message": "Incorrect format"
+    },
+    "EMAIL_ALREADY_USED": {
+      "status": 400,
+      "id": 1002,
+      "message": "Email already used"
+    },
+    "INVALID_EMAIL": {
+      "status": 400,
+      "id": 1003,
+      "message": "Invalid email"
+    },
+    "INVALID_PASSWORD": {
+      "status": 400,
+      "id": 1004,
+      "message": "Invalid password (min 8 characters) "
+    },
+    "INVALID_ACTIVATION_CODE": {
+      "status": 400,
+      "id": 1005,
+      "message": "Invalid activation code"
+    },
+    "INVALID_PAGE": {
+      "status": 400,
+      "id": 1006,
+      "message": "Invalid page number"
+    },
+    "INVALID_COIN_NAME": {
+      "status": 400,
+      "id": 1007,
+      "message": "Invalid coin name"
+    },
+    "INVALID_PORTFOLIO_NAME": {
+      "status": 400,
+      "id": 1008,
+      "message": "Invalid portfolio name"
+    },
+    "INVALID_IS_FAVORITE": {
+      "status": 400,
+      "id": 1009,
+      "message": "Invalid parameter `isFavorite`"
+    },
+    "INVALID_HAS_OPERATION": {
+      "status": 400,
+      "id": 1010,
+      "message": "Invalid parameter `hasOperation`"
+    },
+    "INVALID_OPERATION_TYPE": {
+      "status": 400,
+      "id": 1011,
+      "message": "Invalid operation type (`buy` or `sell`)"
+    },
+    "INVALID_QUANTITY": {
+      "status": 400,
+      "id": 1012,
+      "message": "Invalid quantity (min 0)"
+    },
+    "INVALID_PRICE": {
+      "status": 400,
+      "id": 1013,
+      "message": "Invalid price (min 0)"
+    }
+  },
+  "USER": {
+    "INVALID_EMAIL_PASSWORD": {
+      "status": 403,
+      "id": 2000,
+      "message": "Invalid email or password"
+    },
+    "NOT_ACTIVATED": {
+      "status": 403,
+      "id": 2001,
+      "message": "User not actiated"
+    },
+    "ALREADY_ACTIVATED": {
+      "status": 400,
+      "id": 2002,
+      "message": "User already activated"
+    },
+    "NOT_FOUND": {
+      "status": 404,
+      "id": 2003,
+      "message": "User not found"
+    }
+  },
+  "COIN": {
+    "NOT_FOUND": {
+      "status": 404,
+      "id": 3000,
+      "message": "Coin not found"
+    }
+  },
+  "PORTFOLIO": {
+    "NOT_FOUND": {
+      "status": 404,
+      "id": 4000,
+      "message": "Portfolio not found"
+    },
+    "COIN_ALREADY_ADDED": {
+      "status": 400,
+      "id": 4001,
+      "message": "Coin already added"
+    }
+  },
+  "OPERATION": {
+    "NOT_FOUND": {
+      "status": 404,
+      "id": 5000,
+      "message": "Operation not found"
+    }
+  },
+  "INTERNAL": {
+    "CANNOT_SEND_EMAIL": {
+      "status": 500,
+      "id": 9000,
+      "message": "Cannot send email"
+    }
+  }
+}
