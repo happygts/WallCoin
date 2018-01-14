@@ -32,7 +32,6 @@ function createOneRequestReducer(name) {
 
     return createReducer(initialState, {
         [types.START_LIST_DATA](state, action) {
-            console.log("action :", action);
             var namePayload = action.payload.name;
 
             if (name == namePayload) {
@@ -51,7 +50,6 @@ function createOneRequestReducer(name) {
                 var data = action.payload.data.map(element => (element.id));
                 var request = action.payload.request;
                 var requestIndex = action.payload.requestIndex;
-                console.log("request :", request, "requestIndex :", requestIndex);
 
                 return update(state, {
                     requests: {

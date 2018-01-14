@@ -4,7 +4,6 @@ import { coinsSelector, storeSelector, userSelector } from '../selectors/sagaSta
 import { Api, ApiNameSpace } from '../api/api'
 
 export function fetchListDataCoins() {
-    console.log("fetchListDataCoins action");
     return {
         type: types.START_LIST_DATA,
         payload: {

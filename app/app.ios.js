@@ -54,15 +54,15 @@ class App {
 						navigatorStyle,
 						navigatorButtons: {}
 					},
-					// {
-					// 	label: 'Favorites',
-					// 	screen: 'Favorites',
-					// 	icon: iconsMap['ios-star-outline'],
-					// 	selectedIcon: iconsMap['ios-star'],
-					// 	title: 'Favorites',
-					// 	navigatorStyle,
-					// 	navigatorButtons: {}
-					// },
+					{
+						label: 'Favorites',
+						screen: 'Favorites',
+						icon: iconsMap['ios-star-outline'],
+						selectedIcon: iconsMap['ios-star'],
+						title: 'Favorites',
+						navigatorStyle,
+						navigatorButtons: {}
+					},
 					{
 						label: 'MyCoins',
 						screen: 'MyCoins',
