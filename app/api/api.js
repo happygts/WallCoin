@@ -2,7 +2,7 @@ import userApi from './userApi'
 import coinsApi from './coinsApi'
 import portfoliosApi from './portfoliosApi'
 
-const Api = Object.assign({}, userApi, coinsApi, portfoliosApi, {
+export const Api = Object.assign({}, userApi, coinsApi, portfoliosApi, {
     health() {
         var myHeaders = new Headers();
 
@@ -21,4 +21,6 @@ const Api = Object.assign({}, userApi, coinsApi, portfoliosApi, {
     }
 });
 
-export default Api
+export const ApiNameSpace = {
+    GET_COINS: 'GET_COINS',
+}

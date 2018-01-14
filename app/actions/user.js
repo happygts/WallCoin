@@ -1,5 +1,6 @@
 import * as types from './types'
 import Api from '../lib/api'
+import { userSelector, storeSelector } from '../selectors/sagaStateSelectors'
 
 export function login(email, password) {
     return {
@@ -18,5 +19,21 @@ export function register(email, password) {
             email,
             password
         }
+    }
+}
+
+export function changeUserPortfolio(portfolioId) {
+    return {
+        type: types.START_CHANGE_USER_PORTFOLIO,
+        payload: {
+            userSelector,
+            storeSelector
+        }
+    }
+}
+
+export function whoAmI() {
+    return {
+        type: types.START_WHO_AM_I
     }
 }
