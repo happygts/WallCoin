@@ -128,7 +128,7 @@ function compareRequestWithNewRequest(requestArray, newRequestArray) {
     return true;
 }
 
-function getRequestIdFromRequests(requests, url, userId, params) {
+function getrequestIndexFromRequests(requests, url, userId, params) {
     var indexToReturn = -1;
 
     for (let index = 0; index < requests.length; index++) {
@@ -146,17 +146,18 @@ function getRequestIdFromRequests(requests, url, userId, params) {
     return indexToReturn;
 }
 
-function getEveryItemAssociatedWithPageAndRequest(store, requestId, page) {
+function getEveryItemAssociatedWithPageAndRequest(store, requestIndex, page) {
     var toReturn = [];
 
     Object.keys(store).forEach((key) => {
         const element = store[key];
+        console.log("element.contexts :", element.contexts, "element.contexts.length :", element.contexts.length);
+        for (let index = 0; index < Object.keys(element.contexts).length; index++) {
+            const context = element.contexts[index];
+            console.log("element.contexts[" + index + "] :", element.contexts[index])
 
-
-        for (let index = 0; index < element.contexts.length; index++) {
-            const context = element.context[index];
-
-            if (context.requestId == context.page) {
+            if (context.requestIndex == requestIndex && page == context.page) {
+                console.log("push to toReturn");
                 toReturn.push(element);
                 break;
             }
@@ -212,7 +213,6 @@ function* fetchPage(callback, url, page, userId, params, requestIndex, name) {
 }
 
 function* listData({ payload }) {
-    console.log("Inside listData :", payload);
     const name = payload.name;
     const url = payload.url;
     const params = payload.params;
@@ -225,25 +225,28 @@ function* listData({ payload }) {
     const storeElement = storeSelector[name];
     const requests = sagaSelector ? sagaSelector.requests : [];
 
-    var requestId = getRequestIdFromRequests(requests, url, userId, params);
-    if (requestId >= 0) {
-        if (requests[requestId].pagination.current * requests[requestId].pagination.size < requests[requestId].pagination.totalItems) {
-            var newPage = requests[requestId].pagination.current + 1
-            var items = getEveryItemAssociatedWithPageAndRequest(storeElement, requestId, newPage);
-
+    var requestIndex = getrequestIndexFromRequests(requests, url, userId, params);
+    if (requestIndex >= 0) {
+        if (requests[requestIndex].pagination.current * requests[requestIndex].pagination.size < requests[requestIndex].pagination.totalItems) {
+            var newPage = requests[requestIndex].pagination.current + 1
+            newPage = 0
+            var items = getEveryItemAssociatedWithPageAndRequest(storeElement, requestIndex, newPage);
+            console.log("items associated :", items, "with requestIndex :", requestIndex, " and page :", newPage, "storeElement :", storeElement);
             if (items.length > 0) {
                 if (compareExpirationDate(items) > 10) { // > 10 %
-                    yield fetchPage(callback, url, page, userId, params, requestId, name);
+                    console.log("compareExpirationDate > 10");
+                    yield fetchPage(callback, url, page, userId, params, requestIndex, name);
                 }
                 else {
-                    // reload every item one by one
-                    items.forEach(element => {
-                        console.log("need to reload :", element);
-                    });
+                    // reload every item one by one ONLY THE OUTOFDATE
+                    console.log("need to reload item by item :", items);
+                    // items.forEach(element => {
+                    //     console.log("need to reload :", element);
+                    // });
                 }
             }
             else {
-                yield fetchPage(callback, url, newPage, userId, params, requestId, name);
+                yield fetchPage(callback, url, newPage, userId, params, requestIndex, name);
             }
         }
         else {
