@@ -83,7 +83,6 @@ export const store = createReducer(initialState, {
                 })
             })
         });
-        console.log("State :", state);
 
         return state;
     },
