@@ -2,19 +2,14 @@ import { combineReducers } from 'redux';
 import * as store from './store';
 import * as user from './user';
 import * as myCoins from './myCoins';
-import * as coins from './pagination'
-
-// TO DELETE
-import * as cryptoCurencies from './cryptoCurencies'
-//
+import * as request from './request'
 
 import * as asyncInitialState from 'redux-async-initial-state';
 
 export default asyncInitialState.outerReducer(combineReducers({
     ...store,
     ...user,
-    ...coins,
-    ...cryptoCurencies,
+    ...request,
     ...myCoins,
     asyncInitialState: asyncInitialState.innerReducer
 }));

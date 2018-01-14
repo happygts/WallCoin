@@ -31,16 +31,16 @@ class Home extends Component {
   }
 
   componentDidMount() {
-    if (this.props.coins.list.length <= 0)
-      this.props.fetchNextPageCoins();
+    // this.props.initCoins();
+    // this.props.initPortfolios();
+    this.props.fetchListDataCoins();
   }
 
   handleLoadMore(params) {
-    this.props.fetchNextPageCoins();
+    this.props.fetchListDataCoins();
   }
 
   handleRefresh() {
-    console.log("handleRefresh");
     this.props.refreshCoins();  
   }
 
