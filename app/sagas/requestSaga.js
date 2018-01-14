@@ -225,14 +225,14 @@ function* listData({ payload }) {
             var items = getEveryItemAssociatedWithPageAndRequest(storeElement, requestIndex, newPage);
             console.log("items associated :", items, "with requestIndex :", requestIndex, " and page :", newPage, "storeElement :", storeElement);
             if (items.length > 0) {
-                if (compareExpirationDate(items) > 10) { // > 10 %
+                if (compareExpirationDate(items) > 0) { // > MUST SET TO 10 %
                     console.log("compareExpirationDate > 10");
                     yield fetchPage(callback, url, page, userId, params, requestIndex, name);
                 }
                 else {
                     // reload every item one by one ONLY THE OUTOFDATE
                     items.forEach(element => {
-                        if (element.expirationDate <  Date.now()) {
+                        if (element.expirationDate < Date.now()) {
                             console.log("need to reload :", element);
                         }
                     });
@@ -260,14 +260,15 @@ function* listData({ payload }) {
     }
 }
 
-function* refreshData() {
+function* refreshData({ payload }) {
+    const name = payload.name;
 
 }
 
 function* requestSaga() {
     yield all([
         takeEvery(types.START_LIST_DATA, listData),
-        // takeEvery(types.START_REFRESH_DATA, fetchNextPage),
+        takeEvery(types.START_REFRESH_DATA, refreshData),
     ])
 }
 
