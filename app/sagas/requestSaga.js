@@ -3,118 +3,6 @@ import { put, takeEvery, takeLatest, all, call, select } from 'redux-saga/effect
 import * as types from '../actions/types'
 import Api from '../api/api';
 
-// function* fetchNextPage({ header }) {
-//     const name = header.name;
-//     const params = header.params;
-//     const sagaSelector = yield select(header.selector);
-//     const pagination = sagaSelector ? sagaSelector.pagination : {};
-
-//     console.log("pagination :", pagination, "params :", params);
-
-//     if (!pagination.current || pagination.current * pagination.size < pagination.totalItems) {
-//         try {
-//             const response = yield call(header.callback, pagination && pagination.current >= 0 ? pagination.current + 1 : 0, ...params);
-
-//             console.log("response :", response);
-//             console.log("response[name] :", response[name]);
-//             yield put({
-//                 type: types.UPDATE_STORE, payload: {
-//                     toUpdate: name,
-//                     data: response[name]
-//                 }
-//             });
-//             yield put({
-//                 type: types.SUCCESS_FETCH_PAGE,
-//                 payload: {
-//                     data: response[name],
-//                     pagination: response.pagination
-//                 }
-//             });
-//         }
-//         catch (error) {
-//             yield put({ type: types.ERROR_FETCH_PAGE, error });
-//         }
-//     }
-//     else {
-//         yield put({
-//             type: types.NO_MORE_FETCH_PAGE, payload: {
-//                 name
-//             }
-//         });
-//     }
-// }
-
-// function* fetchPage({ header }) {
-//     const name = header.name;
-//     const params = header.params;
-//     const page = header.page;
-
-//     const sagaSelector = yield select(header.selector);
-
-//     try {
-//         const response = yield call(header.callback, page, ...params);
-
-//         yield put({
-//             type: types.UPDATE_STORE, payload: {
-//                 toUpdate: name,
-//                 data: response[name]
-//             }
-//         });
-//         yield put({
-//             type: types.SUCCESS_FETCH_PAGE,
-//             payload: {
-//                 name,
-//                 data: response[name],
-//                 pagination: response.pagination
-//             }
-//         });
-//     }
-//     catch (error) {
-//         yield put({ type: types.ERROR_FETCH_PAGE, error });
-//     }
-// }
-
-// function* refreshPagination({ header }) {
-//     const name = header.name;
-//     const sagaSelector = yield select(header.selector);
-//     const storeSelector = yield select(header.storeSelector)
-//     const storeElements = storeSelector[name];
-
-//     var elementsToRefresh = [];
-
-//     sagaSelector.list.forEach(id => {
-//         if (storeElements[id].experiedDate <= Date.now()) {
-//             elementsToRefresh.push(id);
-//         }
-//     });
-
-//     try {
-//         var data = []
-//         for (let index = 0; index < elementsToRefresh.length; index++) {
-//             response = yield call(header.callback, elementsToRefresh[index]);
-//             data.push(response);
-//         }
-//         console.log("Data :", data);
-//         yield put({
-//             type: types.SUCCESS_REFRESH_PAGINATION,
-//             payload: {
-//                 name,
-//                 data
-//             }
-//         });
-//         yield put({
-//             type: types.UPDATE_STORE, payload: {
-//                 toUpdate: name,
-//                 data
-//             }
-//         });
-//     }
-//     catch (error) {
-//         yield put({ type: types.ERROR_REFRESH_PAGINATION, error });
-//     }
-
-// }
-
 function compareRequestWithNewRequest(requestArray, newRequestArray) {
     console.log("Inside compareRequestWithNewRequest :", requestArray, newRequestArray);
     if (requestArray.length != newRequestArray.length) {
@@ -171,10 +59,8 @@ function compareExpirationDate(items) {
 }
 
 function* fetchPage(callback, url, page, userId, params, requestIndex, name) {
-    console.log("inside fetchPage");
     try {
         const response = yield call(callback, page, ...params);
-        console.log("response :", response);
         yield put({
             type: types.UPDATE_STORE, payload: {
                 toUpdate: name,
@@ -223,10 +109,8 @@ function* listData({ payload }) {
         if (requests[requestIndex].pagination.current * requests[requestIndex].pagination.size < requests[requestIndex].pagination.totalItems) {
             var newPage = requests[requestIndex].pagination.current + 1
             var items = getEveryItemAssociatedWithPageAndRequest(storeElement, requestIndex, newPage);
-            console.log("items associated :", items, "with requestIndex :", requestIndex, " and page :", newPage, "storeElement :", storeElement);
             if (items.length > 0) {
                 if (compareExpirationDate(items) > 0) { // > MUST SET TO 10 %
-                    console.log("compareExpirationDate > 10");
                     yield fetchPage(callback, url, page, userId, params, requestIndex, name);
                 }
                 else {
@@ -260,9 +144,66 @@ function* listData({ payload }) {
     }
 }
 
-function* refreshData({ payload }) {
-    const name = payload.name;
+function getEveryItemAssociatedWithRequest(storeElement, requestIndex) {
+    var toReturn = [];
 
+    Object.keys(storeElement).forEach((key) => {
+        const element = storeElement[key];
+        for (let index = 0; index < Object.keys(element.contexts).length; index++) {
+            const context = element.contexts[index];
+
+            if (context.requestIndex == requestIndex) {
+                toReturn.push(element);
+                break;
+            }
+        }
+    });
+
+    return toReturn;
+}
+
+function groupItemsPerPage(items) {
+    var page = 0;
+    var toReturn = {}
+
+    while (itemsPage = items.filter((item) => {
+        for (let index = 0; index < Object.keys(item.contexts).length; index++) {
+            const context = item.contexts[index];
+
+            if (context.page == page) {
+                return true;
+            }
+        }
+        return false
+    })) {
+        if (itemsPage.length <= 0) {
+            break;
+        }
+        toReturn[page] = itemsPage;
+        page++;
+    }
+
+    return toReturn;
+}
+
+function* refreshData({ payload }) {
+    console.log("RefreshData inside saga");
+    const name = payload.name;
+    const sagaSelector = yield select(payload.selector);
+    const storeSelector = yield select(payload.storeSelector);
+    const userSelector = yield select(payload.userSelector);
+
+    const userId = userSelector.userId;
+    const storeElement = storeSelector[name];
+
+    var itemsGroupedPages = groupItemsPerPage(getEveryItemAssociatedWithRequest(storeElement, sagaSelector.currentRequestIndex));
+
+    console.log("itemsGroupedPages :", itemsGroupedPages);
+    yield put({
+        type: types.SUCCESS_REFRESH_DATA, payload: {
+            name
+        }
+    });
 }
 
 function* requestSaga() {

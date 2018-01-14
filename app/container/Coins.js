@@ -36,7 +36,7 @@ class Coins extends Component {
   }
 
   handleRefresh() {
-    this.props.refreshCoins();
+    this.props.refreshDataCoins();
   }
 
   _onSearchTextChanged(newText) {

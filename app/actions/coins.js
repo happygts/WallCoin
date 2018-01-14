@@ -20,12 +20,15 @@ export function fetchListDataCoins() {
 
 export function refreshDataCoins() {
     return {
-        type: types.START_REFRESH_PAGINATION,
+        type: types.START_REFRESH_DATA,
         payload: {
-            callback: Api.getOneCoins,
             name: 'coins',
+            callback: Api.getCoins,
+            url: ApiNameSpace.GET_COINS,
             selector: coinsSelector,
-            storeSelector: storeSelector
+            storeSelector,
+            userSelector,
+            params: []
         }
     }
 }
