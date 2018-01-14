@@ -8,6 +8,7 @@ import Search from 'react-native-search-box';
 
 import styles from '../styles/AppStyle'
 import { ActionCreators } from '../actions'
+import { makeComputeListRequestItems } from '../selectors/requestSelectors'
 
 import CardCryptoCurrency from '../component/cardCryptoCurrency'
 
@@ -31,8 +32,6 @@ class Home extends Component {
   }
 
   componentDidMount() {
-    // this.props.initCoins();
-    // this.props.initPortfolios();
     this.props.fetchListDataCoins();
   }
 
@@ -41,7 +40,7 @@ class Home extends Component {
   }
 
   handleRefresh() {
-    this.props.refreshCoins();  
+    this.props.refreshCoins();
   }
 
   _onSearchTextChanged(newText) {
@@ -110,18 +109,13 @@ class Home extends Component {
               onDelete={this._onSearchCancel.bind(this)}
             />
             <FlatList
-              data={this.props.store.coins && this.props.coins && this.props.coins.list ? this.props.coins.list.filter(coinId => {
-                if (this.props.store.coins[coinId]) {
-                  var coin = this.props.store.coins[coinId].value;
-
-                  return coin && coin.name && coin.name.includes(this.state.searchText)
-                }
-                return false;
-              }) : []}
+              data={this.props.listCoins.filter(coin => {
+                return coin.value && coin.value.name && coin.value.name.includes(this.state.searchText)
+              })}
               renderItem={({ item }) => (
                 <CardCryptoCurrency
                   key={item}
-                  cryptoCurrency={this.props.store.coins[item].value}
+                  cryptoCurrency={item.value}
                   pressFav={this.pressFav.bind(this)}
                   pressMyCoins={this.pressMyCoins.bind(this)}
                   isFav={this.isFav.bind(this)}
@@ -142,12 +136,16 @@ class Home extends Component {
   }
 }
 
-const mapStateToProps = (state) => ({
-  store: state.store,
-  coins: state.coins,
-  myCoins: state.myCoins,
-  asyncInitialState: state.asyncInitialState
-})
+const mapStateToProps = (state, ownProps) => {
+  const getListItems = makeComputeListRequestItems();
+
+  return {
+    coins: state.coins,
+    listCoins: getListItems(state, ownProps, 'coins'),
+    myCoins: state.myCoins,
+    asyncInitialState: state.asyncInitialState
+  }
+}
 
 function mapDispachToProps(dispatch) {
   return bindActionCreators(ActionCreators, dispatch);

@@ -23,7 +23,6 @@ import update from 'immutability-helper';
 const initialState = {
     loading: false,
     refreshing: false,
-    list: [],
     requests: [],
     currentRequestIndex: -1
 };
@@ -55,9 +54,6 @@ function createOneRequestReducer(name) {
                 console.log("request :", request, "requestIndex :", requestIndex);
 
                 return update(state, {
-                    list: {
-                        $push: data
-                    },
                     requests: {
                         $merge: {
                             [requestIndex] : request

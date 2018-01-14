@@ -133,15 +133,11 @@ function getrequestIndexFromRequests(requests, url, userId, params) {
 
     for (let index = 0; index < requests.length; index++) {
         const request = requests[index];
-        console.log("request :", [request.data.url, request.data.userId, ...request.data.params], [url, userId, ...params]);
         if (compareRequestWithNewRequest([request.data.url, request.data.userId, ...request.data.params], [url, userId, ...params])) {
-            console.log("found pagination :", request.pagination);
             indexToReturn = index;
             break;
         }
     }
-
-    console.log("index to Return :", indexToReturn);
 
     return indexToReturn;
 }
@@ -151,13 +147,10 @@ function getEveryItemAssociatedWithPageAndRequest(store, requestIndex, page) {
 
     Object.keys(store).forEach((key) => {
         const element = store[key];
-        console.log("element.contexts :", element.contexts, "element.contexts.length :", element.contexts.length);
         for (let index = 0; index < Object.keys(element.contexts).length; index++) {
             const context = element.contexts[index];
-            console.log("element.contexts[" + index + "] :", element.contexts[index])
 
             if (context.requestIndex == requestIndex && page == context.page) {
-                console.log("push to toReturn");
                 toReturn.push(element);
                 break;
             }
@@ -229,7 +222,6 @@ function* listData({ payload }) {
     if (requestIndex >= 0) {
         if (requests[requestIndex].pagination.current * requests[requestIndex].pagination.size < requests[requestIndex].pagination.totalItems) {
             var newPage = requests[requestIndex].pagination.current + 1
-            newPage = 0
             var items = getEveryItemAssociatedWithPageAndRequest(storeElement, requestIndex, newPage);
             console.log("items associated :", items, "with requestIndex :", requestIndex, " and page :", newPage, "storeElement :", storeElement);
             if (items.length > 0) {
@@ -239,10 +231,16 @@ function* listData({ payload }) {
                 }
                 else {
                     // reload every item one by one ONLY THE OUTOFDATE
-                    console.log("need to reload item by item :", items);
-                    // items.forEach(element => {
-                    //     console.log("need to reload :", element);
-                    // });
+                    items.forEach(element => {
+                        if (element.expirationDate <  Date.now()) {
+                            console.log("need to reload :", element);
+                        }
+                    });
+                    yield put({
+                        type: types.NO_MORE_LIST_DATA, payload: {
+                            name
+                        }
+                    });
                 }
             }
             else {
