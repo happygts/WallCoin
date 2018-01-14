@@ -59,7 +59,6 @@ export const store = createReducer(initialState, {
         var requestIndex = action.payload.requestIndex;
         var page = action.payload.page;
 
-        console.log("Inside UPDATE_STORE, data :", data, "toUpdate :", toUpdate, "requestIndex :", requestIndex, "page :", page);
         data.forEach(element => {
             var indexContext = [toUpdate][element.id] ? [toUpdate][element.id].find((e) => {
                 return e.req == requestIndex;
@@ -70,7 +69,7 @@ export const store = createReducer(initialState, {
                     [element.id]: itemToUpdateIndexed => update(itemToUpdateIndexed || {}, {
                         $merge: {
                             value: element,
-                            experiedDate: Date.now() + (2 * 60 * 1000)
+                            expirationDate: Date.now() + (2 * 60 * 1000)
                         },
                         contexts: contexts => update(contexts || {}, {
                             $merge: {

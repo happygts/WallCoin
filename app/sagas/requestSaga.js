@@ -4,7 +4,6 @@ import * as types from '../actions/types'
 import Api from '../api/api';
 
 function compareRequestWithNewRequest(requestArray, newRequestArray) {
-    console.log("Inside compareRequestWithNewRequest :", requestArray, newRequestArray);
     if (requestArray.length != newRequestArray.length) {
         return false;
     }
@@ -58,7 +57,7 @@ function compareExpirationDate(items) {
     return nbExpired * 100 / items.length;
 }
 
-function* fetchPage(callback, url, page, userId, params, requestIndex, name) {
+function* fetchPage(refresh, callback, url, page, userId, params, requestIndex, name) {
     try {
         const response = yield call(callback, page, ...params);
         yield put({
@@ -69,22 +68,24 @@ function* fetchPage(callback, url, page, userId, params, requestIndex, name) {
                 page
             }
         });
-        yield put({
-            type: types.SUCCESS_LIST_DATA,
-            payload: {
-                name,
-                data: response[name],
-                requestIndex,
-                request: {
-                    data: {
-                        url,
-                        userId,
-                        params
-                    },
-                    pagination: response.pagination
+        if (!refresh) {
+            yield put({
+                type: types.SUCCESS_LIST_DATA,
+                payload: {
+                    name,
+                    data: response[name],
+                    requestIndex,
+                    request: {
+                        data: {
+                            url,
+                            userId,
+                            params
+                        },
+                        pagination: response.pagination
+                    }
                 }
-            }
-        });
+            });
+        }
     }
     catch (error) {
         yield put({ type: types.ERROR_FETCH_PAGE, error });
@@ -111,7 +112,7 @@ function* listData({ payload }) {
             var items = getEveryItemAssociatedWithPageAndRequest(storeElement, requestIndex, newPage);
             if (items.length > 0) {
                 if (compareExpirationDate(items) > 0) { // > MUST SET TO 10 %
-                    yield fetchPage(callback, url, page, userId, params, requestIndex, name);
+                    yield fetchPage(false, callback, url, page, userId, params, requestIndex, name);
                 }
                 else {
                     // reload every item one by one ONLY THE OUTOFDATE
@@ -128,7 +129,7 @@ function* listData({ payload }) {
                 }
             }
             else {
-                yield fetchPage(callback, url, newPage, userId, params, requestIndex, name);
+                yield fetchPage(false, callback, url, newPage, userId, params, requestIndex, name);
             }
         }
         else {
@@ -140,7 +141,7 @@ function* listData({ payload }) {
         }
     }
     else {
-        yield fetchPage(callback, url, 0, userId, params, requests.length, name);
+        yield fetchPage(false, callback, url, 0, userId, params, requests.length, name);
     }
 }
 
@@ -164,7 +165,7 @@ function getEveryItemAssociatedWithRequest(storeElement, requestIndex) {
 
 function groupItemsPerPage(items) {
     var page = 0;
-    var toReturn = {}
+    var toReturn = []
 
     while (itemsPage = items.filter((item) => {
         for (let index = 0; index < Object.keys(item.contexts).length; index++) {
@@ -179,7 +180,7 @@ function groupItemsPerPage(items) {
         if (itemsPage.length <= 0) {
             break;
         }
-        toReturn[page] = itemsPage;
+        toReturn.push(itemsPage);
         page++;
     }
 
@@ -187,18 +188,35 @@ function groupItemsPerPage(items) {
 }
 
 function* refreshData({ payload }) {
-    console.log("RefreshData inside saga");
     const name = payload.name;
+    const url = payload.url;
+    const params = payload.params;
+    const callback = payload.callback;
+
     const sagaSelector = yield select(payload.selector);
     const storeSelector = yield select(payload.storeSelector);
     const userSelector = yield select(payload.userSelector);
 
-    const userId = userSelector.userId;
     const storeElement = storeSelector[name];
+    const userId = userSelector.userId;
 
     var itemsGroupedPages = groupItemsPerPage(getEveryItemAssociatedWithRequest(storeElement, sagaSelector.currentRequestIndex));
+    for (let index = 0; index < itemsGroupedPages.length; index++) {
+        const itemsOnePage = itemsGroupedPages[index];
 
-    console.log("itemsGroupedPages :", itemsGroupedPages);
+        var percentageOutOfDate = compareExpirationDate(itemsOnePage);
+        if (percentageOutOfDate == 0) {
+            console.log("everything uptoDate on this page");
+        }
+        else if (percentageOutOfDate > 0) { // need to set to > 10 once refreshOne will be done
+            yield fetchPage(true, callback, url, itemsOnePage[0].contexts[0].page, userId, params, sagaSelector.currentRequestIndex, name);
+            
+        }
+        else {
+            console.log("refresh the only elements out of date");
+        }
+    }
+
     yield put({
         type: types.SUCCESS_REFRESH_DATA, payload: {
             name
