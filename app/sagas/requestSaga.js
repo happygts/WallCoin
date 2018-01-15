@@ -57,13 +57,15 @@ function compareExpirationDate(items) {
     return nbExpired * 100 / items.length;
 }
 
-function* fetchPage(refresh, callback, url, page, userId, params, requestIndex, name) {
+function* fetchPage(refresh, callback, url, page, userId, params, requestIndex, name, nameResponse) {
     try {
         const response = yield call(callback, page, ...params);
+        console.log("fetchPage response :", response, "name :", nameResponse);
         yield put({
-            type: types.UPDATE_STORE, payload: {
+            type: types.UPDATE_STORE,
+            payload: {
                 toUpdate: name,
-                data: response[name],
+                data: response[nameResponse],
                 requestIndex,
                 page
             }
@@ -73,7 +75,7 @@ function* fetchPage(refresh, callback, url, page, userId, params, requestIndex, 
                 type: types.SUCCESS_LIST_DATA,
                 payload: {
                     name,
-                    data: response[name],
+                    data: response[nameResponse],
                     requestIndex,
                     request: {
                         data: {
@@ -94,9 +96,11 @@ function* fetchPage(refresh, callback, url, page, userId, params, requestIndex, 
 
 function* listData({ payload }) {
     const name = payload.name;
+    const nameResponse = payload.nameResponse;
     const url = payload.url;
     const params = payload.params;
     const callback = payload.callback;
+    const pageToFetch = payload.page;
     const sagaSelector = yield select(payload.selector);
     const storeSelector = yield select(payload.storeSelector);
     const userSelector = yield select(payload.userSelector);
@@ -108,11 +112,16 @@ function* listData({ payload }) {
     var requestIndex = getrequestIndexFromRequests(requests, url, userId, params);
     if (requestIndex >= 0) {
         if (requests[requestIndex].pagination.current * requests[requestIndex].pagination.size < requests[requestIndex].pagination.totalItems) {
-            var newPage = requests[requestIndex].pagination.current + 1
-            var items = getEveryItemAssociatedWithPageAndRequest(storeElement, requestIndex, newPage);
+            var page = pageToFetch == -1 ? requests[requestIndex].pagination.current + 1 : pageToFetch;
+            var items = getEveryItemAssociatedWithPageAndRequest(storeElement, requestIndex, page);
+
             if (items.length > 0) {
-                if (compareExpirationDate(items) > 0) { // > MUST SET TO 10 %
-                    yield fetchPage(false, callback, url, page, userId, params, requestIndex, name);
+                var percentageOutOfDate = compareExpirationDate(items);
+                if (percentageOutOfDate == 0) {
+                    console.log("everything uptoDate on this page");
+                }
+                if (percentageOutOfDate > 0) { // > MUST SET TO 10 %
+                    yield fetchPage(false, callback, url, page, userId, params, requestIndex, name, nameResponse);
                 }
                 else {
                     // reload every item one by one ONLY THE OUTOFDATE
@@ -129,7 +138,7 @@ function* listData({ payload }) {
                 }
             }
             else {
-                yield fetchPage(false, callback, url, newPage, userId, params, requestIndex, name);
+                yield fetchPage(false, callback, url, page, userId, params, requestIndex, name, nameResponse);
             }
         }
         else {
@@ -141,7 +150,7 @@ function* listData({ payload }) {
         }
     }
     else {
-        yield fetchPage(false, callback, url, 0, userId, params, requests.length, name);
+        yield fetchPage(false, callback, url, 0, userId, params, requests.length, name, nameResponse);
     }
 }
 
@@ -189,6 +198,7 @@ function groupItemsPerPage(items) {
 
 function* refreshData({ payload }) {
     const name = payload.name;
+    const nameResponse = payload.nameResponse;
     const url = payload.url;
     const params = payload.params;
     const callback = payload.callback;
@@ -209,7 +219,7 @@ function* refreshData({ payload }) {
             console.log("everything uptoDate on this page");
         }
         else if (percentageOutOfDate > 0) { // need to set to > 10 once refreshOne will be done
-            yield fetchPage(true, callback, url, itemsOnePage[0].contexts[0].page, userId, params, sagaSelector.currentRequestIndex, name);
+            yield fetchPage(true, callback, url, itemsOnePage[0].contexts[0].page, userId, params, sagaSelector.currentRequestIndex, name, nameResponse);
             
         }
         else {

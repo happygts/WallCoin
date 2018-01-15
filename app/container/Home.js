@@ -5,8 +5,17 @@ import { ActionCreators } from '../actions'
 import Coins from './Coins'
 
 class Home extends Component {
-  componentDidMount() {
-    this.props.fetchListDataCoins();
+  constructor(props) {
+    super(props);
+    this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
+  }
+
+  onNavigatorEvent(event) {
+    if (event.type == 'NavBarButtonPress') {
+        if (event.id == 'logout') {
+          this.props.logout();
+        }
+    }
   }
   render() {
     return (

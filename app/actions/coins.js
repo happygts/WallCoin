@@ -3,16 +3,19 @@ import { coinsSelector, storeSelector, userSelector } from '../selectors/sagaSta
 
 import { Api, ApiNameSpace } from '../api/api'
 
-export function fetchListDataCoins() {
+export function fetchListDataCoins(page = -1) {
+    console.log("page :", page)
     return {
         type: types.START_LIST_DATA,
         payload: {
             name: 'coins',
+            nameResponse: 'coins',
             callback: Api.getCoins,
             url: ApiNameSpace.GET_COINS,
             selector: coinsSelector,
             storeSelector,
             userSelector,
+            page: page,
             params: []
         }
     }
@@ -23,6 +26,7 @@ export function refreshDataCoins() {
         type: types.START_REFRESH_DATA,
         payload: {
             name: 'coins',
+            nameResponse: 'coins',
             callback: Api.getCoins,
             url: ApiNameSpace.GET_COINS,
             selector: coinsSelector,

@@ -24,7 +24,7 @@ const navigatorStyle = {
 };
 
 class App {
-	connected = true;
+	connected = false;
 
 	constructor() {
 		iconsLoaded.then(() => {
@@ -52,7 +52,14 @@ class App {
 						selectedIcon: iconsMap['ios-home'],
 						title: 'Home',
 						navigatorStyle,
-						navigatorButtons: {}
+						navigatorButtons: {
+							rightButtons: [
+								{
+									icon: iconsMap['ios-log-out'],
+									id: 'logout'
+								}
+							]
+						}
 					},
 					{
 						label: 'Favorites',
