@@ -61,7 +61,8 @@ function* fetchPage(refresh, callback, url, page, userId, params, requestIndex, 
     try {
         const response = yield call(callback, page, ...params);
         yield put({
-            type: types.UPDATE_STORE, payload: {
+            type: types.UPDATE_STORE,
+            payload: {
                 toUpdate: name,
                 data: response[name],
                 requestIndex,

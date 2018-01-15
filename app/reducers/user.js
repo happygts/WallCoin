@@ -4,9 +4,10 @@ import update from 'immutability-helper';
 import uuidv4 from 'uuid/v4'
 
 const initialState = {
-    connected: true,
+    connected: false,
+    activated: false,
     connecting: false,
-    userId: "userIDHere",
+    userId: '',
     currentPortfolioId: null,
     currentMyCoinId: null,
     currentOperationId: null,
@@ -30,10 +31,14 @@ export const user = createReducer(initialState, {
         });
     },
     [types.SUCCESS_LOGIN](state, action) {
+        const userInfo = action.payload;
+
         return update(state, {
             $merge: {
                 connected: true,
+                activated: userInfo.status == "activated" ? true : false,
                 connecting: false,
+                userId: userInfo.userId,
                 error: {
                     isError: false,
                     message: ""

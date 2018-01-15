@@ -12,6 +12,12 @@ export function login(email, password) {
     }
 }
 
+export function logout() {
+    return {
+        type: types.START_LOGOUT
+    }
+}
+
 export function register(email, password) {
     return {
         type: types.START_REGISTER,

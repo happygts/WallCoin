@@ -19,6 +19,8 @@ const icons = {
 	'md-cart': [30],
 	'ios-add-outline' : [30],
 	'md-add' : [30],
+	'ios-log-out': [30],
+	'md-log-out': [30]
 };
 
 const iconsMap = {};
