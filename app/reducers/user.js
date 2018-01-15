@@ -57,13 +57,17 @@ export const user = createReducer(initialState, {
                 }
             }
         });
-    },
-    [types.SUCCESS_INIT_PAGE](state, action) {
-        var namePayload = action.payload.name;
-
-        if (namePayload == 'portfolios') {
-            console.log("Success init page porfolios inside user reducer");
-        }
-        return state;
+    },    
+    [types.START_LOGOUT](state, action) {
+        return update(state, {
+            $merge: {
+                connected: false,
+                connecting: false,
+                userId: '',
+                currentPortfolioId: null,
+                currentMyCoinId: null,
+                currentOperationId: null,
+            }
+        });
     }
 });
