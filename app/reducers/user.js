@@ -67,6 +67,17 @@ export const user = createReducer(initialState, {
                 currentPortfolioId: null,
                 currentMyCoinId: null,
                 currentOperationId: null,
+                error: {
+                    isError: false,
+                    message: ""
+                }
+            }
+        });
+    },
+    [types.MODIFY_CURRENT_PORTFOLIOS_ID](state, action) {
+        return update(state, {
+            $merge: {
+                currentPortfolioId: action.payload.currentPortfolioId,
             }
         });
     }

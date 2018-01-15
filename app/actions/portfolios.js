@@ -1,15 +1,36 @@
 import * as types from './types'
-import { coinsSelector, storeSelector } from '../selectors/sagaStateSelectors'
+import { portfoliosSelector, storeSelector, userSelector } from '../selectors/sagaStateSelectors'
 
-import Api from '../api/api'
+import { Api, ApiNameSpace } from '../api/api'
 
-export function fetchNextPagePortfolios() {
+export function fetchListDataPortfolios(page) {
     return {
-        type: types.START_FETCH_NEXT_PAGE,
-        header: {
-            callback: Api.getPortfolios,
+        type: types.START_LIST_DATA,
+        payload: {
             name: 'portfolios',
-            selector: coinsSelector,
+            nameResponse: 'portfolios',
+            callback: Api.getPortfolios,
+            url: ApiNameSpace.GET_PORTFOLIOS,
+            selector: portfoliosSelector,
+            storeSelector,
+            userSelector,
+            page: page ? page : -1,
+            params: []
+        }
+    }
+}
+
+export function refreshDataPortfolios() {
+    return {
+        type: types.START_REFRESH_DATA,
+        payload: {
+            name: 'portfolios',
+            nameResponse: 'portfolios',
+            callback: Api.getPortfolios,
+            url: ApiNameSpace.GET_PORTFOLIOS,
+            selector: portfoliosSelector,
+            storeSelector,
+            userSelector,
             params: []
         }
     }

@@ -59,6 +59,8 @@ export const store = createReducer(initialState, {
         var requestIndex = action.payload.requestIndex;
         var page = action.payload.page;
 
+        console.log("inside Update_store :", data);
+
         data.forEach(element => {
             var indexContext = [toUpdate][element.id] ? [toUpdate][element.id].find((e) => {
                 return e.req == requestIndex;
