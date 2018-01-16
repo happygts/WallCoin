@@ -51,13 +51,12 @@ export const successLoginFlow = function* successLoginFlow() {
 
         while (numberOfCalls > 0) {
             const action = yield take(['SUCCESS_LIST_DATA', 'NO_MORE_LIST_DATA', 'ERROR_FETCH_PAGE']);
-            console.log("Catched SUCCESS_LIST_DATA or NO_MORE_LIST_DATA or ERROR_FETCH_PAGE");
 
             numberOfCalls -= 1;
         }
         const store = yield select(storeSelector);
         const portfolios = store.portfolios;
-        console.log("portfolios :", Object.keys(portfolios)[0]);
+
         yield put({
             type: types.MODIFY_CURRENT_PORTFOLIOS_ID,
             payload: {

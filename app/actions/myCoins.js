@@ -4,7 +4,6 @@ import { myCoinsSelector, storeSelector, userSelector } from '../selectors/sagaS
 import { Api, ApiNameSpace } from '../api/api'
 
 export function fetchListDataMyCoins(idPortfolios, page) {
-    console.log("here :", types.START_LIST_DATA, myCoinsSelector);
     return {
         type: types.START_LIST_DATA,
         payload: {

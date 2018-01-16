@@ -5,7 +5,6 @@ import { Api } from '../api/api';
 import * as actions from '../actions';
 
 function compareRequestWithNewRequest(requestArray, newRequestArray) {
-    console.log("compare :", requestArray, "and", newRequestArray);
     if (requestArray.length != newRequestArray.length) {
         return false;
     }
@@ -22,7 +21,6 @@ function getrequestIndexFromRequests(requests, url, userId, params) {
 
     for (let index = 0; index < requests.length; index++) {
         const request = requests[index];
-        console.log("compare :", request, "and", [url, userId, ...params])
         if (compareRequestWithNewRequest([request.data.url, request.data.userId, ...request.data.params], [url, userId, ...params])) {
             indexToReturn = index;
             break;
@@ -62,7 +60,6 @@ function compareExpirationDate(items) {
 
 function* fetchPage(refresh, callback, url, page, userId, params, requestIndex, name, nameResponse) {
     // call fetch
-    console.log("fetchPage :", page, "params :", params);
     var paramsWithoutPage = params;
     yield put(actions.ActionCreators.startFetch(callback, url, params = [page, ...params]));
 
@@ -70,13 +67,11 @@ function* fetchPage(refresh, callback, url, page, userId, params, requestIndex, 
     var action;
     while (true) {
         action = yield take(['SUCCESS_FETCH', 'ERROR_FETCH']);
-        console.log("action :", action);
         if (action.payload.url == url) {
             break;
         }
     }
 
-    console.log("fetchPage action received :", action);
     if (action.type == 'ERROR_FETCH') {
         return;
     }
@@ -90,7 +85,6 @@ function* fetchPage(refresh, callback, url, page, userId, params, requestIndex, 
         }
     });
     if (!refresh) {
-        console.log("action.payload.pagination :", action.payload.data.pagination);
         yield put({
             type: types.SUCCESS_LIST_DATA,
             payload: {
@@ -124,13 +118,11 @@ function* listData({ payload }) {
     const userId = userSelector.userId;
     const storeElement = storeSelector[name];
     const requests = sagaSelector ? sagaSelector.requests : [];
-    console.log("requests :", sagaSelector);
     var requestIndex = getrequestIndexFromRequests(requests, url, userId, params);
-    console.log("requestIndex :", requestIndex);
+
     if (requestIndex >= 0) {
         if (requests[requestIndex].pagination.current * requests[requestIndex].pagination.size < requests[requestIndex].pagination.totalItems) {
             var page = pageToFetch == -1 ? requests[requestIndex].pagination.current + 1 : pageToFetch;
-            console.log("Need to load page :", page);
             var items = getEveryItemAssociatedWithPageAndRequest(storeElement, requestIndex, page);
 
             if (items.length > 0) {
@@ -168,7 +160,6 @@ function* listData({ payload }) {
         }
     }
     else {
-        console.log("Fetch if nothing");
         yield fetchPage(false, callback, url, 0, userId, params, requests.length, name, nameResponse);
     }
 }
@@ -256,7 +247,6 @@ function* refreshData({ payload }) {
 export function* listDataFlow() {
     while (true) {
         var action = yield take('START_LIST_DATA');
-        console.log("START_LIST_DATA detected :", action);
         yield fork(listData, action);
     }
 }

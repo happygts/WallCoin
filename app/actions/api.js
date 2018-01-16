@@ -4,7 +4,6 @@ import { coinsSelector, storeSelector, userSelector } from '../selectors/sagaSta
 import { Api, ApiNameSpace } from '../api/api'
 
 export function startFetch(callback, url, params) {
-    console.log("StartFetch url :", url);
     return {
         type: types.START_FETCH,
         payload: {
@@ -16,7 +15,6 @@ export function startFetch(callback, url, params) {
 }
 
 export function successFetch(data, url) {
-    console.log("SuccessFetch url :", url);
     return {
         type: types.SUCCESS_FETCH,
         payload: {

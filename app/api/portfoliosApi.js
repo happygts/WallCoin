@@ -19,7 +19,6 @@ const portfoliosApi = {
         return myFetch(API_URL + "/portfolios/" + id, "DELETE");
     },
     getPortfoliosMyCoins: (page = 0, idPortfolios, token) => {
-        console.log("idPortfolios =", idPortfolios, "page :", page);
         return myFetch(API_URL + "/portfolios/" + idPortfolios + "/coins?page=" + page + "&token=" + token, "GET");
     },
     getPortfoliosMyCoinsFavorites: (page = 0, idPortfolios, token) => {
