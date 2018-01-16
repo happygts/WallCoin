@@ -28,8 +28,8 @@ export function errorFetch(error, url) {
     return {
         type: types.ERROR_FETCH,
         payload: {
-            url,
-            error
-        }
+            url
+        },
+        error
     }
 }

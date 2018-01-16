@@ -1,7 +1,7 @@
 import { all } from 'redux-saga/effects'
 
 import { userSaga, successLoginFlow } from './user';
-import apiSaga from './apiSaga';
+import { apiSaga, apiErrorSaga } from './apiSaga';
 import { requestSaga, listDataFlow } from './requestSaga';
 
 function* helloSaga() {
@@ -12,6 +12,7 @@ export default function* rootSaga() {
     yield all([
         helloSaga(),
         apiSaga(),
+        apiErrorSaga(),
         userSaga(),
         successLoginFlow(),
         requestSaga(),

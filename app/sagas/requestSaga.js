@@ -252,7 +252,5 @@ export function* listDataFlow() {
 }
 
 export function* requestSaga() {
-    yield all([
-        takeEvery(types.START_REFRESH_DATA, refreshData),
-    ])
+    yield takeEvery(types.START_REFRESH_DATA, refreshData);
 }

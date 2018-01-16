@@ -45,7 +45,18 @@ function* handleReceivedStartFetch({ callback, url, params }) {
     }
 }
 
-export default apiSaga = function* () {
+function* handleReceivedErrorFetch({ error }) {
+    // is 401
+    if (error.code == 1) {
+        yield put(actions.ActionCreators.logout());
+    }
+}
+
+export const apiErrorSaga = function* () {
+    yield takeEvery(types.ERROR_FETCH, handleReceivedErrorFetch);
+}
+
+export const apiSaga = function* () {
     while (true) {
         const { payload } = yield take('START_FETCH');
 
