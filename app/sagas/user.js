@@ -63,6 +63,7 @@ export const successLoginFlow = function* successLoginFlow() {
                 currentPortfolioId: Object.keys(portfolios)[0]
             }
         });
+        console.log("fetchListDataMyCoins");
         yield put(actions.ActionCreators.fetchListDataMyCoins(idPortfolios = Object.keys(portfolios)[0], page = 0));
         // yield put(actions.ActionCreators.fetchListDataMyCoins(idPortfolios = Object.keys(portfolios)[0], page = 0));
 

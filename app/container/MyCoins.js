@@ -29,17 +29,22 @@ class MyCoins extends Component {
     }
 
     handleRefresh() {
-        // this.props.fetchCryptoCurencies();
     }
 
     handleLoadMore(params) {
         this.props.fetchListDataMyCoins();
     }
 
-    getCoinValue(id) {
-        return this.props.coins.list.find((coin) => {
-            return coin.id == id;
+    getCoinValue(myCoin) {
+        console.log("this.props.coins :", this.props.coins)
+        var idCoin = Object.keys(this.props.coins).find((id) => {
+            return id == myCoin.value.coinId;
         });
+
+        console.log("idCoin :", this.props.coins[idCoin]);
+        if (idCoin)
+            return this.props.coins[idCoin];
+        return null;
     }
 
     deleteMyCoin(myCoinId) {
@@ -100,14 +105,20 @@ class MyCoins extends Component {
                 <FlatList
                     data={this.props.listMyCoins}
                     renderItem={({ item }) => (
+                        // <Text>{item.value.name}</Text>
+                        // <CardMyCoin key={item.value.id}
+                        //     deleteMyCoin={this.deleteMyCoin.bind(this)}
+                        //     goToOneMyCoins={this.goToOneMyCoins.bind(this)}
+                        //     myCoinValue={this.getCoinValue(item)}
+                        //     nbCoins={item.value.stats.totalQuantity}
+                        //     totalMonneyInDollar={myCoin.totalMonneyInDollar}
+                        //     differencePercentage={myCoin.differencePercentage}
+                        //     beneficial={myCoin.beneficial} />
                         <CardMyCoin key={item.value.id}
                             deleteMyCoin={this.deleteMyCoin.bind(this)}
                             goToOneMyCoins={this.goToOneMyCoins.bind(this)}
-                            myCoinValue={this.getCoinValue(myCoin.id)}
-                            nbCoins={myCoin.nbCoins}
-                            totalMonneyInDollar={myCoin.totalMonneyInDollar}
-                            differencePercentage={myCoin.differencePercentage}
-                            beneficial={myCoin.beneficial} />
+                            coin={this.getCoinValue(item)}
+                            myCoin={item.value}/>
                     )}
                     ListFooterComponent={this.renderFooter}
                     keyExtractor={(item, index) => index}
@@ -122,9 +133,8 @@ class MyCoins extends Component {
 }
 
 const mapStateToProps = (state, ownProps) => {
-    const coins = state.coins;
+    const coins = state.store.coins;
     const getListItems = makeComputeListRequestItems();
-    // const getMyCoins = makeComputeMyCoins();
 
     return {
         coins,

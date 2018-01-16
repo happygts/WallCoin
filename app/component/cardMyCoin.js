@@ -7,6 +7,7 @@ import { Container, Header, Content, List, ListItem, Text, Left, Body, Right, Sw
 
 import { FontelloIcon, checkFontelloIconExist } from '../utils/AppIcons'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
+import { BigNumber } from 'bignumber.js';
 
 const {
     View,
@@ -19,20 +20,60 @@ const {
 import styles from '../styles/AppStyle'
 
 class CardMyCoin extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            beneficial: 0,
+            differencePercentage: 0,
+            totalMonneyInDollar: 0,
+            nbCoins: 0
+        }
+    }
+
+    componentWillReceiveProps(newProps) {
+        console.log("component did update");
+        console.log("newProps :", newProps);
+        let buyOperationSum = new BigNumber(newProps.myCoin.stats.buyOperationSum);
+        let buyPriceSum = new BigNumber(newProps.myCoin.stats.buyPriceSum);
+        let buyWeightedSum = new BigNumber(newProps.myCoin.stats.buyWeightedSum);
+        let nbOperations = new BigNumber(newProps.myCoin.stats.nbOperations);
+        let totalQuantity = new BigNumber(newProps.myCoin.stats.totalQuantity);
+        let hundredBigNumber = new BigNumber(100);
+
+        let priceMyCoin = buyWeightedSum.dividedBy(buyOperationSum);
+        let priceCoin = new BigNumber(newProps.coin.value.price);
+
+        let possessedMyCoinValue = totalQuantity.times(priceMyCoin);
+        let possessedCoinValue = totalQuantity.times(priceCoin);
+
+
+        let beneficial = possessedCoinValue.minus(possessedMyCoinValue);
+        let differencePercentage = hundredBigNumber.minus((priceMyCoin.times(hundredBigNumber)).dividedBy(possessedCoinValue));
+        this.setState(() => {
+            return {
+                beneficial: beneficial.toPrecision(6).toString(),
+                differencePercentage: differencePercentage.toPrecision(6).toString(),
+                differencePercentageIsPositive: differencePercentage.greaterThanOrEqualTo(0),
+                totalMonneyInDollar: possessedCoinValue.toPrecision(6).toString(),
+                nbCoins: totalQuantity.toPrecision(6).toString()
+            }
+        });
+    }
+
     render() {
         return (
             <Container style={styles.listElementMyCoin}>
                 <Content>
                     <Card>
-                        <CardItem button={true} onPress={() => this.props.goToOneMyCoins(this.props.myCoinValue.id)}>
+                        <CardItem button={true} onPress={() => this.props.goToOneMyCoins(this.props.myCoin.id)}>
                             <Left>
-                                {checkFontelloIconExist(this.props.myCoinValue.symbol.toLowerCase() + "-alt") ?
-                                    <FontelloIcon name={this.props.myCoinValue.symbol.toLowerCase() + "-alt"} size={55} style={{ marginTop: 5, marginBottom: 5 }} /> :
+                                {checkFontelloIconExist(this.props.myCoin.symbol.toLowerCase() + "-alt") ?
+                                    <FontelloIcon name={this.props.myCoin.symbol.toLowerCase() + "-alt"} size={55} style={{ marginTop: 5, marginBottom: 5 }} /> :
                                     <FontelloIcon name="coin-2" size={55} style={{ marginTop: 5, marginBottom: 5 }} />
                                 }
                                 <Body>
-                                    <Text>{this.props.myCoinValue.name}</Text>
-                                    <Text note>{this.props.nbCoins} {this.props.myCoinValue.symbol}</Text>
+                                    <Text>{this.props.myCoin.name}</Text>
+                                    <Text note>{this.state.nbCoins} {this.props.myCoin.symbol}</Text>
                                 </Body>
                             </Left>
                             <Body>
@@ -42,7 +83,7 @@ class CardMyCoin extends Component {
                                         flexDirection: 'row',
                                         justifyContent: 'center',
                                     }}>
-                                        <Text style={{ fontSize: 12 }}>Price (USD){this.props.totalMonneyInDollar}</Text>
+                                        <Text style={{ fontSize: 12 }}>Price (USD) {this.state.totalMonneyInDollar}</Text>
                                     </View>
                                 </CardItem>
                                 <CardItem>
@@ -51,7 +92,7 @@ class CardMyCoin extends Component {
                                         flexDirection: 'row',
                                         justifyContent: 'center',
                                     }}>
-                                        <Text style={{ fontSize: 12 }}>Beneficial{this.props.beneficial}$</Text>
+                                        <Text style={{ fontSize: 12 }}>Beneficial {this.state.beneficial}$</Text>
                                     </View>
                                 </CardItem>
                                 <CardItem>
@@ -60,11 +101,11 @@ class CardMyCoin extends Component {
                                         flexDirection: 'row',
                                         justifyContent: 'center',
                                     }}>
-                                        {this.props.differencePercentage >= 0 ?
+                                        {this.state.differencePercentageIsPositive ?
                                             <FontAwesomeIcon name="arrow-up" size={40} color="#090" /> :
                                             <FontAwesomeIcon name="arrow-down" size={40} color="#900" />
                                         }
-                                        <Text style={{ marginTop: 13, marginLeft: 10 }}>{this.props.differencePercentage}%</Text>
+                                        <Text style={{ marginTop: 13, marginLeft: 10 }}>{this.state.differencePercentage}%</Text>
                                     </View>
                                 </CardItem>
                             </Body>
@@ -79,11 +120,8 @@ class CardMyCoin extends Component {
 CardMyCoin.propTypes = {
     deleteMyCoin: PropTypes.func.isRequired,
     goToOneMyCoins: PropTypes.func.isRequired,
-    myCoinValue: PropTypes.object.isRequired,
-    nbCoins: PropTypes.string.isRequired,
-    totalMonneyInDollar: PropTypes.string.isRequired,
-    differencePercentage: PropTypes.string.isRequired,
-    beneficial: PropTypes.string.isRequired,
+    coin: PropTypes.object.isRequired,
+    myCoin: PropTypes.object.isRequired
 };
 
 export default CardMyCoin;
