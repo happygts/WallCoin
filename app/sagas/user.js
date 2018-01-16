@@ -10,6 +10,7 @@ function* login({ payload: { email, password } }) {
         const {accessToken, refreshToken} = yield call(Api.login, email, password);
         const {id, status} = yield call(Api.me, accessToken = accessToken);
 
+        yield put(actions.ActionCreators.updateAccessToken(accessToken));
         yield delay(1000);
         yield put({
             type: types.SUCCESS_LOGIN,

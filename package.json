@@ -9,6 +9,7 @@
   "dependencies": {
     "bignumber.js": "^5.0.0",
     "immutability-helper": "^2.6.0",
+    "jwt-decode": "^2.2.0",
     "native-base": "^2.3.5",
     "prop-types": "^15.6.0",
     "react": "16.0.0",

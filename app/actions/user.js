@@ -42,3 +42,12 @@ export function whoAmI() {
         type: types.START_WHO_AM_I
     }
 }
+
+export function updateAccessToken(accessToken) {
+    return {
+        type: types.UPDATE_ACCESS_TOKEN,
+        payload: {
+            accessToken
+        }
+    }
+}
