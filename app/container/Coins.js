@@ -60,13 +60,14 @@ class Coins extends Component {
   }
 
   pressFav(id) {
-    this.isFav(id) ? this.props.removeFavCryptoCurrency(id) : this.props.addFavCryptoCurrency(id);
+    // this.isFav(id) ? this.props.removeFavCryptoCurrency(id) : this.props.addFavCryptoCurrency(id);
   }
 
   isMyCoins(id) {
-    return this.props.myCoins.find((item) => {
-      return item.id == id
-    });
+    // return this.props.myCoins.find((item) => {
+    //   return item.id == id
+    // });
+    return false;
   }
 
   pressMyCoins(id) {

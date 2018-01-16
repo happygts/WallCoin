@@ -79,7 +79,6 @@ function createOneRequestReducer(name) {
             var namePayload = action.payload.name;
 
             if (name == namePayload) {
-                console.log("START_REFRESH_DATA");
                 return update(state, {
                     $merge: {
                         refreshing: true
@@ -105,4 +104,4 @@ function createOneRequestReducer(name) {
 
 export const coins = createOneRequestReducer("coins");
 export const portfolios = createOneRequestReducer("portfolios");
-export const favorites = createOneRequestReducer("favorites");
+export const myCoins = createOneRequestReducer("myCoins");

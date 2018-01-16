@@ -1,51 +1,71 @@
 import * as types from './types'
-import Api from '../lib/api'
+import { myCoinsSelector, storeSelector, userSelector } from '../selectors/sagaStateSelectors'
 
-export function createMyCoin(id) {
+import { Api, ApiNameSpace } from '../api/api'
+
+export function fetchListDataMyCoins(idPortfolios, page) {
+    console.log("here :", types.START_LIST_DATA, myCoinsSelector);
     return {
-        type: types.CREATE_ONE_MY_COIN,
+        type: types.START_LIST_DATA,
         payload: {
-            id
+            name: 'myCoins',
+            nameResponse: 'coins',
+            callback: Api.getPortfoliosMyCoins,
+            url: ApiNameSpace.GET_MYCOINS,
+            selector: myCoinsSelector,
+            storeSelector,
+            userSelector,
+            page: page ? page : -1,
+            params: [idPortfolios]
         }
     }
 }
 
-export function deleteMyCoin(id) {
+export function refreshDataMyCoins(idPortfolios) {
     return {
-        type: types.DELETE_ONE_MY_COIN,
+        type: types.START_REFRESH_DATA,
         payload: {
-            id
+            name: 'myCoins',
+            nameResponse: 'coins',
+            callback: Api.getPortfoliosMyCoins,
+            url: ApiNameSpace.GET_MYCOINS,
+            selector: myCoinsSelector,
+            storeSelector,
+            userSelector,
+            params: [idPortfolios]
         }
     }
 }
 
-export function addOperetion(myCoinId, operation) {
+export function fetchListDataMyCoinsFavorites(idPortfolios, page) {
     return {
-        type: types.ADD_OPERATION_TO_ONE_MY_COIN,
-        payload : {
-            myCoinId,
-            operation
+        type: types.START_LIST_DATA,
+        payload: {
+            name: 'myCoins',
+            nameResponse: 'coins',
+            callback: Api.getPortfoliosMyCoinsFavorites,
+            url: ApiNameSpace.GET_MYCOINS_FAVORITES,
+            selector: myCoinsSelector,
+            storeSelector,
+            userSelector,
+            page: page ? page : -1,
+            params: [idPortfolios]
         }
     }
 }
 
-export function deleteOperation(myCoinId, operationId) {
+export function refreshDataMyCoinsFavorites(idPortfolios) {
     return {
-        type: types.DELETE_OPERATION_FROM_ONE_MY_COIN,
+        type: types.START_REFRESH_DATA,
         payload: {
-            myCoinId,
-            operationId
-        }
-    }
-}
-
-export function editOperation(myCoinId, operationId, newOperation) {
-    return {
-        type: types.EDIT_OPERATION_OF_ONE_MY_COIN,
-        payload: {
-            myCoinId,
-            operationId,
-            newOperation
+            name: 'myCoins',
+            nameResponse: 'coins',
+            callback: Api.getPortfoliosMyCoinsFavorites,
+            url: ApiNameSpace.GET_MYCOINS_FAVORITES,
+            selector: myCoinsSelector,
+            storeSelector,
+            userSelector,
+            params: [idPortfolios]
         }
     }
 }

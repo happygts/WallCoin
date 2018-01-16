@@ -29,12 +29,16 @@ const getInfoMyCoin = (myCoin, cryptoCurencies) => {
     // console.log("nbCoins :", nbCoins, "totalMonneyInDollar :", totalMonneyInDollar, "differencePercentage :", differencePercentage, "beneficial :", beneficial);
 
     return {
-        ...myCoin, nbCoins: nbCoins.toPrecision(6).toString(),
+        ...myCoin,
+        nbCoins: nbCoins.toPrecision(6).toString(),
         totalMonneyInDollar: totalMonneyInDollar.toPrecision(6).toString(),
         differencePercentage: differencePercentage.toPrecision(6).toString(),
         beneficial: beneficial.toPrecision(6).toString()
     }
 }
+
+// nbCoins == totalQuantity
+// ratioBuyingPrice == buyWeightedSum
 
 const getMyCoins = (state, props) => (
     state.myCoins

@@ -1,6 +1,6 @@
 
 export default function (url, method, body) {
-    return fetch(url, {
+    fetch(url, {
         method: method,
         body,
         headers: {

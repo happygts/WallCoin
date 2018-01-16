@@ -1,5 +1,4 @@
 import * as types from './types'
-import Api from '../lib/api'
 import { userSelector, storeSelector } from '../selectors/sagaStateSelectors'
 
 export function login(email, password) {

@@ -59,6 +59,7 @@ function compareExpirationDate(items) {
 
 function* fetchPage(refresh, callback, url, page, userId, params, requestIndex, name, nameResponse) {
     try {
+        console.log("callback :", callback);
         const response = yield call(callback, page, ...params);
         console.log("fetchPage response :", response, "name :", nameResponse);
         yield put({
@@ -90,7 +91,7 @@ function* fetchPage(refresh, callback, url, page, userId, params, requestIndex, 
         }
     }
     catch (error) {
-        yield put({ type: types.ERROR_FETCH_PAGE, error });
+        yield put({ type: types.ERROR_LIST_DATA, error });
     }
 }
 
@@ -108,7 +109,7 @@ function* listData({ payload }) {
     const userId = userSelector.userId;
     const storeElement = storeSelector[name];
     const requests = sagaSelector ? sagaSelector.requests : [];
-
+    console.log("requests :", sagaSelector);
     var requestIndex = getrequestIndexFromRequests(requests, url, userId, params);
     if (requestIndex >= 0) {
         if (requests[requestIndex].pagination.current * requests[requestIndex].pagination.size < requests[requestIndex].pagination.totalItems) {
