@@ -22,6 +22,8 @@ export const SUCCESS_REFRESH_DATA = 'SUCCESS_REFRESH_DATA';
 
 // api
 export const START_FETCH = 'START_FETCH';
+export const SUCCESS_FETCH = 'SUCCESS_FETCH';
+export const ERROR_FETCH = 'ERROR_FETCH';
 
 // portfolios
 export const MODIFY_CURRENT_PORTFOLIOS_ID = 'MODIFY_CURRENT_PORTFOLIOS_ID';

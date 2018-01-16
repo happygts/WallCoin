@@ -2,8 +2,8 @@ import { API_URL } from './env'
 import myFetch from './fetch'
 
 const portfoliosApi = {
-    getPortfolios: (page = 0) => {
-        return myFetch(API_URL + "/portfolios?page=" + page, "GET");
+    getPortfolios: (page = 0, token) => {
+        return myFetch(API_URL + "/portfolios?page=" + page + "&token=" + token, "GET");
     },
     createPortfolios: (name) => {
         return myFetch(API_URL + "/portfolios", "POST", JSON.stringify({
@@ -18,15 +18,15 @@ const portfoliosApi = {
     deletePortfolios: (id) => {
         return myFetch(API_URL + "/portfolios/" + id, "DELETE");
     },
-    getPortfoliosMyCoins: (page = 0, idPortfolios) => {
+    getPortfoliosMyCoins: (page = 0, idPortfolios, token) => {
         console.log("idPortfolios =", idPortfolios, "page :", page);
-        return myFetch(API_URL + "/portfolios/" + idPortfolios + "/coins?page=" + page, "GET");
+        return myFetch(API_URL + "/portfolios/" + idPortfolios + "/coins?page=" + page + "&token=" + token, "GET");
     },
-    getPortfoliosMyCoinsFavorites: (page = 0, idPortfolios) => {
-        return myFetch(API_URL + "/portfolios/" + idPortfolios + "/coins?isFavorite=true&page=" + page, "GET");
+    getPortfoliosMyCoinsFavorites: (page = 0, idPortfolios, token) => {
+        return myFetch(API_URL + "/portfolios/" + idPortfolios + "/coins?isFavorite=true&page=" + page + "&token=" + token, "GET");
     },
-    getPortfoliosMyCoinsWithOperations: (page = 0, idPortfolios) => {
-        return myFetch(API_URL + "/portfolios/" + idPortfolios + "/coins?hasOperations=true&page=" + page, "GET");
+    getPortfoliosMyCoinsWithOperations: (page = 0, idPortfolios, token) => {
+        return myFetch(API_URL + "/portfolios/" + idPortfolios + "/coins?hasOperations=true&page=" + page + "&token=" + token, "GET");
     },
     createPortfoliosMyCoins: (idPortfolios, coinId, isFavorite) => {
         return myFetch(API_URL + "/portfolios/" + idPortfolios + "/coins", "POST", JSON.stringify({
@@ -39,14 +39,14 @@ const portfoliosApi = {
             isFavorite
         }));
     },
-    getPortfoliosOneMyCoins: (idPortfolios, myCoinId) => {
-        return myFetch(API_URL + "/portfolios/" + idPortfolios + "/coins/" + myCoinId, "GET");
+    getPortfoliosOneMyCoins: (idPortfolios, myCoinId, token) => {
+        return myFetch(API_URL + "/portfolios/" + idPortfolios + "/coins/" + myCoinId + "&token=" + token, "GET");
     },
     deletePortfoliosMyCoins: (idPortfolios, myCoinId) => {
         return myFetch(API_URL + "/portfolios/" + idPortfolios + "/coins/" + myCoinId, "DELETE");
     },
-    getPortfoliosOneMyCoinsOperations: (page = 0, idPortfolios, idMyCoins) => {
-        return myFetch(API_URL + "/portfolios/" + idPortfolios + "/coins/" + idMyCoins + "/operations?page=" + page, "GET");
+    getPortfoliosOneMyCoinsOperations: (page = 0, idPortfolios, idMyCoins, token) => {
+        return myFetch(API_URL + "/portfolios/" + idPortfolios + "/coins/" + idMyCoins + "/operations?page=" + page + "&token=" + token, "GET");
     },
     /**
      * 

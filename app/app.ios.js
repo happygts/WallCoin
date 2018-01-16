@@ -70,15 +70,15 @@ class App {
 					// 	navigatorStyle,
 					// 	navigatorButtons: {}
 					// },
-					{
-						label: 'MyCoins',
-						screen: 'MyCoins',
-						icon: iconsMap['ios-cart-outline'],
-						selectedIcon: iconsMap['ios-cart'],
-						title: 'My Coins',
-						navigatorStyle,
-						navigatorButtons: {}
-					}
+					// {
+					// 	label: 'MyCoins',
+					// 	screen: 'MyCoins',
+					// 	icon: iconsMap['ios-cart-outline'],
+					// 	selectedIcon: iconsMap['ios-cart'],
+					// 	title: 'My Coins',
+					// 	navigatorStyle,
+					// 	navigatorButtons: {}
+					// }
 				],
 				tabsStyle: {
 					tabBarButtonColor: 'white',

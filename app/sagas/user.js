@@ -3,19 +3,21 @@ import { put, takeEvery, call, select, take} from 'redux-saga/effects'
 import * as types from '../actions/types'
 import { Api } from '../api/api';
 import * as actions from '../actions';
-import { coinsSelector, storeSelector, userSelector, portfoliosSelector } from '../selectors/sagaStateSelectors'
+import { storeSelector } from '../selectors/sagaStateSelectors'
 
 function* login({ payload: { email, password } }) {
     try {
-        const response = yield call(Api.login, email, password);
-        console.log("response :", response);
+        const {accessToken, refreshToken} = yield call(Api.login, email, password);
+        const {id, status} = yield call(Api.me, accessToken = accessToken);
+
         yield delay(1000);
         yield put({
             type: types.SUCCESS_LOGIN,
             payload: {
-                userId: response.id,
-                email: response.email,
-                status: response.status
+                userId: id,
+                email: email,
+                status: status,
+                refreshToken: refreshToken
             }
         });
     }
@@ -49,6 +51,7 @@ export const successLoginFlow = function* successLoginFlow() {
 
         while (numberOfCalls > 0) {
             const action = yield take(['SUCCESS_LIST_DATA', 'NO_MORE_LIST_DATA', 'ERROR_FETCH_PAGE']);
+            console.log("Catched SUCCESS_LIST_DATA or NO_MORE_LIST_DATA or ERROR_FETCH_PAGE");
 
             numberOfCalls -= 1;
         }

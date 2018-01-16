@@ -63,6 +63,16 @@ function createOneRequestReducer(name) {
             }
             return state;
         },
+        [types.ERROR_LIST_DATA](state, action) {
+            var namePayload = action.payload.name;
+
+            if (name == namePayload) {
+                return update(state, {
+                    loading: { $set: false },
+                })
+            }
+            return state;
+        },
         [types.NO_MORE_LIST_DATA](state, action) {
             var namePayload = action.payload.name;
 
