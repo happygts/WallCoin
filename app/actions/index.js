@@ -1,13 +1,13 @@
 import * as user from './user'
 import * as coins from './coins'
 import * as portfolios from './portfolios'
-import * as favorites from './favorites'
 import * as myCoins from './myCoins'
+import * as api from './api'
 
 export const ActionCreators = {
   ...user,
   ...coins,
   ...portfolios,
-  ...favorites,
-  ...myCoins
+  ...myCoins,
+  ...api
 };

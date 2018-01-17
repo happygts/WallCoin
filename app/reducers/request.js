@@ -63,6 +63,16 @@ function createOneRequestReducer(name) {
             }
             return state;
         },
+        [types.ERROR_LIST_DATA](state, action) {
+            var namePayload = action.payload.name;
+
+            if (name == namePayload) {
+                return update(state, {
+                    loading: { $set: false },
+                })
+            }
+            return state;
+        },
         [types.NO_MORE_LIST_DATA](state, action) {
             var namePayload = action.payload.name;
 
@@ -79,7 +89,6 @@ function createOneRequestReducer(name) {
             var namePayload = action.payload.name;
 
             if (name == namePayload) {
-                console.log("START_REFRESH_DATA");
                 return update(state, {
                     $merge: {
                         refreshing: true
@@ -105,4 +114,4 @@ function createOneRequestReducer(name) {
 
 export const coins = createOneRequestReducer("coins");
 export const portfolios = createOneRequestReducer("portfolios");
-export const favorites = createOneRequestReducer("favorites");
+export const myCoins = createOneRequestReducer("myCoins");

@@ -8,6 +8,8 @@ const initialState = {
     activated: false,
     connecting: false,
     userId: '',
+    accessToken: '',
+    refreshToken: '',
     currentPortfolioId: null,
     currentMyCoinId: null,
     currentOperationId: null,
@@ -39,6 +41,7 @@ export const user = createReducer(initialState, {
                 activated: userInfo.status == "activated" ? true : false,
                 connecting: false,
                 userId: userInfo.userId,
+                refreshToken: userInfo.refreshToken,
                 error: {
                     isError: false,
                     message: ""
@@ -64,6 +67,7 @@ export const user = createReducer(initialState, {
                 connected: false,
                 connecting: false,
                 userId: '',
+                refreshToken: '',
                 currentPortfolioId: null,
                 currentMyCoinId: null,
                 currentOperationId: null,
@@ -78,6 +82,14 @@ export const user = createReducer(initialState, {
         return update(state, {
             $merge: {
                 currentPortfolioId: action.payload.currentPortfolioId,
+            }
+        });
+    },
+    [types.UPDATE_ACCESS_TOKEN](state, action) {
+        console.log("UPDATE_ACCESS_TOKEN :", action);
+        return update(state, {
+            $merge: {
+                accessToken: action.payload.accessToken
             }
         });
     }

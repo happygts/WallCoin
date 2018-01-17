@@ -24,5 +24,6 @@ export const Api = Object.assign({}, userApi, coinsApi, portfoliosApi, {
 export const ApiNameSpace = {
     GET_COINS: 'GET_COINS',
     GET_PORTFOLIOS: 'GET_PORTFOLIOS',
-    GET_PORTFOLIOS_FAVORITES: 'GET_PORTFOLIOS_FAVORITES'
+    GET_MYCOINS: 'GET_MYCOINS',
+    GET_MYCOINS_FAVORITES: 'GET_MYCOINS_FAVORITES'
 }

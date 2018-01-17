@@ -1,5 +1,4 @@
 import * as types from './types'
-import Api from '../lib/api'
 import { userSelector, storeSelector } from '../selectors/sagaStateSelectors'
 
 export function login(email, password) {
@@ -41,5 +40,14 @@ export function changeUserPortfolio(portfolioId) {
 export function whoAmI() {
     return {
         type: types.START_WHO_AM_I
+    }
+}
+
+export function updateAccessToken(accessToken) {
+    return {
+        type: types.UPDATE_ACCESS_TOKEN,
+        payload: {
+            accessToken
+        }
     }
 }

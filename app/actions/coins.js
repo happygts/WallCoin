@@ -4,7 +4,6 @@ import { coinsSelector, storeSelector, userSelector } from '../selectors/sagaSta
 import { Api, ApiNameSpace } from '../api/api'
 
 export function fetchListDataCoins(page = -1) {
-    console.log("page :", page)
     return {
         type: types.START_LIST_DATA,
         payload: {

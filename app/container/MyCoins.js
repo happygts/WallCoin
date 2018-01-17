@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 
 import styles from '../styles/AppStyle'
 import { ActionCreators } from '../actions'
-import { makeComputeMyCoins } from '../selectors/myCoinsSelectors'
+import { makeComputeListRequestItems } from '../selectors/requestSelectors'
 
 import CardMyCoin from '../component/cardMyCoin'
 
@@ -15,10 +15,12 @@ import { iconsMap } from '../utils/AppIcons';
 const {
   View,
     ScrollView,
+    FlatList,
     RefreshControl,
     TouchableHighlight,
     StyleSheet,
-    Text
+    Text,
+    ActivityIndicator
 } = ReactNative;
 
 class MyCoins extends Component {
@@ -26,85 +28,118 @@ class MyCoins extends Component {
         super(props);
     }
 
-    _onRefresh() {
-        // this.props.fetchCryptoCurencies();
+    handleRefresh() {
     }
 
-    getCoinValue(id) {
-        return this.props.coins.list.find((cryptoCurencie) => {
-            return cryptoCurencie.id == id;
+    handleLoadMore(params) {
+        this.props.fetchListDataMyCoins();
+    }
+
+    getCoinValue(myCoin) {
+        console.log("this.props.coins :", this.props.coins)
+        var idCoin = Object.keys(this.props.coins).find((id) => {
+            return id == myCoin.value.coinId;
         });
+
+        console.log("idCoin :", this.props.coins[idCoin]);
+        if (idCoin)
+            return this.props.coins[idCoin];
+        return null;
     }
 
     deleteMyCoin(myCoinId) {
-        this.props.deleteMyCoin(myCoinId);
+        // this.props.deleteMyCoin(myCoinId);
     }
 
     goToOneMyCoins(id) {
-        var myCoin = this.props.myCoins.find((myCoin) => {
-            return id == myCoin.id;
-        });
+        // var myCoin = this.props.myCoins.find((myCoin) => {
+        //     return id == myCoin.id;
+        // });
 
-        var myCoinValue = this.getCoinValue(id);
+        // var myCoinValue = this.getCoinValue(id);
 
-        this.props.navigator.push({
-            screen: 'OneMyCoins',
-            title: "MyCoin " + myCoinValue.name,
-            passProps: { myCoinId: myCoin.id, myCoinValue },
-            animated: true,
-            animationType: 'fade',
-            navigatorStyle: {
-                navBarTranslucent: true,
-                drawUnderNavBar: true,
-                navBarTextColor: 'white',
-                navBarButtonColor: 'white',
-                statusBarTextColorScheme: 'light',
-                drawUnderTabBar: true
-            },
-            navigatorButtons: {
-                rightButtons: [
-                    {
-                        icon: iconsMap['md-add'],
-                        id: 'add'
-                    }
-                ]
-            }
-        });
+        // this.props.navigator.push({
+        //     screen: 'OneMyCoins',
+        //     title: "MyCoin " + myCoinValue.name,
+        //     passProps: { myCoinId: myCoin.id, myCoinValue },
+        //     animated: true,
+        //     animationType: 'fade',
+        //     navigatorStyle: {
+        //         navBarTranslucent: true,
+        //         drawUnderNavBar: true,
+        //         navBarTextColor: 'white',
+        //         navBarButtonColor: 'white',
+        //         statusBarTextColorScheme: 'light',
+        //         drawUnderTabBar: true
+        //     },
+        //     navigatorButtons: {
+        //         rightButtons: [
+        //             {
+        //                 icon: iconsMap['md-add'],
+        //                 id: 'add'
+        //             }
+        //         ]
+        //     }
+        // });
     }
+
+    renderFooter = () => {
+        if (!this.props.coins.loading) return null;
+
+        return (
+            <View
+                style={{
+                    paddingVertical: 20,
+                    borderTopWidth: 1,
+                    borderColor: "#CED0CE"
+                }}
+            >
+                <ActivityIndicator animating size="large" />
+            </View>
+        );
+    };
 
     render() {
         return (
             <View style={styles.container}>
-                <ScrollView refreshControl={
-                    <RefreshControl
-                        refreshing={this.props.coins.loading}
-                        onRefresh={this._onRefresh.bind(this)}
-                    />
-                }>
-                    {this.props.myCoins && this.props.myCoins.length && this.props.coins && this.props.coins.list.length ? this.props.myCoins.map((myCoin) => (
-                        <CardMyCoin key={myCoin.id}
+                <FlatList
+                    data={this.props.listMyCoins}
+                    renderItem={({ item }) => (
+                        // <Text>{item.value.name}</Text>
+                        // <CardMyCoin key={item.value.id}
+                        //     deleteMyCoin={this.deleteMyCoin.bind(this)}
+                        //     goToOneMyCoins={this.goToOneMyCoins.bind(this)}
+                        //     myCoinValue={this.getCoinValue(item)}
+                        //     nbCoins={item.value.stats.totalQuantity}
+                        //     totalMonneyInDollar={myCoin.totalMonneyInDollar}
+                        //     differencePercentage={myCoin.differencePercentage}
+                        //     beneficial={myCoin.beneficial} />
+                        <CardMyCoin key={item.value.id}
                             deleteMyCoin={this.deleteMyCoin.bind(this)}
                             goToOneMyCoins={this.goToOneMyCoins.bind(this)}
-                            myCoinValue={this.getCoinValue(myCoin.id)}
-                            nbCoins={myCoin.nbCoins}
-                            totalMonneyInDollar={myCoin.totalMonneyInDollar}
-                            differencePercentage={myCoin.differencePercentage}
-                            beneficial={myCoin.beneficial} />
-                    )) : null}
-                </ScrollView>
+                            coin={this.getCoinValue(item)}
+                            myCoin={item.value}/>
+                    )}
+                    ListFooterComponent={this.renderFooter}
+                    keyExtractor={(item, index) => index}
+                    onEndReached={this.handleLoadMore.bind(this)}
+                    onEndReachedThreshold={0}
+                    onRefresh={this.handleRefresh.bind(this)}
+                    refreshing={this.props.myCoins.refreshing}
+                />
             </View>
         )
     }
 }
 
 const mapStateToProps = (state, ownProps) => {
-    const coins = state.coins;
-
-    const getMyCoins = makeComputeMyCoins();
+    const coins = state.store.coins;
+    const getListItems = makeComputeListRequestItems();
 
     return {
         coins,
-        myCoins: getMyCoins(state, ownProps)
+        listMyCoins: getListItems(state, ownProps, 'myCoins'),
+        myCoins: state.myCoins
     }
 }
 
