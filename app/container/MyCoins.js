@@ -28,7 +28,11 @@ class MyCoins extends Component {
         super(props);
     }
 
+    componentWillUpdate() {
+    }
+
     handleRefresh() {
+        this.props.refreshDataMyCoins(this.props.user.currentPortfolioId);
     }
 
     handleLoadMore(params) {
@@ -36,12 +40,10 @@ class MyCoins extends Component {
     }
 
     getCoinValue(myCoin) {
-        console.log("this.props.coins :", this.props.coins)
         var idCoin = Object.keys(this.props.coins).find((id) => {
             return id == myCoin.value.coinId;
         });
 
-        console.log("idCoin :", this.props.coins[idCoin]);
         if (idCoin)
             return this.props.coins[idCoin];
         return null;
@@ -105,15 +107,6 @@ class MyCoins extends Component {
                 <FlatList
                     data={this.props.listMyCoins}
                     renderItem={({ item }) => (
-                        // <Text>{item.value.name}</Text>
-                        // <CardMyCoin key={item.value.id}
-                        //     deleteMyCoin={this.deleteMyCoin.bind(this)}
-                        //     goToOneMyCoins={this.goToOneMyCoins.bind(this)}
-                        //     myCoinValue={this.getCoinValue(item)}
-                        //     nbCoins={item.value.stats.totalQuantity}
-                        //     totalMonneyInDollar={myCoin.totalMonneyInDollar}
-                        //     differencePercentage={myCoin.differencePercentage}
-                        //     beneficial={myCoin.beneficial} />
                         <CardMyCoin key={item.value.id}
                             deleteMyCoin={this.deleteMyCoin.bind(this)}
                             goToOneMyCoins={this.goToOneMyCoins.bind(this)}
@@ -139,7 +132,8 @@ const mapStateToProps = (state, ownProps) => {
     return {
         coins,
         listMyCoins: getListItems(state, ownProps, 'myCoins'),
-        myCoins: state.myCoins
+        myCoins: state.myCoins,
+        user: state.user
     }
 }
 

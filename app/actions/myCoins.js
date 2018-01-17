@@ -90,9 +90,8 @@ export function deleteMyCoin(idPortfolios, myCoinId) {
         type: types.START_DELETE_DATA,
         payload: {
             name: 'myCoins',
-            nameResponse: 'coins',
             callback: Api.deletePortfoliosMyCoins,
-            url: ApiNameSpace.CREATE_MY_COIN,
+            url: ApiNameSpace.DELTE_MY_COIN,
             selector: myCoinsSelector,
             storeSelector,
             userSelector,

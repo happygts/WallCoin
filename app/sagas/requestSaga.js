@@ -237,6 +237,7 @@ function* refreshData({ payload }) {
             console.log("everything uptoDate on this page");
         }
         else if (percentageOutOfDate > 0) { // need to set to > 10 once refreshOne will be done
+            console.log("refresh Here");
             yield fetchPage(true, callback, url, itemsOnePage[0].contexts[0].page, userId, params, sagaSelector.currentRequestIndex, name, nameResponse);
 
         }
@@ -261,11 +262,15 @@ export function* refreshDataFlow() {
 
 function* createData({ payload }) {
     const name = payload.name;
-    const nameResponse = payload.nameResponse;
     const url = payload.url;
     const params = payload.params;
     const callback = payload.callback;
+    const callbackRefresh = payload.callbackRefresh;
+    const callbackRefreshParams = payload.callbackRefreshParams;
+    const sagaSelector = yield select(payload.selector);
+    const userSelector = yield select(payload.userSelector);
 
+    console.log("callbackRefreshParams :", callbackRefreshParams);
     yield put(actions.ActionCreators.startFetch(callback, url, params));
 
     // wait for fetch to end
@@ -282,15 +287,15 @@ function* createData({ payload }) {
     if (action.type == 'ERROR_FETCH') {
         return;
     }
-    // yield put({
-    //     type: types.UPDATE_STORE,
-    //     payload: {
-    //         toUpdate: name,
-    //         data: action.payload.data[nameResponse],
-    //         requestIndex,
-    //         page
-    //     }
-    // });
+    yield put({
+        type: types.ADD_TO_STORE,
+        payload: {
+            toUpdate: name,
+            data: action.payload.data,
+            requestIndex: sagaSelector.currentRequestIndex,
+            page: 999999 // page impossible car non synchronisé
+        }
+    });
 }
 
 export function* requestSaga() {
