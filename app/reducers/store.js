@@ -104,5 +104,16 @@ export const store = createReducer(initialState, {
                 }
             })
         })
+    },
+    [types.DELETE_TO_STORE](state, action) {
+        var dataElement = action.payload.data;
+        console.log("dataElement :", dataElement);
+        var toUpdate = action.payload.toUpdate;
+
+        return update(state, {
+            [toUpdate]: {
+                $unset: [action.payload.idToDelete]
+            }
+        })
     }
 });

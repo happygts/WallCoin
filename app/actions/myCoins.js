@@ -86,6 +86,7 @@ export function createMyCoin(idPortfolios, coinId, isFavorite) {
 }
 
 export function deleteMyCoin(idPortfolios, myCoinId) {
+    console.log("idPortfolios :", idPortfolios, "myCoinId :", myCoinId);
     return {
         type: types.START_DELETE_DATA,
         payload: {
@@ -95,6 +96,7 @@ export function deleteMyCoin(idPortfolios, myCoinId) {
             selector: myCoinsSelector,
             storeSelector,
             userSelector,
+            idToDelete: myCoinId,
             params: [idPortfolios, myCoinId]
         }
     }

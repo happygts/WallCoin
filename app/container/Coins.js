@@ -83,7 +83,7 @@ class Coins extends Component {
   }
 
   pressMyCoins(id) {
-    this.isMyCoins(id) ? this.props.deleteMyCoin(id) : this.props.createMyCoin(this.props.user.currentPortfolioId, id, false);
+    this.isMyCoins(id) ? this.props.deleteMyCoin(this.props.user.currentPortfolioId, this.getMyCoinWithCoinId(id).value.id) : this.props.createMyCoin(this.props.user.currentPortfolioId, id, false);
   }
 
   renderFooter = () => {

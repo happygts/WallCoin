@@ -11,8 +11,9 @@ export const ERROR_REGISTER = 'ERROR_REGISTER';
 
 export const UPDATE_ACCESS_TOKEN = 'UPDATE_ACCESS_TOKEN';
 // store
-export const UPDATE_STORE = 'UPDATE_STORE'
-export const ADD_TO_STORE = 'ADD_TO_STORE'
+export const UPDATE_STORE = 'UPDATE_STORE';
+export const ADD_TO_STORE = 'ADD_TO_STORE';
+export const DELETE_TO_STORE = 'DELETE_TO_STORE';
 
 // request
 export const START_LIST_DATA = 'START_LIST_DATA';

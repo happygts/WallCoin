@@ -265,8 +265,6 @@ function* createData({ payload }) {
     const url = payload.url;
     const params = payload.params;
     const callback = payload.callback;
-    const callbackRefresh = payload.callbackRefresh;
-    const callbackRefreshParams = payload.callbackRefreshParams;
     const sagaSelector = yield select(payload.selector);
     const userSelector = yield select(payload.userSelector);
 
@@ -298,8 +296,44 @@ function* createData({ payload }) {
     });
 }
 
+function* deleteData({ payload }) {
+    const name = payload.name;
+    const url = payload.url;
+    const params = payload.params;
+    const callback = payload.callback;
+    const idToDelete = payload.idToDelete;
+    
+    const sagaSelector = yield select(payload.selector);
+    const userSelector = yield select(payload.userSelector);
+
+    yield put(actions.ActionCreators.startFetch(callback, url, params));
+
+    // wait for fetch to end
+    var action;
+    while (true) {
+        action = yield take(['SUCCESS_FETCH', 'ERROR_FETCH']);
+        if (action.payload.url == url) {
+            break;
+        }
+    }
+
+    console.log("action received after fetch :", action);
+
+    if (action.type == 'ERROR_FETCH') {
+        return;
+    }
+    yield put({
+        type: types.DELETE_TO_STORE,
+        payload: {
+            toUpdate: name,
+            idToDelete
+        }
+    });
+}
+
 export function* requestSaga() {
     yield all([
-        takeEvery(types.START_CREATE_DATA, createData)
+        takeEvery(types.START_CREATE_DATA, createData),
+        takeEvery(types.START_DELETE_DATA, deleteData)
     ])
 }
