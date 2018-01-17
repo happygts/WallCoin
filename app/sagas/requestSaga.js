@@ -1,5 +1,5 @@
 import { delay } from 'redux-saga'
-import { put, takeEvery, takeLatest, take, all, call, select, fork} from 'redux-saga/effects'
+import { put, takeEvery, takeLatest, take, all, call, select, fork } from 'redux-saga/effects'
 import * as types from '../actions/types'
 import { Api } from '../api/api';
 import * as actions from '../actions';
@@ -206,6 +206,14 @@ function groupItemsPerPage(items) {
     return toReturn;
 }
 
+export function* listDataFlow() {
+    while (true) {
+        var action = yield take('START_LIST_DATA');
+        yield fork(listData, action);
+    }
+}
+
+
 function* refreshData({ payload }) {
     const name = payload.name;
     const nameResponse = payload.nameResponse;
@@ -244,13 +252,20 @@ function* refreshData({ payload }) {
     });
 }
 
-export function* listDataFlow() {
+export function* refreshDataFlow() {
     while (true) {
-        var action = yield take('START_LIST_DATA');
-        yield fork(listData, action);
+        var action = yield take('START_REFRESH_DATA');
+        yield fork(refreshData, action);
     }
 }
 
+
+function* createData({ payload }) {
+
+}
+
 export function* requestSaga() {
-    yield takeEvery(types.START_REFRESH_DATA, refreshData);
+    yield all([
+        takeEvery(types.START_CREATE_DATA, createData)
+    ])
 }

@@ -2,7 +2,7 @@ import { all } from 'redux-saga/effects'
 
 import { userSaga, successLoginFlow } from './user';
 import { apiSaga, apiErrorSaga } from './apiSaga';
-import { requestSaga, listDataFlow } from './requestSaga';
+import { requestSaga, listDataFlow, refreshDataFlow } from './requestSaga';
 
 function* helloSaga() {
     console.log('Hello Sagas!')
@@ -16,6 +16,7 @@ export default function* rootSaga() {
         userSaga(),
         successLoginFlow(),
         requestSaga(),
-        listDataFlow()
+        listDataFlow(),
+        refreshDataFlow()
     ])
 }

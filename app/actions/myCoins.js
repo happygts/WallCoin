@@ -68,3 +68,23 @@ export function refreshDataMyCoinsFavorites(idPortfolios) {
         }
     }
 }
+
+export function createMyCoin() {
+    return {
+        type: types.START_CREATE_DATA,
+        payload: {
+            name: 'myCoins',
+            nameResponse: 'coins',
+            callback: Api.createPortfoliosMyCoins,
+            url: ApiNameSpace.CREATE_MY_COIN,
+            selector: myCoinsSelector,
+            storeSelector,
+            userSelector,
+            params: [idPortfolios]
+        }
+    }
+}
+
+export function deleteMyCoin() {
+
+}
