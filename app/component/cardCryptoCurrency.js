@@ -24,16 +24,16 @@ class CardCryptoCurrency extends Component {
     constructor(props) {
         super(props)
 
-        this.pressFav = this.pressFav.bind(this)
+        this.pressFav = this.pressFav.bind(this);
         this.state = {
-            isFav: props.isFav(this.props.cryptoCurrency.id),
-            isMyCoins: props.isMyCoins(this.props.cryptoCurrency.id),
+            isFav: props.isFav(this.props.coin.id),
+            isMyCoins: props.isMyCoins(this.props.coin.id),
             currentCoin: {
-                price: new BigNumber(this.props.cryptoCurrency.price),
+                price: new BigNumber(this.props.coin.price),
                 percentChange: {
-                    hour: new BigNumber(this.props.cryptoCurrency.percentChange.hour),
-                    day: new BigNumber(this.props.cryptoCurrency.percentChange.day),
-                    week: new BigNumber(this.props.cryptoCurrency.percentChange.week)
+                    hour: new BigNumber(this.props.coin.percentChange.hour),
+                    day: new BigNumber(this.props.coin.percentChange.day),
+                    week: new BigNumber(this.props.coin.percentChange.week)
                 }
             }
         };
@@ -41,7 +41,7 @@ class CardCryptoCurrency extends Component {
 
     pressFav() {
         this.setState({ isFav: !this.state.isFav });
-        this.props.pressFav(this.props.cryptoCurrency.id);
+        this.props.pressFav(this.props.coin.id);
     }
 
     pressMyCoins() {
@@ -54,7 +54,7 @@ class CardCryptoCurrency extends Component {
                     {
                         text: 'OK', onPress: () => {
                             this.setState({ isMyCoins: !this.state.isMyCoins })
-                            this.props.pressMyCoins(this.props.cryptoCurrency.id);
+                            this.props.pressMyCoins(this.props.coin.id);
                         }
                     },
                 ],
@@ -62,12 +62,20 @@ class CardCryptoCurrency extends Component {
         }
         else {
             this.setState({ isMyCoins: !this.state.isMyCoins })
-            this.props.pressMyCoins(this.props.cryptoCurrency.id);
+            this.props.pressMyCoins(this.props.coin.id);
         }
     }
 
     shouldComponentUpdate(nextProps, nextState) {
-        return this.props.isFav(nextProps.cryptoCurrency.id) !== this.state.isFav || this.props.isMyCoins(nextProps.cryptoCurrency.id) !== this.state.isMyCoins;
+        return this.props.isFav(nextProps.coin.id) !== this.state.isFav || this.props.isMyCoins(nextProps.coin.id) !== this.state.isMyCoins;
+    }
+
+    componentWillUpdate() {
+        this.setState((state) => {
+            return {
+                isMyCoins: this.props.isMyCoins(this.props.coin.id)
+            }
+        })
     }
 
     render() {
@@ -78,13 +86,13 @@ class CardCryptoCurrency extends Component {
                         rightOpenValue={-100}
                         right={
                             <View style={{ flex: 1, flexDirection: 'row' }}>
-                                <TouchableHighlight onPress={() => this.pressFav(this.props.cryptoCurrency.id)}>
+                                <TouchableHighlight onPress={() => this.pressFav(this.props.coin.id)}>
                                     {this.state.isFav ?
                                         <FontAwesomeIcon name="star" color="#FFD700" style={{ marginTop: 45, marginLeft: 11 }} size={30} /> :
                                         <FontAwesomeIcon name="star-o" color="#000000" style={{ marginTop: 45, marginLeft: 11 }} size={30} />
                                     }
                                 </TouchableHighlight>
-                                <TouchableHighlight onPress={() => this.pressMyCoins(this.props.cryptoCurrency.id)}>
+                                <TouchableHighlight onPress={() => this.pressMyCoins(this.props.coin.id)}>
                                     {this.state.isMyCoins ?
                                         <Ionicons name="ios-cart" color="#FFD700" style={{ marginTop: 45, marginLeft: 11 }} size={30} />
                                         :
@@ -97,13 +105,13 @@ class CardCryptoCurrency extends Component {
                             <Card>
                                 <CardItem>
                                     <Left>
-                                        {checkFontelloIconExist(this.props.cryptoCurrency.symbol && this.props.cryptoCurrency.symbol.toLowerCase() + "-alt") ?
-                                            <FontelloIcon name={this.props.cryptoCurrency.symbol.toLowerCase() + "-alt"} size={55} style={{ marginTop: 5, marginBottom: 5 }} /> :
+                                        {checkFontelloIconExist(this.props.coin.symbol && this.props.coin.symbol.toLowerCase() + "-alt") ?
+                                            <FontelloIcon name={this.props.coin.symbol.toLowerCase() + "-alt"} size={55} style={{ marginTop: 5, marginBottom: 5 }} /> :
                                             <FontelloIcon name="coin-2" size={55} style={{ marginTop: 5, marginBottom: 5 }} />
                                         }
                                         <Body>
-                                            <Text>{this.props.cryptoCurrency.name}</Text>
-                                            <Text note>{this.props.cryptoCurrency.symbol}</Text>
+                                            <Text>{this.props.coin.name}</Text>
+                                            <Text note>{this.props.coin.symbol}</Text>
                                         </Body>
                                     </Left>
                                     <Body>
@@ -149,7 +157,7 @@ class CardCryptoCurrency extends Component {
 }
 
 CardCryptoCurrency.propTypes = {
-    cryptoCurrency: PropTypes.object.isRequired,
+    coin: PropTypes.object.isRequired,
     pressFav: PropTypes.func.isRequired,
     pressMyCoins: PropTypes.func.isRequired,
     isFav: PropTypes.func.isRequired,

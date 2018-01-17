@@ -259,9 +259,38 @@ export function* refreshDataFlow() {
     }
 }
 
-
 function* createData({ payload }) {
+    const name = payload.name;
+    const nameResponse = payload.nameResponse;
+    const url = payload.url;
+    const params = payload.params;
+    const callback = payload.callback;
 
+    yield put(actions.ActionCreators.startFetch(callback, url, params));
+
+    // wait for fetch to end
+    var action;
+    while (true) {
+        action = yield take(['SUCCESS_FETCH', 'ERROR_FETCH']);
+        if (action.payload.url == url) {
+            break;
+        }
+    }
+
+    console.log("action received after fetch :", action);
+
+    if (action.type == 'ERROR_FETCH') {
+        return;
+    }
+    // yield put({
+    //     type: types.UPDATE_STORE,
+    //     payload: {
+    //         toUpdate: name,
+    //         data: action.payload.data[nameResponse],
+    //         requestIndex,
+    //         page
+    //     }
+    // });
 }
 
 export function* requestSaga() {

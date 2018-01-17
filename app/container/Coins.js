@@ -31,6 +31,10 @@ class Coins extends Component {
     }
   }
 
+  componentDidUpdate() {
+    console.log("Coins updated");
+  }
+
   handleLoadMore(params) {
     this.props.fetchListDataCoins();
   }
@@ -63,15 +67,23 @@ class Coins extends Component {
     // this.isFav(id) ? this.props.removeFavCryptoCurrency(id) : this.props.addFavCryptoCurrency(id);
   }
 
+  getMyCoinWithCoinId(id) {
+    let idMyCoinFound = Object.keys(this.props.myCoinsStore).find((idMyCoin) => {
+      return this.props.myCoinsStore[idMyCoin].value.coinId == id
+    });
+
+    if (idMyCoinFound) {
+      return this.props.myCoinsStore[idMyCoinFound];
+    }
+    return null;
+  }
+
   isMyCoins(id) {
-    // return this.props.myCoins.find((item) => {
-    //   return item.id == id
-    // });
-    return false;
+    return this.getMyCoinWithCoinId(id);
   }
 
   pressMyCoins(id) {
-    this.isMyCoins(id) ? this.props.deleteMyCoin(id) : this.props.createMyCoin(id);
+    this.isMyCoins(id) ? this.props.deleteMyCoin(id) : this.props.createMyCoin(this.props.user.currentPortfolioId, id, false);
   }
 
   renderFooter = () => {
@@ -112,7 +124,7 @@ class Coins extends Component {
               renderItem={({ item }) => (
                 <CardCryptoCurrency
                   key={item}
-                  cryptoCurrency={item.value}
+                  coin={item.value}
                   pressFav={this.pressFav.bind(this)}
                   pressMyCoins={this.pressMyCoins.bind(this)}
                   isFav={this.isFav.bind(this)}
@@ -137,9 +149,10 @@ const mapStateToProps = (state, ownProps) => {
   const getListItems = makeComputeListRequestItems();
 
   return {
+    user: state.user,
     coins: state.coins,
     listCoins: getListItems(state, ownProps, 'coins'),
-    myCoins: state.myCoins,
+    myCoinsStore: state.store.myCoins,
     asyncInitialState: state.asyncInitialState
   }
 }
