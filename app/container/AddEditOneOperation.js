@@ -22,12 +22,13 @@ const {
 class AddEditOneOperation extends Component {
     constructor(props) {
         super(props);
+        console.log("props.operation :", props.operation);
         this.state = {
             operation: {
-                id: props.operation ? props.operation.id : null,
-                bought: props.operation ? props.operation.bought : true,
-                quantity: props.operation ? props.operation.quantity : "",
-                price: props.operation ? props.operation.price : "",
+                id: props.operation ? props.operation.value.id : null,
+                bought: props.operation? props.operation.value.type == "buy" : true,
+                quantity: props.operation ? props.operation.value.quantity : "",
+                price: props.operation ? props.operation.value.price : "",
             },
             add: props.operation == undefined,
             error: {
@@ -111,6 +112,7 @@ class AddEditOneOperation extends Component {
             // ajouter une operation.
             this.state.operation.quantity = parseFloat(this.state.operation.quantity);
             this.state.operation.price = parseFloat(this.state.operation.price);
+            console.log("this.state.operation :", this.state.operation);
             var newOperation = {
                 type: this.state.operation.bought ? "buy" : "sell",
                 price: this.state.operation.price.toString(),
@@ -120,7 +122,7 @@ class AddEditOneOperation extends Component {
                 this.props.createOperation(this.props.portfolioId, this.props.myCoinId, newOperation.type, newOperation.price, newOperation.quantity);
             }
             else {
-                this.props.deleteOperation(this.props.portfolioId, this.props.myCoinId, this.state.operation.id);
+                this.props.modifyOperation(this.props.portfolioId, this.props.myCoinId, this.props.operation.value.id, newOperation.type, newOperation.price, newOperation.quantity);
             }
 
             this.props.navigator.pop({

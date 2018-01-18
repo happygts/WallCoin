@@ -25,10 +25,10 @@ class CardOneOperation extends Component {
                 rightOpenValue={-100}
                 right={
                     <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center' }}>
-                        <TouchableHighlight onPress={() => this.props.editOperation(this.props.id)} style={{ flex: 1 }}>
+                        <TouchableHighlight onPress={() => this.props.editOperation(this.props.operation.id)} style={{ flex: 1 }}>
                             <FontAwesomeIcon name="pencil" color="#FFD700" style={{ marginTop: 35, marginLeft: 10 }} size={30} />
                         </TouchableHighlight >
-                        <TouchableHighlight onPress={() => this.props.deleteOperation(this.props.id)} style={{ flex: 1 }}>
+                        <TouchableHighlight onPress={() => this.props.deleteOperation(this.props.operation.id)} style={{ flex: 1 }}>
                             <FontAwesomeIcon name="trash" color="#FF0000" style={{ marginTop: 35 }} size={30} />
                         </TouchableHighlight >
                     </View>
@@ -49,8 +49,8 @@ class CardOneOperation extends Component {
                                         <View>
                                             <Text style={{ fontSize: 12 }}> Quantity : {this.props.operation.quantity}</Text>
                                             {this.props.operation.type == "buy" ?
-                                                <Text style={{ fontSize: 12 }}> Buying price : {this.props.operation.price}</Text> :
-                                                <Text style={{ fontSize: 12 }}> Selling price : {this.props.operation.price}</Text>
+                                                <Text style={{ fontSize: 12 }}> Buying price : {this.props.operation.price} $</Text> :
+                                                <Text style={{ fontSize: 12 }}> Selling price : {this.props.operation.price} $</Text>
                                             }
                                         </View>
                                     </Body>

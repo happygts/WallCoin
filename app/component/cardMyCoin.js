@@ -45,7 +45,7 @@ class CardMyCoin extends Component {
         let possessedCoinValue = totalQuantity.times(priceCoin);
 
         let beneficial = possessedCoinValue.minus(possessedMyCoinValue);
-        let differencePercentage = hundredBigNumber.minus((priceMyCoin.times(hundredBigNumber)).dividedBy(possessedCoinValue));
+        let differencePercentage = hundredBigNumber.minus((possessedMyCoinValue.times(hundredBigNumber)).dividedBy(possessedCoinValue));
         this.setState(() => {
             return {
                 beneficial: beneficial.toPrecision(6).toString(),

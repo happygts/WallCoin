@@ -48,7 +48,7 @@ class OneMyCoins extends Component {
         let possessedCoinValue = totalQuantity.times(priceCoin);
 
         let beneficial = possessedCoinValue.minus(possessedMyCoinValue);
-        let differencePercentage = hundredBigNumber.minus((priceMyCoin.times(hundredBigNumber)).dividedBy(possessedCoinValue));
+        let differencePercentage = hundredBigNumber.minus((possessedMyCoinValue.times(hundredBigNumber)).dividedBy(possessedCoinValue));
 
         return {
             beneficial: beneficial.toPrecision(4).toString(),
@@ -64,14 +64,12 @@ class OneMyCoins extends Component {
     }
 
     onNavigatorEvent(event) {
-        var myCoin = this.props.myCoin;
-        console.log("this.props.user.currentPortfolioId :", this.props.user.currentPortfolioId, "this.props.user", this.props.user);
         if (event.type == 'NavBarButtonPress') {
             if (event.id == 'add') {
                 this.props.navigator.push({
                     screen: 'AddEditOneOperation',
                     title: "New Operation",
-                    passProps: { myCoinId: myCoin.value.id, portfolioId: this.props.user.currentPortfolioId},
+                    passProps: { myCoinId: this.props.myCoin.value.id, portfolioId: this.props.user.currentPortfolioId },
                     animated: true,
                     animationType: 'fade',
                     navigatorStyle: {
@@ -89,27 +87,25 @@ class OneMyCoins extends Component {
     }
 
     editOperation(id) {
-        // let operation = this.props.myCoin.operations.find((op) => {
-        //     return op.id == id;
-        // })
-        // if (operation) {
-        //     this.props.navigator.push({
-        //         screen: 'AddEditOneOperation',
-        //         title: "New Operation",
-        //         passProps: { myCoin: this.props.myCoin, operation },
-        //         animated: true,
-        //         animationType: 'fade',
-        //         navigatorStyle: {
-        //             navBarTranslucent: true,
-        //             drawUnderNavBar: true,
-        //             navBarTextColor: 'white',
-        //             navBarButtonColor: 'white',
-        //             statusBarTextColorScheme: 'light',
-        //             drawUnderTabBar: true
-        //         },
-        //         navigatorButtons: {},
-        //     });
-        // }
+        console.log("this.props.operationsStore :", this.props.operationsStore, "id :", id);
+        if (this.props.operationsStore[id]) {
+            this.props.navigator.push({
+                screen: 'AddEditOneOperation',
+                title: "Edit Operation",
+                passProps: { myCoinId: this.props.myCoin.value.id, portfolioId: this.props.user.currentPortfolioId, operation: this.props.operationsStore[id] },
+                animated: true,
+                animationType: 'fade',
+                navigatorStyle: {
+                    navBarTranslucent: true,
+                    drawUnderNavBar: true,
+                    navBarTextColor: 'white',
+                    navBarButtonColor: 'white',
+                    statusBarTextColorScheme: 'light',
+                    drawUnderTabBar: true
+                },
+                navigatorButtons: {},
+            });
+        }
     }
 
     deleteOperation(operationId) {
@@ -120,7 +116,7 @@ class OneMyCoins extends Component {
                 { text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
                 {
                     text: 'OK', onPress: () => {
-                        // this.props.deleteOperation(this.props.myCoin.id, operationId);
+                        this.props.deleteOperation(this.props.user.currentPortfolioId, this.props.myCoin.value.id, operationId);
                     }
                 },
             ],
@@ -197,7 +193,7 @@ const mapStateToProps = (state, ownProps) => {
     return {
         myCoin: getOneItem(state, ownProps, 'myCoins', ownProps.myCoinId),
         listOperations: getListItems(state, ownProps, 'operations'),
-        operations: state.operations,
+        operationsStore: state.store.operations,
         user: state.user
     }
 }

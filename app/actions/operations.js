@@ -58,27 +58,27 @@ export function deleteOperation(idPortfolios, myCoinId, operationId) {
         type: types.START_DELETE_DATA,
         payload: {
             name: 'operations',
-            callback: Api.editPortfoliosMyCoinsOperations,
-            url: ApiNameSpace.MODIFY_OPERATION,
+            callback: Api.deletePortfoliosMyCoinsOperations,
+            url: ApiNameSpace.DELETE_OPERATION,
             selector: operationsSelector,
             storeSelector,
             userSelector,
-            idToDelete: myCoinId,
-            params: [idPortfolios, myCoinId]
+            idToDelete: operationId,
+            params: [idPortfolios, myCoinId, operationId]
         }
     }
 }
 
-export function modifyOperation(idPortfolios, myCoinId, type, price, quantity) {
+export function modifyOperation(idPortfolios, myCoinId, operationId, type, price, quantity) {
     return {
         type: types.MODIFY_CREATE_DATA,
         payload: {
             name: 'operations',
             nameResponse: 'operations',
-            callback: Api.editPortfoliosMyCoins,
-            url: ApiNameSpace.MODIFY_MY_COIN,
+            callback: Api.editPortfoliosMyCoinsOperations,
+            url: ApiNameSpace.MODIFY_OPERATION,
             selector: operationsSelector,
-            params: [idPortfolios, myCoinId, isFavorite]
+            params: [idPortfolios, myCoinId, operationId, type, price, quantity]
         }
     }
 }

@@ -12,7 +12,6 @@ const initialState = {
     refreshToken: '',
     currentPortfolioId: null,
     currentMyCoinId: null,
-    currentOperationId: null,
     error: {
         isError: false,
         message: ""
@@ -70,7 +69,6 @@ export const user = createReducer(initialState, {
                 refreshToken: '',
                 currentPortfolioId: null,
                 currentMyCoinId: null,
-                currentOperationId: null,
                 error: {
                     isError: false,
                     message: ""
