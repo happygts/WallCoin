@@ -142,7 +142,8 @@ function* listData({ payload }) {
                     });
                     yield put({
                         type: types.NO_MORE_LIST_DATA, payload: {
-                            name
+                            name,
+                            requestIndex
                         }
                     });
                 }
@@ -154,7 +155,8 @@ function* listData({ payload }) {
         else {
             yield put({
                 type: types.NO_MORE_LIST_DATA, payload: {
-                    name
+                    name,
+                    requestIndex
                 }
             });
         }

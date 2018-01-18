@@ -44,7 +44,6 @@ class CardMyCoin extends Component {
         let possessedMyCoinValue = totalQuantity.times(priceMyCoin);
         let possessedCoinValue = totalQuantity.times(priceCoin);
 
-
         let beneficial = possessedCoinValue.minus(possessedMyCoinValue);
         let differencePercentage = hundredBigNumber.minus((priceMyCoin.times(hundredBigNumber)).dividedBy(possessedCoinValue));
         this.setState(() => {
@@ -63,7 +62,7 @@ class CardMyCoin extends Component {
             <Container style={styles.listElementMyCoin}>
                 <Content>
                     <Card>
-                        <CardItem button={true} onPress={() => this.props.goToOneMyCoins(this.props.myCoin.id)}>
+                        <CardItem button={true} onPress={() => this.props.goToOneMyCoins(this.props.myCoin)}>
                             <Left>
                                 {checkFontelloIconExist(this.props.myCoin.symbol.toLowerCase() + "-alt") ?
                                     <FontelloIcon name={this.props.myCoin.symbol.toLowerCase() + "-alt"} size={55} style={{ marginTop: 5, marginBottom: 5 }} /> :

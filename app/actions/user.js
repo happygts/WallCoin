@@ -1,5 +1,5 @@
 import * as types from './types'
-import { userSelector, storeSelector } from '../selectors/sagaStateSelectors'
+import { userSelector } from '../selectors/sagaStateSelectors'
 
 export function login(email, password) {
     return {
@@ -29,10 +29,19 @@ export function register(email, password) {
 
 export function changeUserPortfolio(portfolioId) {
     return {
-        type: types.START_CHANGE_USER_PORTFOLIO,
+        type: types.MODIFY_CURRENT_PORTFOLIOS_ID,
         payload: {
-            userSelector,
-            storeSelector
+            currentPortfolioId: portfolioId
+        }
+    }
+}
+
+export function changeUserMyCoin(myCoinId) {
+    return {
+        type: types.MODIFY_CURRENT_MYCOIN_ID,
+        payload: {
+            myCoinId,
+            userSelector
         }
     }
 }

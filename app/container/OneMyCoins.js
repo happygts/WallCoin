@@ -10,10 +10,12 @@ import { FontelloIcon, checkFontelloIconExist } from '../utils/AppIcons'
 
 import styles from '../styles/AppStyle'
 import { ActionCreators } from '../actions'
-import { makeComputeOneMyCoin } from '../selectors/myCoinsSelectors'
+import { makeComputeListRequestItems, makeComputeOneRequestItems } from '../selectors/requestSelectors'
 
 import ViewFlexWidthCenterHeight from '../component/ViewFlexWidthCenterHeight'
 import CardOneOperation from '../component/CardOneOperation'
+
+import { BigNumber } from 'bignumber.js';
 
 const {
     View,
@@ -25,7 +27,40 @@ const {
 class OneMyCoins extends Component {
     constructor(props) {
         super(props);
+        this.state = this.calculEverythingFromProps(props);
+
         this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
+    }
+
+    calculEverythingFromProps(props) {
+        console.log("this.props.myCoin :", props.myCoin);
+        let buyOperationSum = new BigNumber(props.myCoin.value.stats.buyOperationSum);
+        let buyPriceSum = new BigNumber(props.myCoin.value.stats.buyPriceSum);
+        let buyWeightedSum = new BigNumber(props.myCoin.value.stats.buyWeightedSum);
+        let nbOperations = new BigNumber(props.myCoin.value.stats.nbOperations);
+        let totalQuantity = new BigNumber(props.myCoin.value.stats.totalQuantity);
+        let hundredBigNumber = new BigNumber(100);
+
+        let priceMyCoin = buyWeightedSum.dividedBy(buyOperationSum);
+        let priceCoin = new BigNumber(props.coin.value.price);
+
+        let possessedMyCoinValue = totalQuantity.times(priceMyCoin);
+        let possessedCoinValue = totalQuantity.times(priceCoin);
+
+        let beneficial = possessedCoinValue.minus(possessedMyCoinValue);
+        let differencePercentage = hundredBigNumber.minus((priceMyCoin.times(hundredBigNumber)).dividedBy(possessedCoinValue));
+
+        return {
+            beneficial: beneficial.toPrecision(6).toString(),
+            differencePercentage: differencePercentage.toPrecision(6).toString(),
+            differencePercentageIsPositive: differencePercentage.greaterThanOrEqualTo(0),
+            totalMonneyInDollar: possessedCoinValue.toPrecision(6).toString(),
+            nbCoins: totalQuantity.toPrecision(6).toString()
+        }
+    }
+
+    componentWillReceiveProps(newProps) {
+        this.setState(() => this.calculEverythingFromProps(newProps));
     }
 
     onNavigatorEvent(event) {
@@ -92,51 +127,54 @@ class OneMyCoins extends Component {
     }
 
     render() {
-        console.log("Render mycoin :", this.props.myCoin.id, this.props.myCoin)
+        console.log("Render mycoin :", this.props.myCoin.value.id, this.props.myCoin)
         return (
             <View style={styles.containerPush}>
                 <View style={{ flexDirection: 'row', height: 40 }}>
                     <ViewFlexWidthCenterHeight height={40}>
-                        {checkFontelloIconExist(this.props.myCoinValue.symbol.toLowerCase() + "-alt") ?
-                            <FontelloIcon name={this.props.myCoinValue.symbol.toLowerCase() + "-alt"} size={20} style={{ marginTop: 5, marginBottom: 5 }} /> :
+                        {checkFontelloIconExist(this.props.myCoin.value.symbol.toLowerCase() + "-alt") ?
+                            <FontelloIcon name={this.props.myCoin.value.symbol.toLowerCase() + "-alt"} size={20} style={{ marginTop: 5, marginBottom: 5 }} /> :
                             <FontelloIcon name="coin-2" size={20} style={{ marginTop: 5, marginBottom: 5 }} />
                         }
-                        <Text>{this.props.myCoin.nbCoins}</Text>
+                        <Text>{this.state.nbCoins}</Text>
                     </ViewFlexWidthCenterHeight>
                     <ViewFlexWidthCenterHeight height={40}>
-                        <Text>{this.props.myCoin.totalMonneyInDollar} $</Text>
+                        <Text>{this.state.totalMonneyInDollar} $</Text>
                     </ViewFlexWidthCenterHeight>
                     <ViewFlexWidthCenterHeight height={40}>
-                        {this.props.myCoin.beneficial >= 0 ?
+                        {this.state.beneficial >= 0 ?
                             <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
                                 <FontAwesomeIcon name="arrow-up" size={10} color="#090" />
-                                <Text style={{ color: '#090' }}>{this.props.myCoin.beneficial} $</Text>
+                                <Text style={{ color: '#090' }}>{this.state.beneficial} $</Text>
                             </View>
                             :
                             <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
                                 <FontAwesomeIcon name="arrow-down" size={10} color="#900" />
-                                <Text style={{ color: '#900' }}>{this.props.myCoin.beneficial} $</Text>
+                                <Text style={{ color: '#900' }}>{this.state.beneficial} $</Text>
                             </View>
                         }
                     </ViewFlexWidthCenterHeight>
                     <ViewFlexWidthCenterHeight height={40}>
-                        {this.props.myCoin.differencePercentage >= 0 ?
+                        {this.state.differencePercentageIsPositive ?
                             <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
                                 <FontAwesomeIcon name="arrow-up" size={10} color="#090" />
-                                <Text style={{ color: '#090' }}>{this.props.myCoin.differencePercentage} %</Text>
+                                <Text style={{ color: '#090' }}>{this.state.differencePercentage} %</Text>
                             </View>
                             :
                             <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
                                 <FontAwesomeIcon name="arrow-down" size={10} color="#900" />
-                                <Text style={{ color: '#900' }}>{this.props.myCoin.differencePercentage} %</Text>
+                                <Text style={{ color: '#900' }}>{this.state.differencePercentage} %</Text>
                             </View>
                         }
                     </ViewFlexWidthCenterHeight>
                 </View>
                 <View style={{ flex: 1 }}>
                     <FlatList
-                        data={this.props.myCoin.operations}
-                        renderItem={({ item }) => <CardOneOperation
+                        data={this.props.listOperations}
+                        renderItem={({ item }) =>
+                            <Text>toto</Text>
+                        }>
+                        {/* renderItem={({ item }) => <CardOneOperation
                             key={item.id}
                             editOperation={this.editOperation.bind(this)}
                             deleteOperation={this.deleteOperation.bind(this)}
@@ -144,7 +182,7 @@ class OneMyCoins extends Component {
                             bought={item.bought}
                             quantity={item.quantity.toString()}
                             buyingPrice={item.buyingPrice.toString()}
-                        />}>
+                        />}> */}
                     </FlatList>
                 </View>
             </View>
@@ -154,15 +192,18 @@ class OneMyCoins extends Component {
 
 OneMyCoins.propTypes = {
     myCoinId: PropTypes.string.isRequired,
-    myCoinValue: PropTypes.object.isRequired
+    coin: PropTypes.object.isRequired
 };
 
 const mapStateToProps = (state, ownProps) => {
-    const getOneMyCoin = makeComputeOneMyCoin();
+    const getOneItem = makeComputeOneRequestItems();
+    const getListItems = makeComputeListRequestItems();
 
     return {
-        myCoins: state.myCoins,
-        myCoin: getOneMyCoin(state, ownProps)
+        myCoin: getOneItem(state, ownProps, 'myCoins', ownProps.myCoinId),
+        listOperations: getListItems(state, ownProps, 'operations'),
+        operations: state.operations,
+        user: state.user
     }
 }
 

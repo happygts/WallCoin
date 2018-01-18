@@ -77,9 +77,12 @@ function createOneRequestReducer(name) {
             var namePayload = action.payload.name;
 
             if (name == namePayload) {
+                var requestIndex = action.payload.requestIndex;
+
                 return update(state, {
                     $merge: {
-                        loading: false
+                        loading: false,
+                        currentRequestIndex: requestIndex
                     }
                 })
             }
@@ -115,3 +118,4 @@ function createOneRequestReducer(name) {
 export const coins = createOneRequestReducer("coins");
 export const portfolios = createOneRequestReducer("portfolios");
 export const myCoins = createOneRequestReducer("myCoins");
+export const operations = createOneRequestReducer("operations");

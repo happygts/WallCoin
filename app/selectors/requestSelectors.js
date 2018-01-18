@@ -33,3 +33,34 @@ export const makeComputeListRequestItems = () => {
         (store, items) => listItems(store, items.currentRequestIndex)
     )
 }
+
+const oneItem = (store, currentRequestIndex) => {
+    var listToReturn = [];
+
+    Object.keys(store).forEach((key) => {
+        const item = store[key];
+        for (let index = 0; index < Object.keys(item.contexts).length; index++) {
+            const context = item.contexts[index];
+
+            if (context.requestIndex == currentRequestIndex) {
+                listToReturn.push(item);
+                break;
+            }
+        }
+    });
+
+    console.log("listToReturn :", listToReturn);
+    return listToReturn;
+}
+
+
+const getOneItemStore = (state, props, name, idItem) => {
+    return state.store[name][idItem];
+}
+
+export const makeComputeOneRequestItems = () => {  
+    return createSelector(
+        [getOneItemStore],
+        (element) => (element)
+    )
+}
