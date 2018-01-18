@@ -270,6 +270,7 @@ function* createData({ payload }) {
     const sagaSelector = yield select(payload.selector);
     const userSelector = yield select(payload.userSelector);
 
+    console.log("CreateData :", params);
     yield put(actions.ActionCreators.startFetch(callback, url, params));
 
     // wait for fetch to end

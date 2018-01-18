@@ -65,12 +65,13 @@ class OneMyCoins extends Component {
 
     onNavigatorEvent(event) {
         var myCoin = this.props.myCoin;
+        console.log("this.props.user.currentPortfolioId :", this.props.user.currentPortfolioId, "this.props.user", this.props.user);
         if (event.type == 'NavBarButtonPress') {
             if (event.id == 'add') {
                 this.props.navigator.push({
                     screen: 'AddEditOneOperation',
                     title: "New Operation",
-                    passProps: { myCoin },
+                    passProps: { myCoinId: myCoin.value.id, portfolioId: this.props.user.currentPortfolioId},
                     animated: true,
                     animationType: 'fade',
                     navigatorStyle: {

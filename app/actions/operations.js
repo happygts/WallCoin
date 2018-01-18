@@ -35,3 +35,50 @@ export function refreshDataPortfolios() {
         }
     }
 }
+
+export function createOperation(idPortfolios, myCoinId, type, price, quantity) {
+    return {
+        type: types.START_CREATE_DATA,
+        payload: {
+            name: 'operations',
+            nameResponse: 'operations',
+            callback: Api.createPortfoliosMyCoinsOperations,
+            url: ApiNameSpace.CREATE_OPERATION,
+            selector: operationsSelector,
+            storeSelector,
+            userSelector,
+            params: [idPortfolios, myCoinId, type, price, quantity]
+        }
+    }
+}
+
+export function deleteOperation(idPortfolios, myCoinId, operationId) {
+    console.log("idPortfolios :", idPortfolios, "myCoinId :", myCoinId, "operationId :", operationId);
+    return {
+        type: types.START_DELETE_DATA,
+        payload: {
+            name: 'operations',
+            callback: Api.editPortfoliosMyCoinsOperations,
+            url: ApiNameSpace.MODIFY_OPERATION,
+            selector: operationsSelector,
+            storeSelector,
+            userSelector,
+            idToDelete: myCoinId,
+            params: [idPortfolios, myCoinId]
+        }
+    }
+}
+
+export function modifyOperation(idPortfolios, myCoinId, type, price, quantity) {
+    return {
+        type: types.MODIFY_CREATE_DATA,
+        payload: {
+            name: 'operations',
+            nameResponse: 'operations',
+            callback: Api.editPortfoliosMyCoins,
+            url: ApiNameSpace.MODIFY_MY_COIN,
+            selector: operationsSelector,
+            params: [idPortfolios, myCoinId, isFavorite]
+        }
+    }
+}
