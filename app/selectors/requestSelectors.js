@@ -15,6 +15,7 @@ const listItems = (store, currentRequestIndex) => {
         }
     });
 
+    console.log("listToReturn :", listToReturn);
     return listToReturn;
 }
 

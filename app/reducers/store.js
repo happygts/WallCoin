@@ -71,7 +71,7 @@ export const store = createReducer(initialState, {
                     [element.id]: itemToUpdateIndexed => update(itemToUpdateIndexed || {}, {
                         $merge: {
                             value: element,
-                            expirationDate: Date.now() + (2 * 60 * 1000)
+                            expirationDate: Date.now()// + (2 * 60 * 1000)
                         },
                         contexts: contexts => update(contexts || {}, {
                             $merge: {
@@ -88,4 +88,32 @@ export const store = createReducer(initialState, {
 
         return state;
     },
+    [types.ADD_TO_STORE](state, action) {
+        var dataElement = action.payload.data;
+        console.log("dataElement :", dataElement);
+        var toUpdate = action.payload.toUpdate;
+
+        return update(state, {
+            [toUpdate]: itemToUpdate => update(itemToUpdate || {}, {
+                [dataElement.id]: {
+                    $set: {
+                        value: dataElement,
+                        expirationDate: Date.now(),// + (2 * 60 * 1000),
+                        contexts: { 0: { requestIndex: action.payload.requestIndex, page: action.payload.page } }
+                    }
+                }
+            })
+        })
+    },
+    [types.DELETE_TO_STORE](state, action) {
+        var dataElement = action.payload.data;
+        console.log("dataElement :", dataElement);
+        var toUpdate = action.payload.toUpdate;
+
+        return update(state, {
+            [toUpdate]: {
+                $unset: [action.payload.idToDelete]
+            }
+        })
+    }
 });

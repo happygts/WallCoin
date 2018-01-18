@@ -1,5 +1,5 @@
 import { delay } from 'redux-saga'
-import { put, takeEvery, takeLatest, take, all, call, select, fork} from 'redux-saga/effects'
+import { put, takeEvery, takeLatest, take, all, call, select, fork } from 'redux-saga/effects'
 import * as types from '../actions/types'
 import { Api } from '../api/api';
 import * as actions from '../actions';
@@ -206,6 +206,14 @@ function groupItemsPerPage(items) {
     return toReturn;
 }
 
+export function* listDataFlow() {
+    while (true) {
+        var action = yield take('START_LIST_DATA');
+        yield fork(listData, action);
+    }
+}
+
+
 function* refreshData({ payload }) {
     const name = payload.name;
     const nameResponse = payload.nameResponse;
@@ -229,6 +237,7 @@ function* refreshData({ payload }) {
             console.log("everything uptoDate on this page");
         }
         else if (percentageOutOfDate > 0) { // need to set to > 10 once refreshOne will be done
+            console.log("refresh Here");
             yield fetchPage(true, callback, url, itemsOnePage[0].contexts[0].page, userId, params, sagaSelector.currentRequestIndex, name, nameResponse);
 
         }
@@ -244,13 +253,122 @@ function* refreshData({ payload }) {
     });
 }
 
-export function* listDataFlow() {
+export function* refreshDataFlow() {
     while (true) {
-        var action = yield take('START_LIST_DATA');
-        yield fork(listData, action);
+        var action = yield take('START_REFRESH_DATA');
+        yield fork(refreshData, action);
     }
 }
 
+function* createData({ payload }) {
+    const name = payload.name;
+    const url = payload.url;
+    const params = payload.params;
+    const callback = payload.callback;
+    const sagaSelector = yield select(payload.selector);
+    const userSelector = yield select(payload.userSelector);
+
+    yield put(actions.ActionCreators.startFetch(callback, url, params));
+
+    // wait for fetch to end
+    var action;
+    while (true) {
+        action = yield take(['SUCCESS_FETCH', 'ERROR_FETCH']);
+        if (action.payload.url == url) {
+            break;
+        }
+    }
+
+    console.log("action received after fetch :", action);
+
+    if (action.type == 'ERROR_FETCH') {
+        return;
+    }
+    yield put({
+        type: types.ADD_TO_STORE,
+        payload: {
+            toUpdate: name,
+            data: action.payload.data,
+            requestIndex: sagaSelector.currentRequestIndex,
+            page: 999999 // page impossible car non synchronisé
+        }
+    });
+}
+
+function* deleteData({ payload }) {
+    const name = payload.name;
+    const url = payload.url;
+    const params = payload.params;
+    const callback = payload.callback;
+    const idToDelete = payload.idToDelete;
+
+    const sagaSelector = yield select(payload.selector);
+    const userSelector = yield select(payload.userSelector);
+
+    yield put(actions.ActionCreators.startFetch(callback, url, params));
+
+    // wait for fetch to end
+    var action;
+    while (true) {
+        action = yield take(['SUCCESS_FETCH', 'ERROR_FETCH']);
+        if (action.payload.url == url) {
+            break;
+        }
+    }
+
+    console.log("action received after fetch :", action);
+
+    if (action.type == 'ERROR_FETCH') {
+        return;
+    }
+    yield put({
+        type: types.DELETE_TO_STORE,
+        payload: {
+            toUpdate: name,
+            idToDelete
+        }
+    });
+}
+
+function* modifyData({ payload }) {
+    const name = payload.name;
+    const url = payload.url;
+    const params = payload.params;
+    const callback = payload.callback;
+
+    const sagaSelector = yield select(payload.selector);
+
+    yield put(actions.ActionCreators.startFetch(callback, url, params));
+
+    // wait for fetch to end
+    var action;
+    while (true) {
+        action = yield take(['SUCCESS_FETCH', 'ERROR_FETCH']);
+        if (action.payload.url == url) {
+            break;
+        }
+    }
+
+    console.log("action received after fetch :", action);
+
+    if (action.type == 'ERROR_FETCH') {
+        return;
+    }
+    yield put({
+        type: types.UPDATE_STORE,
+        payload: {
+            toUpdate: name,
+            data: [action.payload.data],
+            requestIndex: sagaSelector.currentRequestIndex,
+            page
+        }
+    });
+}
+
 export function* requestSaga() {
-    yield takeEvery(types.START_REFRESH_DATA, refreshData);
+    yield all([
+        takeEvery(types.START_CREATE_DATA, createData),
+        takeEvery(types.START_DELETE_DATA, deleteData),
+        takeEvery(types.MODIFY_CREATE_DATA, modifyData)
+    ])
 }

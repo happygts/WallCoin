@@ -31,8 +31,6 @@ class CardMyCoin extends Component {
     }
 
     componentWillReceiveProps(newProps) {
-        console.log("component did update");
-        console.log("newProps :", newProps);
         let buyOperationSum = new BigNumber(newProps.myCoin.stats.buyOperationSum);
         let buyPriceSum = new BigNumber(newProps.myCoin.stats.buyPriceSum);
         let buyWeightedSum = new BigNumber(newProps.myCoin.stats.buyWeightedSum);
