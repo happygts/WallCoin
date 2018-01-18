@@ -51,11 +51,11 @@ class OneMyCoins extends Component {
         let differencePercentage = hundredBigNumber.minus((priceMyCoin.times(hundredBigNumber)).dividedBy(possessedCoinValue));
 
         return {
-            beneficial: beneficial.toPrecision(6).toString(),
-            differencePercentage: differencePercentage.toPrecision(6).toString(),
+            beneficial: beneficial.toPrecision(4).toString(),
+            differencePercentage: differencePercentage.toPrecision(4).toString(),
             differencePercentageIsPositive: differencePercentage.greaterThanOrEqualTo(0),
-            totalMonneyInDollar: possessedCoinValue.toPrecision(6).toString(),
-            nbCoins: totalQuantity.toPrecision(6).toString()
+            totalMonneyInDollar: possessedCoinValue.toPrecision(4).toString(),
+            nbCoins: totalQuantity.toPrecision(4).toString()
         }
     }
 
@@ -88,27 +88,27 @@ class OneMyCoins extends Component {
     }
 
     editOperation(id) {
-        let operation = this.props.myCoin.operations.find((op) => {
-            return op.id == id;
-        })
-        if (operation) {
-            this.props.navigator.push({
-                screen: 'AddEditOneOperation',
-                title: "New Operation",
-                passProps: { myCoin: this.props.myCoin, operation },
-                animated: true,
-                animationType: 'fade',
-                navigatorStyle: {
-                    navBarTranslucent: true,
-                    drawUnderNavBar: true,
-                    navBarTextColor: 'white',
-                    navBarButtonColor: 'white',
-                    statusBarTextColorScheme: 'light',
-                    drawUnderTabBar: true
-                },
-                navigatorButtons: {},
-            });
-        }
+        // let operation = this.props.myCoin.operations.find((op) => {
+        //     return op.id == id;
+        // })
+        // if (operation) {
+        //     this.props.navigator.push({
+        //         screen: 'AddEditOneOperation',
+        //         title: "New Operation",
+        //         passProps: { myCoin: this.props.myCoin, operation },
+        //         animated: true,
+        //         animationType: 'fade',
+        //         navigatorStyle: {
+        //             navBarTranslucent: true,
+        //             drawUnderNavBar: true,
+        //             navBarTextColor: 'white',
+        //             navBarButtonColor: 'white',
+        //             statusBarTextColorScheme: 'light',
+        //             drawUnderTabBar: true
+        //         },
+        //         navigatorButtons: {},
+        //     });
+        // }
     }
 
     deleteOperation(operationId) {
@@ -119,7 +119,7 @@ class OneMyCoins extends Component {
                 { text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
                 {
                     text: 'OK', onPress: () => {
-                        this.props.deleteOperation(this.props.myCoin.id, operationId);
+                        // this.props.deleteOperation(this.props.myCoin.id, operationId);
                     }
                 },
             ],
@@ -136,10 +136,10 @@ class OneMyCoins extends Component {
                             <FontelloIcon name={this.props.myCoin.value.symbol.toLowerCase() + "-alt"} size={20} style={{ marginTop: 5, marginBottom: 5 }} /> :
                             <FontelloIcon name="coin-2" size={20} style={{ marginTop: 5, marginBottom: 5 }} />
                         }
-                        <Text>{this.state.nbCoins}</Text>
+                        <Text> {this.state.nbCoins}</Text>
                     </ViewFlexWidthCenterHeight>
                     <ViewFlexWidthCenterHeight height={40}>
-                        <Text>{this.state.totalMonneyInDollar} $</Text>
+                        <Text> {this.state.totalMonneyInDollar} $ </Text>
                     </ViewFlexWidthCenterHeight>
                     <ViewFlexWidthCenterHeight height={40}>
                         {this.state.beneficial >= 0 ?
@@ -171,18 +171,12 @@ class OneMyCoins extends Component {
                 <View style={{ flex: 1 }}>
                     <FlatList
                         data={this.props.listOperations}
-                        renderItem={({ item }) =>
-                            <Text>toto</Text>
-                        }>
-                        {/* renderItem={({ item }) => <CardOneOperation
-                            key={item.id}
+                        renderItem={({ item }) => <CardOneOperation
+                            key={item.value.id}
                             editOperation={this.editOperation.bind(this)}
                             deleteOperation={this.deleteOperation.bind(this)}
-                            id={item.id}
-                            bought={item.bought}
-                            quantity={item.quantity.toString()}
-                            buyingPrice={item.buyingPrice.toString()}
-                        />}> */}
+                            operation={item.value}
+                        />}>
                     </FlatList>
                 </View>
             </View>

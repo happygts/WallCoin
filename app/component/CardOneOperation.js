@@ -21,7 +21,7 @@ import styles from '../styles/AppStyle'
 class CardOneOperation extends Component {
     render() {
         return (
-            <SwipeRow style={styles.listElement}
+            <SwipeRow style={[styles.listElement, {marginTop: 10}]}
                 rightOpenValue={-100}
                 right={
                     <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center' }}>
@@ -40,17 +40,17 @@ class CardOneOperation extends Component {
                             <Card>
                                 <CardItem >
                                     <Left>
-                                        {this.props.bought ?
+                                        {this.props.operation.type == "buy" ?
                                             <FontAwesomeIcon name="plus-circle" size={55} style={{ marginTop: 5, marginBottom: 5 }} /> :
                                             <FontAwesomeIcon name="minus-circle" size={55} style={{ marginTop: 5, marginBottom: 5 }} />
                                         }
                                     </Left>
                                     <Body>
                                         <View>
-                                            <Text style={{ fontSize: 12 }}> Quantity : {this.props.quantity}</Text>
-                                            {this.props.bought ?
-                                                <Text style={{ fontSize: 12 }}> Buying price : {this.props.buyingPrice}</Text> :
-                                                <Text style={{ fontSize: 12 }}> Selling price : {this.props.buyingPrice}</Text>
+                                            <Text style={{ fontSize: 12 }}> Quantity : {this.props.operation.quantity}</Text>
+                                            {this.props.operation.type == "buy" ?
+                                                <Text style={{ fontSize: 12 }}> Buying price : {this.props.operation.price}</Text> :
+                                                <Text style={{ fontSize: 12 }}> Selling price : {this.props.operation.price}</Text>
                                             }
                                         </View>
                                     </Body>
@@ -70,10 +70,7 @@ class CardOneOperation extends Component {
 CardOneOperation.propTypes = {
     editOperation: PropTypes.func.isRequired,
     deleteOperation: PropTypes.func.isRequired,
-    id: PropTypes.any.isRequired,
-    bought: PropTypes.bool.isRequired,
-    quantity: PropTypes.string.isRequired,
-    buyingPrice: PropTypes.string.isRequired
+    operation: PropTypes.object.isRequired
 };
 
 export default CardOneOperation;
