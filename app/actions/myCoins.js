@@ -101,3 +101,17 @@ export function deleteMyCoin(idPortfolios, myCoinId) {
         }
     }
 }
+
+export function modifyFavMyCoin(idPortfolios, myCoinId, isFavorite) {
+    return {
+        type: types.MODIFY_CREATE_DATA,
+        payload: {
+            name: 'myCoins',
+            nameResponse: 'coins',
+            callback: Api.editPortfoliosMyCoins,
+            url: ApiNameSpace.MODIFY_MY_COIN,
+            selector: myCoinsSelector,
+            params: [idPortfolios, myCoinId, isFavorite]
+        }
+    }
+}

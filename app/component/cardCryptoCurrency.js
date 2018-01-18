@@ -73,7 +73,8 @@ class CardCryptoCurrency extends Component {
     componentWillUpdate() {
         this.setState((state) => {
             return {
-                isMyCoins: this.props.isMyCoins(this.props.coin.id)
+                isMyCoins: this.props.isMyCoins(this.props.coin.id),
+                isFav: this.props.isFav(this.props.coin.id)
             }
         })
     }

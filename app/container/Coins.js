@@ -59,14 +59,6 @@ class Coins extends Component {
     })
   }
 
-  isFav(id) {
-    return false
-  }
-
-  pressFav(id) {
-    // this.isFav(id) ? this.props.removeFavCryptoCurrency(id) : this.props.addFavCryptoCurrency(id);
-  }
-
   getMyCoinWithCoinId(id) {
     let idMyCoinFound = Object.keys(this.props.myCoinsStore).find((idMyCoin) => {
       return this.props.myCoinsStore[idMyCoin].value.coinId == id
@@ -84,6 +76,23 @@ class Coins extends Component {
 
   pressMyCoins(id) {
     this.isMyCoins(id) ? this.props.deleteMyCoin(this.props.user.currentPortfolioId, this.getMyCoinWithCoinId(id).value.id) : this.props.createMyCoin(this.props.user.currentPortfolioId, id, false);
+  }
+
+  isFav(id) {
+    var myCoin = this.getMyCoinWithCoinId(id);
+
+    return myCoin ? myCoin.value.isFavorite : false;
+  }
+
+  pressFav(id) {
+    var myCoin = this.getMyCoinWithCoinId(id);
+
+    if (myCoin) {
+      this.props.modifyFavMyCoin(this.props.user.currentPortfolioId, myCoin.value.id, !myCoin.value.isFavorite);
+    }
+    else {
+      this.props.createMyCoin(this.props.user.currentPortfolioId, id, true);
+    }
   }
 
   renderFooter = () => {
