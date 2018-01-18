@@ -165,6 +165,7 @@ class OneMyCoins extends Component {
                         }
                     </ViewFlexWidthCenterHeight>
                 </View>
+                {this.props.listOperations && Object.keys(this.props.listOperations).length > 0 ? 
                 <View style={{ flex: 1 }}>
                     <FlatList
                         data={this.props.listOperations}
@@ -176,6 +177,11 @@ class OneMyCoins extends Component {
                         />}>
                     </FlatList>
                 </View>
+                :
+                <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+                    <Text>No operations</Text>
+                </View>
+                }
             </View>
         )
     }
