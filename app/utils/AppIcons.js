@@ -20,7 +20,9 @@ const icons = {
 	'ios-add-outline' : [30],
 	'md-add' : [30],
 	'ios-log-out': [30],
-	'md-log-out': [30]
+	'md-log-out': [30],
+	'arrow-dropleft-circle': [30],
+	'arrow-dropright-circle': [30]
 };
 
 const iconsMap = {};

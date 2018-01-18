@@ -46,6 +46,10 @@ class CardMyCoin extends Component {
 
         let beneficial = possessedCoinValue.minus(possessedMyCoinValue);
         let differencePercentage = hundredBigNumber.minus((possessedMyCoinValue.times(hundredBigNumber)).dividedBy(possessedCoinValue));
+
+        beneficial = beneficial.isNaN() ? new BigNumber(0) : beneficial;
+        differencePercentage = differencePercentage.isNaN() ? new BigNumber(0) : differencePercentage;
+
         this.setState(() => {
             return {
                 beneficial: beneficial.toPrecision(6).toString(),
@@ -96,7 +100,7 @@ class CardMyCoin extends Component {
                                     <View style={{
                                         flex: 1,
                                         flexDirection: 'row',
-                                        justifyContent: 'center',
+                                        justifyContent: 'center'
                                     }}>
                                         {this.state.differencePercentageIsPositive ?
                                             <FontAwesomeIcon name="arrow-up" size={40} color="#090" /> :

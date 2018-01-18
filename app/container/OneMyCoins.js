@@ -50,6 +50,9 @@ class OneMyCoins extends Component {
         let beneficial = possessedCoinValue.minus(possessedMyCoinValue);
         let differencePercentage = hundredBigNumber.minus((possessedMyCoinValue.times(hundredBigNumber)).dividedBy(possessedCoinValue));
 
+        beneficial = beneficial.isNaN() ? new BigNumber(0) : beneficial;
+        differencePercentage = differencePercentage.isNaN() ? new BigNumber(0) : differencePercentage;
+
         return {
             beneficial: beneficial.toPrecision(4).toString(),
             differencePercentage: differencePercentage.toPrecision(4).toString(),

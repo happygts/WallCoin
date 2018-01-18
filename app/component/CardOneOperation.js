@@ -7,6 +7,7 @@ import { Container, Header, Content, List, ListItem, Text, Left, Body, Right, Sw
 
 import { FontelloIcon, checkFontelloIconExist } from '../utils/AppIcons'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const {
     View,
@@ -21,7 +22,7 @@ import styles from '../styles/AppStyle'
 class CardOneOperation extends Component {
     render() {
         return (
-            <SwipeRow style={[styles.listElement, {marginTop: 10}]}
+            <SwipeRow style={[styles.listElement, { marginTop: 10 }]}
                 rightOpenValue={-100}
                 right={
                     <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center' }}>
@@ -41,12 +42,12 @@ class CardOneOperation extends Component {
                                 <CardItem >
                                     <Left>
                                         {this.props.operation.type == "buy" ?
-                                            <FontAwesomeIcon name="plus-circle" size={55} style={{ marginTop: 5, marginBottom: 5 }} /> :
-                                            <FontAwesomeIcon name="minus-circle" size={55} style={{ marginTop: 5, marginBottom: 5 }} />
+                                            <Ionicons name="md-arrow-dropright-circle" color="#090" style={{ marginTop: 1, marginLeft: 5 }} size={50} /> :
+                                            <Ionicons name="md-arrow-dropleft-circle" color="#900" style={{ marginTop: 1, marginLeft: 5 }} size={50} />
                                         }
                                     </Left>
                                     <Body>
-                                        <View>
+                                        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center'}}>
                                             <Text style={{ fontSize: 12 }}> Quantity : {this.props.operation.quantity}</Text>
                                             {this.props.operation.type == "buy" ?
                                                 <Text style={{ fontSize: 12 }}> Buying price : {this.props.operation.price} $</Text> :
