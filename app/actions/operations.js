@@ -20,7 +20,7 @@ export function fetchListDataOperations(idPortfolios, myCoinId, page) {
     }
 }
 
-export function refreshDataPortfolios() {
+export function refreshDataOperations() {
     return {
         type: types.START_REFRESH_DATA,
         payload: {

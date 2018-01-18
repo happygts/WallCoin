@@ -14,6 +14,7 @@ import { makeComputeListRequestItems, makeComputeOneRequestItems } from '../sele
 
 import ViewFlexWidthCenterHeight from '../component/ViewFlexWidthCenterHeight'
 import CardOneOperation from '../component/CardOneOperation'
+import FooterActivityIndicator from '../component/footerActivityIndicator'
 
 import { BigNumber } from 'bignumber.js';
 
@@ -33,7 +34,6 @@ class OneMyCoins extends Component {
     }
 
     calculEverythingFromProps(props) {
-        console.log("this.props.myCoin :", props.myCoin);
         let buyOperationSum = new BigNumber(props.myCoin.value.stats.buyOperationSum);
         let buyPriceSum = new BigNumber(props.myCoin.value.stats.buyPriceSum);
         let buyWeightedSum = new BigNumber(props.myCoin.value.stats.buyWeightedSum);
@@ -87,7 +87,6 @@ class OneMyCoins extends Component {
     }
 
     editOperation(id) {
-        console.log("this.props.operationsStore :", this.props.operationsStore, "id :", id);
         if (this.props.operationsStore[id]) {
             this.props.navigator.push({
                 screen: 'AddEditOneOperation',
@@ -123,8 +122,23 @@ class OneMyCoins extends Component {
         )
     }
 
+    renderFooter = () => {
+        if (!this.props.operations.loading) return null;
+
+        return (
+            <FooterActivityIndicator />
+        );
+    };
+
+    handleLoadMoreOperations() {
+        this.props.fetchListDataOperations(this.props.user.currentPortfolioId, this.props.myCoin.value.id);
+    }
+
+    handleRefreshOperations() {
+        this.props.refreshDataCoins();
+    }
+
     render() {
-        console.log("Render mycoin :", this.props.myCoin.value.id, this.props.myCoin)
         return (
             <View style={styles.containerPush}>
                 <View style={{ flexDirection: 'row', height: 40 }}>
@@ -165,22 +179,29 @@ class OneMyCoins extends Component {
                         }
                     </ViewFlexWidthCenterHeight>
                 </View>
-                {this.props.listOperations && Object.keys(this.props.listOperations).length > 0 ? 
-                <View style={{ flex: 1 }}>
-                    <FlatList
-                        data={this.props.listOperations}
-                        renderItem={({ item }) => <CardOneOperation
-                            key={item.value.id}
-                            editOperation={this.editOperation.bind(this)}
-                            deleteOperation={this.deleteOperation.bind(this)}
-                            operation={item.value}
-                        />}>
-                    </FlatList>
-                </View>
-                :
-                <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-                    <Text>No operations</Text>
-                </View>
+                {this.props.listOperations && Object.keys(this.props.listOperations).length > 0 ?
+                    <View style={{ flex: 1 }}>
+                        <FlatList
+                            data={this.props.listOperations}
+                            renderItem={({ item }) => <CardOneOperation
+                                key={item.value.id}
+                                editOperation={this.editOperation.bind(this)}
+                                deleteOperation={this.deleteOperation.bind(this)}
+                                operation={item.value}
+                            />}
+                            keyExtractor={(item, index) => index}
+                            ListFooterComponent={this.renderFooter}
+                            onEndReached={this.handleLoadMoreOperations.bind(this)}
+                            onEndReachedThreshold={0}
+                            onRefresh={this.handleRefreshOperations.bind(this)}
+                            refreshing={this.props.operations.refreshing}
+                        >
+                        </FlatList>
+                    </View>
+                    :
+                    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+                        <Text>No operations</Text>
+                    </View>
                 }
             </View>
         )
@@ -200,6 +221,7 @@ const mapStateToProps = (state, ownProps) => {
         myCoin: getOneItem(state, ownProps, 'myCoins', ownProps.myCoinId),
         listOperations: getListItems(state, ownProps, 'operations'),
         operationsStore: state.store.operations,
+        operations: state.operations,
         user: state.user
     }
 }

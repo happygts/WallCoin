@@ -9,6 +9,7 @@ import { ActionCreators } from '../actions'
 import { makeComputeListRequestItems } from '../selectors/requestSelectors'
 
 import CardMyCoin from '../component/cardMyCoin'
+import FooterActivityIndicator from '../component/footerActivityIndicator'
 
 import { iconsMap } from '../utils/AppIcons';
 
@@ -81,15 +82,7 @@ class MyCoins extends Component {
         if (!this.props.coins.loading) return null;
 
         return (
-            <View
-                style={{
-                    paddingVertical: 20,
-                    borderTopWidth: 1,
-                    borderColor: "#CED0CE"
-                }}
-            >
-                <ActivityIndicator animating size="large" />
-            </View>
+            <FooterActivityIndicator/>
         );
     };
 

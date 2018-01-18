@@ -11,6 +11,7 @@ import { ActionCreators } from '../actions'
 import { makeComputeListRequestItems } from '../selectors/requestSelectors'
 
 import CardCryptoCurrency from '../component/cardCryptoCurrency'
+import FooterActivityIndicator from '../component/footerActivityIndicator'
 
 const {
   View,
@@ -99,17 +100,9 @@ class Coins extends Component {
     if (!this.props.coins.loading) return null;
 
     return (
-      <View
-        style={{
-          paddingVertical: 20,
-          borderTopWidth: 1,
-          borderColor: "#CED0CE"
-        }}
-      >
-        <ActivityIndicator animating size="large" />
-      </View>
+        <FooterActivityIndicator/>
     );
-  };
+};
 
   render() {
     return (
@@ -140,8 +133,8 @@ class Coins extends Component {
                   isMyCoins={this.isMyCoins.bind(this)}
                 />
               )}
-              ListFooterComponent={this.renderFooter}
               keyExtractor={(item, index) => index}
+              ListFooterComponent={this.renderFooter}
               onEndReached={this.handleLoadMore.bind(this)}
               onEndReachedThreshold={0}
               onRefresh={this.handleRefresh.bind(this)}
