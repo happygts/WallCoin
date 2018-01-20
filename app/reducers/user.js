@@ -12,7 +12,6 @@ const initialState = {
     refreshToken: '',
     currentPortfolioId: null,
     currentMyCoinId: null,
-    currentOperationId: null,
     error: {
         isError: false,
         message: ""
@@ -70,7 +69,6 @@ export const user = createReducer(initialState, {
                 refreshToken: '',
                 currentPortfolioId: null,
                 currentMyCoinId: null,
-                currentOperationId: null,
                 error: {
                     isError: false,
                     message: ""
@@ -85,8 +83,14 @@ export const user = createReducer(initialState, {
             }
         });
     },
+    [types.MODIFY_CURRENT_MYCOIN_ID](state, action) {
+        return update(state, {
+            $merge: {
+                currentMyCoinId: action.payload.myCoinId,
+            }
+        });
+    },
     [types.UPDATE_ACCESS_TOKEN](state, action) {
-        console.log("UPDATE_ACCESS_TOKEN :", action);
         return update(state, {
             $merge: {
                 accessToken: action.payload.accessToken

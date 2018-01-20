@@ -7,6 +7,7 @@ import { Container, Header, Content, List, ListItem, Text, Left, Body, Right, Sw
 
 import { FontelloIcon, checkFontelloIconExist } from '../utils/AppIcons'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const {
     View,
@@ -21,14 +22,14 @@ import styles from '../styles/AppStyle'
 class CardOneOperation extends Component {
     render() {
         return (
-            <SwipeRow style={styles.listElement}
+            <SwipeRow style={[styles.listElement, { marginTop: 10 }]}
                 rightOpenValue={-100}
                 right={
                     <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center' }}>
-                        <TouchableHighlight onPress={() => this.props.editOperation(this.props.id)} style={{ flex: 1 }}>
+                        <TouchableHighlight onPress={() => this.props.editOperation(this.props.operation.id)} style={{ flex: 1 }}>
                             <FontAwesomeIcon name="pencil" color="#FFD700" style={{ marginTop: 35, marginLeft: 10 }} size={30} />
                         </TouchableHighlight >
-                        <TouchableHighlight onPress={() => this.props.deleteOperation(this.props.id)} style={{ flex: 1 }}>
+                        <TouchableHighlight onPress={() => this.props.deleteOperation(this.props.operation.id)} style={{ flex: 1 }}>
                             <FontAwesomeIcon name="trash" color="#FF0000" style={{ marginTop: 35 }} size={30} />
                         </TouchableHighlight >
                     </View>
@@ -40,17 +41,17 @@ class CardOneOperation extends Component {
                             <Card>
                                 <CardItem >
                                     <Left>
-                                        {this.props.bought ?
-                                            <FontAwesomeIcon name="plus-circle" size={55} style={{ marginTop: 5, marginBottom: 5 }} /> :
-                                            <FontAwesomeIcon name="minus-circle" size={55} style={{ marginTop: 5, marginBottom: 5 }} />
+                                        {this.props.operation.type == "buy" ?
+                                            <Ionicons name="md-arrow-dropright-circle" color="#090" style={{ marginTop: 1, marginLeft: 5 }} size={50} /> :
+                                            <Ionicons name="md-arrow-dropleft-circle" color="#900" style={{ marginTop: 1, marginLeft: 5 }} size={50} />
                                         }
                                     </Left>
                                     <Body>
-                                        <View>
-                                            <Text style={{ fontSize: 12 }}> Quantity : {this.props.quantity}</Text>
-                                            {this.props.bought ?
-                                                <Text style={{ fontSize: 12 }}> Buying price : {this.props.buyingPrice}</Text> :
-                                                <Text style={{ fontSize: 12 }}> Selling price : {this.props.buyingPrice}</Text>
+                                        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+                                            <Text style={{ fontSize: 12 }}> Quantity : {this.props.operation.quantity}</Text>
+                                            {this.props.operation.type == "buy" ?
+                                                <Text style={{ fontSize: 12 }}> Buying price : {this.props.operation.price} $</Text> :
+                                                <Text style={{ fontSize: 12 }}> Selling price : {this.props.operation.price} $</Text>
                                             }
                                         </View>
                                     </Body>
@@ -70,10 +71,7 @@ class CardOneOperation extends Component {
 CardOneOperation.propTypes = {
     editOperation: PropTypes.func.isRequired,
     deleteOperation: PropTypes.func.isRequired,
-    id: PropTypes.any.isRequired,
-    bought: PropTypes.bool.isRequired,
-    quantity: PropTypes.string.isRequired,
-    buyingPrice: PropTypes.string.isRequired
+    operation: PropTypes.object.isRequired
 };
 
 export default CardOneOperation;

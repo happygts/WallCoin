@@ -22,17 +22,18 @@ const {
 class AddEditOneOperation extends Component {
     constructor(props) {
         super(props);
+        console.log("props.operation :", props.operation);
         this.state = {
             operation: {
-                id: props.operation ? props.operation.id : null,
-                bought: props.operation ? props.operation.bought : true,
-                quantity: props.operation ? props.operation.quantity : "",
-                buyingPrice: props.operation ? props.operation.buyingPrice : "",
+                id: props.operation ? props.operation.value.id : null,
+                bought: props.operation? props.operation.value.type == "buy" : true,
+                quantity: props.operation ? props.operation.value.quantity : "",
+                price: props.operation ? props.operation.value.price : "",
             },
             add: props.operation == undefined,
             error: {
                 quantity: false,
-                buyingPrice: false
+                price: false
             }
         };
     }
@@ -83,14 +84,14 @@ class AddEditOneOperation extends Component {
         })
     }
 
-    onBuyingPriceChanged(value) {
-        var newBuyingPrice = this.getNewNumber(value);
+    onpriceChanged(value) {
+        var newprice = this.getNewNumber(value);
 
         this.setState((state) => {
             return update(state, {
                 operation: {
                     $merge: {
-                        buyingPrice: newBuyingPrice
+                        price: newprice
                     }
                 }
             });
@@ -102,25 +103,26 @@ class AddEditOneOperation extends Component {
             return {
                 error: {
                     quantity: !this.state.operation.quantity,
-                    buyingPrice: !this.state.operation.buyingPrice
+                    price: !this.state.operation.price
                 }
             }
         });
 
-        if (this.state.operation.quantity && this.state.operation.buyingPrice) {
+        if (this.state.operation.quantity && this.state.operation.price) {
             // ajouter une operation.
             this.state.operation.quantity = parseFloat(this.state.operation.quantity);
-            this.state.operation.buyingPrice = parseFloat(this.state.operation.buyingPrice);
+            this.state.operation.price = parseFloat(this.state.operation.price);
+            console.log("this.state.operation :", this.state.operation);
             var newOperation = {
-                bought: this.state.operation.bought,
-                quantity: this.state.operation.quantity,
-                buyingPrice: this.state.operation.buyingPrice,
+                type: this.state.operation.bought ? "buy" : "sell",
+                price: this.state.operation.price.toString(),
+                quantity: this.state.operation.quantity.toString(),
             }
             if (this.state.add) {
-                this.props.addOperetion(this.props.myCoin.id, newOperation);
+                this.props.createOperation(this.props.portfolioId, this.props.myCoinId, newOperation.type, newOperation.price, newOperation.quantity);
             }
             else {
-                this.props.editOperation(this.props.myCoin.id, this.state.operation.id, newOperation);
+                this.props.modifyOperation(this.props.portfolioId, this.props.myCoinId, this.props.operation.value.id, newOperation.type, newOperation.price, newOperation.quantity);
             }
 
             this.props.navigator.pop({
@@ -145,8 +147,8 @@ class AddEditOneOperation extends Component {
                         <Item error={this.state.error.quantity} >
                             <Input onChangeText={(text) => this.onQuantityChanged(text)} value={this.state.operation.quantity.toString()} placeholder="Quantity" />
                         </Item>
-                        <Item error={this.state.error.buyingPrice} >
-                            <Input onChangeText={(text) => this.onBuyingPriceChanged(text)} value={this.state.operation.buyingPrice.toString()} placeholder="Buying price" />
+                        <Item error={this.state.error.price} >
+                            <Input onChangeText={(text) => this.onpriceChanged(text)} value={this.state.operation.price.toString()} placeholder="Buying price" />
                         </Item>
                         <Button style={{ marginTop: 10 }} full success onPress={() => this.createEditOperation()}>
                             <Text>{this.state.add ? "Add" : "Edit"}</Text>
@@ -159,7 +161,8 @@ class AddEditOneOperation extends Component {
 }
 
 AddEditOneOperation.propTypes = {
-    myCoin: PropTypes.object.isRequired,
+    myCoinId: PropTypes.string.isRequired,
+    portfolioId: PropTypes.string.isRequired,
     operation: PropTypes.object
 };
 

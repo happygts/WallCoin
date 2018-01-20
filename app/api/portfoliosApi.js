@@ -44,19 +44,20 @@ const portfoliosApi = {
     deletePortfoliosMyCoins: (idPortfolios, myCoinId, token) => {
         return myFetch(API_URL + "/portfolios/" + idPortfolios + "/coins/" + myCoinId  + "?token=" + token, "DELETE");
     },
-    getPortfoliosOneMyCoinsOperations: (page = 0, idPortfolios, idMyCoins, token) => {
-        return myFetch(API_URL + "/portfolios/" + idPortfolios + "/coins/" + idMyCoins + "/operations?page=" + page + "&token=" + token, "GET");
+    getPortfoliosOneMyCoinsOperations: (page = 0, idPortfolios, myCoinId, token) => {
+        return myFetch(API_URL + "/portfolios/" + idPortfolios + "/coins/" + myCoinId + "/operations?page=" + page + "&token=" + token, "GET");
     },
     /**
      * 
      * @param {string} idPortfolios 
-     * @param {string} idMyCoins 
+     * @param {string} myCoinId 
      * @param {string} type ("buy" or "sell")
      * @param {string} price 
      * @param {string} quantity 
     */
-    createPortfoliosMyCoinsOperations: (idPortfolios, idMyCoins, type, price, quantity, token) => {
-        return myFetch(API_URL + "/portfolios/" + idPortfolios + "/coins/" + idMyCoins + "/operations" + "?token=" + token, "POST", JSON.stringify({
+    createPortfoliosMyCoinsOperations: (idPortfolios, myCoinId, type, price, quantity, token) => {
+        console.log("createPortfoliosMyCoinsOperations idPortfolios :", idPortfolios, "myCoinId :", myCoinId, "type :", type, "price :", price, "quantity :", quantity);
+        return myFetch(API_URL + "/portfolios/" + idPortfolios + "/coins/" + myCoinId + "/operations" + "?token=" + token, "POST", JSON.stringify({
             type,
             price,
             quantity
@@ -65,15 +66,20 @@ const portfoliosApi = {
     /**
      * 
      * @param {string} idPortfolios 
-     * @param {string} idMyCoins 
+     * @param {string} myCoinId 
      * @param {string} idOperation
      * @param {object} operation
     */
-    editPortfoliosMyCoinsOperations: (idPortfolios, idMyCoins, idOperation, operation, token) => {
-        return myFetch(API_URL + "/portfolios/" + idPortfolios + "/coins/" + idMyCoins + "/operations/" + idOperation + "?token=" + token, "PATCH", JSON.stringify(operation));
+    editPortfoliosMyCoinsOperations: (idPortfolios, myCoinId, idOperation, type, price, quantity, token) => {
+        console.log("createPortfoliosMyCoinsOperations idPortfolios :", idPortfolios, "myCoinId :", myCoinId, "type :", type, "price :", price, "quantity :", quantity);
+        return myFetch(API_URL + "/portfolios/" + idPortfolios + "/coins/" + myCoinId + "/operations/" + idOperation + "?token=" + token, "PATCH", JSON.stringify({
+            type,
+            price,
+            quantity
+        }));
     },
-    deletePortfoliosMyCoinsOperations: (idPortfolios, idMyCoins, idOperation, token) => {
-        return myFetch(API_URL + "/portfolios/" + idPortfolios + "/coins/" + idMyCoins + "/operations/" + idOperation + "?token=" + token, "DELETE");
+    deletePortfoliosMyCoinsOperations: (idPortfolios, myCoinId, idOperation, token) => {
+        return myFetch(API_URL + "/portfolios/" + idPortfolios + "/coins/" + myCoinId + "/operations/" + idOperation + "?token=" + token, "DELETE");
     },
 };
 

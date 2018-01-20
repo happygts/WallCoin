@@ -142,7 +142,8 @@ function* listData({ payload }) {
                     });
                     yield put({
                         type: types.NO_MORE_LIST_DATA, payload: {
-                            name
+                            name,
+                            requestIndex
                         }
                     });
                 }
@@ -154,7 +155,8 @@ function* listData({ payload }) {
         else {
             yield put({
                 type: types.NO_MORE_LIST_DATA, payload: {
-                    name
+                    name,
+                    requestIndex
                 }
             });
         }
@@ -268,6 +270,7 @@ function* createData({ payload }) {
     const sagaSelector = yield select(payload.selector);
     const userSelector = yield select(payload.userSelector);
 
+    console.log("CreateData :", params);
     yield put(actions.ActionCreators.startFetch(callback, url, params));
 
     // wait for fetch to end

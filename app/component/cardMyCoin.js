@@ -44,9 +44,12 @@ class CardMyCoin extends Component {
         let possessedMyCoinValue = totalQuantity.times(priceMyCoin);
         let possessedCoinValue = totalQuantity.times(priceCoin);
 
-
         let beneficial = possessedCoinValue.minus(possessedMyCoinValue);
-        let differencePercentage = hundredBigNumber.minus((priceMyCoin.times(hundredBigNumber)).dividedBy(possessedCoinValue));
+        let differencePercentage = hundredBigNumber.minus((possessedMyCoinValue.times(hundredBigNumber)).dividedBy(possessedCoinValue));
+
+        beneficial = beneficial.isNaN() ? new BigNumber(0) : beneficial;
+        differencePercentage = differencePercentage.isNaN() ? new BigNumber(0) : differencePercentage;
+
         this.setState(() => {
             return {
                 beneficial: beneficial.toPrecision(6).toString(),
@@ -63,7 +66,7 @@ class CardMyCoin extends Component {
             <Container style={styles.listElementMyCoin}>
                 <Content>
                     <Card>
-                        <CardItem button={true} onPress={() => this.props.goToOneMyCoins(this.props.myCoin.id)}>
+                        <CardItem button={true} onPress={() => this.props.goToOneMyCoins(this.props.myCoin)}>
                             <Left>
                                 {checkFontelloIconExist(this.props.myCoin.symbol.toLowerCase() + "-alt") ?
                                     <FontelloIcon name={this.props.myCoin.symbol.toLowerCase() + "-alt"} size={55} style={{ marginTop: 5, marginBottom: 5 }} /> :
@@ -97,7 +100,7 @@ class CardMyCoin extends Component {
                                     <View style={{
                                         flex: 1,
                                         flexDirection: 'row',
-                                        justifyContent: 'center',
+                                        justifyContent: 'center'
                                     }}>
                                         {this.state.differencePercentageIsPositive ?
                                             <FontAwesomeIcon name="arrow-up" size={40} color="#090" /> :

@@ -9,6 +9,7 @@ import { ActionCreators } from '../actions'
 import { makeComputeListRequestItems } from '../selectors/requestSelectors'
 
 import CardMyCoin from '../component/cardMyCoin'
+import FooterActivityIndicator from '../component/footerActivityIndicator'
 
 import { iconsMap } from '../utils/AppIcons';
 
@@ -39,65 +40,49 @@ class MyCoins extends Component {
         this.props.fetchListDataMyCoins();
     }
 
-    getCoinValue(myCoin) {
-        var idCoin = Object.keys(this.props.coins).find((id) => {
-            return id == myCoin.value.coinId;
-        });
-
-        if (idCoin)
-            return this.props.coins[idCoin];
-        return null;
+    getCoin(coinId) {
+        return this.props.coinStore[coinId];
     }
 
     deleteMyCoin(myCoinId) {
-        // this.props.deleteMyCoin(myCoinId);
+        this.props.deleteMyCoin(this.props.user.currentPortfolioId, myCoinId);
     }
 
-    goToOneMyCoins(id) {
-        // var myCoin = this.props.myCoins.find((myCoin) => {
-        //     return id == myCoin.id;
-        // });
+    goToOneMyCoins(myCoin) {
+        this.props.changeUserMyCoin(myCoin.id);
+        
+        var coin = this.getCoin(myCoin.coinId);
 
-        // var myCoinValue = this.getCoinValue(id);
-
-        // this.props.navigator.push({
-        //     screen: 'OneMyCoins',
-        //     title: "MyCoin " + myCoinValue.name,
-        //     passProps: { myCoinId: myCoin.id, myCoinValue },
-        //     animated: true,
-        //     animationType: 'fade',
-        //     navigatorStyle: {
-        //         navBarTranslucent: true,
-        //         drawUnderNavBar: true,
-        //         navBarTextColor: 'white',
-        //         navBarButtonColor: 'white',
-        //         statusBarTextColorScheme: 'light',
-        //         drawUnderTabBar: true
-        //     },
-        //     navigatorButtons: {
-        //         rightButtons: [
-        //             {
-        //                 icon: iconsMap['md-add'],
-        //                 id: 'add'
-        //             }
-        //         ]
-        //     }
-        // });
+        this.props.navigator.push({
+            screen: 'OneMyCoins',
+            title: "MyCoin " + myCoin.name,
+            passProps: { myCoinId: myCoin.id, coin },
+            animated: true,
+            animationType: 'fade',
+            navigatorStyle: {
+                navBarTranslucent: true,
+                drawUnderNavBar: true,
+                navBarTextColor: 'white',
+                navBarButtonColor: 'white',
+                statusBarTextColorScheme: 'light',
+                drawUnderTabBar: true
+            },
+            navigatorButtons: {
+                rightButtons: [
+                    {
+                        icon: iconsMap['md-add'],
+                        id: 'add'
+                    }
+                ]
+            }
+        });
     }
 
     renderFooter = () => {
         if (!this.props.coins.loading) return null;
 
         return (
-            <View
-                style={{
-                    paddingVertical: 20,
-                    borderTopWidth: 1,
-                    borderColor: "#CED0CE"
-                }}
-            >
-                <ActivityIndicator animating size="large" />
-            </View>
+            <FooterActivityIndicator/>
         );
     };
 
@@ -106,12 +91,12 @@ class MyCoins extends Component {
             <View style={styles.container}>
                 <FlatList
                     data={this.props.listMyCoins}
-                    renderItem={({ item }) => (
+                    renderItem={({ item }) => ( 
                         <CardMyCoin key={item.value.id}
                             deleteMyCoin={this.deleteMyCoin.bind(this)}
                             goToOneMyCoins={this.goToOneMyCoins.bind(this)}
-                            coin={this.getCoinValue(item)}
-                            myCoin={item.value}/>
+                            coin={this.getCoin(item.value.coinId)}
+                            myCoin={item.value} />
                     )}
                     ListFooterComponent={this.renderFooter}
                     keyExtractor={(item, index) => index}
@@ -133,6 +118,8 @@ const mapStateToProps = (state, ownProps) => {
         coins,
         listMyCoins: getListItems(state, ownProps, 'myCoins'),
         myCoins: state.myCoins,
+        myCoinsStore: state.store.myCoins,
+        coinStore: state.store.coins,
         user: state.user
     }
 }
