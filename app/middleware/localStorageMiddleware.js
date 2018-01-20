@@ -6,18 +6,18 @@ export default saveInsideLocalStorageMiddleware = ({ getState }) => next => (act
     if (typeof predicate === 'function' && !predicate(getState, action)) {
         return next(action);
     }
-    
+
     let previousState = getState();
     let returnedValue = next(action);
     let nextState = stateTransformer(getState());
-    
+
     if (JSON.stringify(previousState) != JSON.stringify(nextState)) {
         AsyncStorage.setItem('@store:state', JSON.stringify(nextState))
-        .then(response => {
-        })
-        .catch(error => {
-            console.error("error :", error);
-        }); 
+            .then(response => {
+            })
+            .catch(error => {
+                console.error("error :", error);
+            });
     }
 
     return returnedValue;
