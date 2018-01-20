@@ -7,7 +7,8 @@ import { Container, Header, Content, List, ListItem, Text, Left, Body, Right, Sw
 
 import { FontelloIcon, checkFontelloIconExist } from '../utils/AppIcons'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
-import { BigNumber } from 'bignumber.js';
+
+import calculateOperationsMyCoin from '../utils/calculateOperationsMyCoin';
 
 const {
     View,
@@ -21,44 +22,13 @@ import styles from '../styles/AppStyle'
 
 class CardMyCoin extends Component {
     constructor(props) {
+        console.log("ccalculateOperationsMyCoin", calculateOperationsMyCoin)
         super(props);
-        this.state = {
-            beneficial: 0,
-            differencePercentage: 0,
-            totalMonneyInDollar: 0,
-            nbCoins: 0
-        }
+        this.state = calculateOperationsMyCoin(props.myCoin, props.coin);
     }
 
     componentWillReceiveProps(newProps) {
-        let buyOperationSum = new BigNumber(newProps.myCoin.stats.buyOperationSum);
-        let buyPriceSum = new BigNumber(newProps.myCoin.stats.buyPriceSum);
-        let buyWeightedSum = new BigNumber(newProps.myCoin.stats.buyWeightedSum);
-        let nbOperations = new BigNumber(newProps.myCoin.stats.nbOperations);
-        let totalQuantity = new BigNumber(newProps.myCoin.stats.totalQuantity);
-        let hundredBigNumber = new BigNumber(100);
-
-        let priceMyCoin = buyWeightedSum.dividedBy(buyOperationSum);
-        let priceCoin = new BigNumber(newProps.coin.value.price);
-
-        let possessedMyCoinValue = totalQuantity.times(priceMyCoin);
-        let possessedCoinValue = totalQuantity.times(priceCoin);
-
-        let beneficial = possessedCoinValue.minus(possessedMyCoinValue);
-        let differencePercentage = hundredBigNumber.minus((possessedMyCoinValue.times(hundredBigNumber)).dividedBy(possessedCoinValue));
-
-        beneficial = beneficial.isNaN() ? new BigNumber(0) : beneficial;
-        differencePercentage = differencePercentage.isNaN() ? new BigNumber(0) : differencePercentage;
-
-        this.setState(() => {
-            return {
-                beneficial: beneficial.toPrecision(6).toString(),
-                differencePercentage: differencePercentage.toPrecision(6).toString(),
-                differencePercentageIsPositive: differencePercentage.greaterThanOrEqualTo(0),
-                totalMonneyInDollar: possessedCoinValue.toPrecision(6).toString(),
-                nbCoins: totalQuantity.toPrecision(6).toString()
-            }
-        });
+        this.setState(() => calculateOperationsMyCoin(newProps.myCoin, newProps.coin));
     }
 
     render() {

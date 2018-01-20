@@ -24,17 +24,17 @@ const navigatorStyle = {
 };
 
 class App {
-	connected = false;
-
 	constructor() {
 		iconsLoaded.then(() => {
 			store.subscribe(this.onStoreUpdate.bind(this));
+			this.connected = store.getState().user.connected;
 			this.startApp();
 		});
 	}
 
 	onStoreUpdate() {
 		const connected = store.getState().user.connected;
+		console.log("OnStoreUpdate :", connected);
 		if (this.connected != connected) {
 			this.connected = connected;
 			this.startApp();

@@ -16,7 +16,7 @@ import ViewFlexWidthCenterHeight from '../component/ViewFlexWidthCenterHeight'
 import CardOneOperation from '../component/CardOneOperation'
 import FooterActivityIndicator from '../component/footerActivityIndicator'
 
-import { BigNumber } from 'bignumber.js';
+import calculateOperationsMyCoin from '../utils/calculateOperationsMyCoin';
 
 const {
     View,
@@ -28,42 +28,13 @@ const {
 class OneMyCoins extends Component {
     constructor(props) {
         super(props);
-        this.state = this.calculEverythingFromProps(props);
+        this.state = calculateOperationsMyCoin(props.myCoin.value, props.coin);
 
         this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
     }
 
-    calculEverythingFromProps(props) {
-        let buyOperationSum = new BigNumber(props.myCoin.value.stats.buyOperationSum);
-        let buyPriceSum = new BigNumber(props.myCoin.value.stats.buyPriceSum);
-        let buyWeightedSum = new BigNumber(props.myCoin.value.stats.buyWeightedSum);
-        let nbOperations = new BigNumber(props.myCoin.value.stats.nbOperations);
-        let totalQuantity = new BigNumber(props.myCoin.value.stats.totalQuantity);
-        let hundredBigNumber = new BigNumber(100);
-
-        let priceMyCoin = buyWeightedSum.dividedBy(buyOperationSum);
-        let priceCoin = new BigNumber(props.coin.value.price);
-
-        let possessedMyCoinValue = totalQuantity.times(priceMyCoin);
-        let possessedCoinValue = totalQuantity.times(priceCoin);
-
-        let beneficial = possessedCoinValue.minus(possessedMyCoinValue);
-        let differencePercentage = hundredBigNumber.minus((possessedMyCoinValue.times(hundredBigNumber)).dividedBy(possessedCoinValue));
-
-        beneficial = beneficial.isNaN() ? new BigNumber(0) : beneficial;
-        differencePercentage = differencePercentage.isNaN() ? new BigNumber(0) : differencePercentage;
-
-        return {
-            beneficial: beneficial.toPrecision(4).toString(),
-            differencePercentage: differencePercentage.toPrecision(4).toString(),
-            differencePercentageIsPositive: differencePercentage.greaterThanOrEqualTo(0),
-            totalMonneyInDollar: possessedCoinValue.toPrecision(4).toString(),
-            nbCoins: totalQuantity.toPrecision(4).toString()
-        }
-    }
-
     componentWillReceiveProps(newProps) {
-        this.setState(() => this.calculEverythingFromProps(newProps));
+        this.setState(() => calculateOperationsMyCoin(newProps.myCoin.value, newProps.coin));
     }
 
     onNavigatorEvent(event) {
