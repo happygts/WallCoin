@@ -1,64 +1,45 @@
 import { createSelector } from 'reselect'
 
-const listItems = (store, currentRequestIndex) => {
+const listItems = (store, currentRequestId) => {
     var listToReturn = [];
 
-    Object.keys(store).forEach((key) => {
-        const item = store[key];
-        for (let index = 0; index < Object.keys(item.contexts).length; index++) {
-            const context = item.contexts[index];
+    if (store) {
+        Object.keys(store).forEach((key) => {
+            const item = store[key];
+            for (let index = 0; index < Object.keys(item.contexts).length; index++) {
+                const context = item.contexts[index];
 
-            if (context.requestIndex == currentRequestIndex) {
-                listToReturn.push(item);
-                break;
+                if (context.requestId == currentRequestId) {
+                    listToReturn.push(item);
+                    break;
+                }
             }
-        }
-    });
+        });
+    }
 
-    console.log("listToReturn :", listToReturn);
     return listToReturn;
 }
 
-const getStore = (state, props, name) => (
-    state.store[name]
+const getStore = (state, props, nameStore, nameRequest) => (
+    state.store[nameStore]
 )
 
-const getRequestItems = (state, props, name) => (
-    state[name]
+const getRequestItems = (state, props, nameStore, nameRequest) => (
+    state[nameRequest]
 )
 
-export const makeComputeListRequestItems = () => {  
+export const makeComputeListRequestItems = () => {
     return createSelector(
         [getStore, getRequestItems],
-        (store, items) => listItems(store, items.currentRequestIndex)
+        (store, items) => listItems(store, items.currentRequestId)
     )
 }
-
-const oneItem = (store, currentRequestIndex) => {
-    var listToReturn = [];
-
-    Object.keys(store).forEach((key) => {
-        const item = store[key];
-        for (let index = 0; index < Object.keys(item.contexts).length; index++) {
-            const context = item.contexts[index];
-
-            if (context.requestIndex == currentRequestIndex) {
-                listToReturn.push(item);
-                break;
-            }
-        }
-    });
-
-    console.log("listToReturn :", listToReturn);
-    return listToReturn;
-}
-
 
 const getOneItemStore = (state, props, name, idItem) => {
     return state.store[name][idItem];
 }
 
-export const makeComputeOneRequestItems = () => {  
+export const makeComputeOneRequestItems = () => {
     return createSelector(
         [getOneItemStore],
         (element) => (element)

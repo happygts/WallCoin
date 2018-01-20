@@ -7,7 +7,8 @@ export function fetchListDataOperations(idPortfolios, myCoinId, page) {
     return {
         type: types.START_LIST_DATA,
         payload: {
-            name: 'operations',
+            nameRequest: 'operations',
+            nameStore: 'operations',
             nameResponse: 'operations',
             callback: Api.getPortfoliosOneMyCoinsOperations,
             url: ApiNameSpace.GET_OPERATION,
@@ -24,7 +25,8 @@ export function refreshDataOperations() {
     return {
         type: types.START_REFRESH_DATA,
         payload: {
-            name: 'operations',
+            nameRequest: 'operations',
+            nameStore: 'operations',
             nameResponse: 'operations',
             callback: Api.getPortfoliosOneMyCoinsOperations,
             url: ApiNameSpace.GET_OPERATION,
@@ -40,8 +42,7 @@ export function createOperation(idPortfolios, myCoinId, type, price, quantity) {
     return {
         type: types.START_CREATE_DATA,
         payload: {
-            name: 'operations',
-            nameResponse: 'operations',
+            nameStore: 'operations',
             callback: Api.createPortfoliosMyCoinsOperations,
             url: ApiNameSpace.CREATE_OPERATION,
             selector: operationsSelector,
@@ -57,7 +58,7 @@ export function deleteOperation(idPortfolios, myCoinId, operationId) {
     return {
         type: types.START_DELETE_DATA,
         payload: {
-            name: 'operations',
+            nameStore: 'operations',
             callback: Api.deletePortfoliosMyCoinsOperations,
             url: ApiNameSpace.DELETE_OPERATION,
             selector: operationsSelector,
@@ -73,8 +74,7 @@ export function modifyOperation(idPortfolios, myCoinId, operationId, type, price
     return {
         type: types.MODIFY_CREATE_DATA,
         payload: {
-            name: 'operations',
-            nameResponse: 'operations',
+            nameStore: 'operations',
             callback: Api.editPortfoliosMyCoinsOperations,
             url: ApiNameSpace.MODIFY_OPERATION,
             selector: operationsSelector,

@@ -116,7 +116,7 @@ const mapStateToProps = (state, ownProps) => {
 
     return {
         coins,
-        listMyCoins: getListItems(state, ownProps, 'myCoins'),
+        listMyCoins: getListItems(state, ownProps, 'myCoins', 'myCoins'),
         myCoins: state.myCoins,
         myCoinsStore: state.store.myCoins,
         coinStore: state.store.coins,

@@ -193,7 +193,7 @@ const mapStateToProps = (state, ownProps) => {
 
     return {
         myCoin: getOneItem(state, ownProps, 'myCoins', ownProps.myCoinId),
-        listOperations: getListItems(state, ownProps, 'operations'),
+        listOperations: getListItems(state, ownProps, 'operations', 'operations'),
         operationsStore: state.store.operations,
         operations: state.operations,
         user: state.user

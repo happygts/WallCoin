@@ -5,7 +5,7 @@ import Coins from './Coins'
 class Favorites extends Component {
     render() {
         return (
-            <Coins favoritesOnly={false}></Coins>
+            <Coins favoritesOnly={true}></Coins>
         )
     }
 }

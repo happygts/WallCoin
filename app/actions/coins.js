@@ -7,7 +7,8 @@ export function fetchListDataCoins(page = -1) {
     return {
         type: types.START_LIST_DATA,
         payload: {
-            name: 'coins',
+            nameRequest: 'coins',
+            nameStore: 'coins',
             nameResponse: 'coins',
             callback: Api.getCoins,
             url: ApiNameSpace.GET_COINS,
@@ -24,7 +25,8 @@ export function refreshDataCoins() {
     return {
         type: types.START_REFRESH_DATA,
         payload: {
-            name: 'coins',
+            nameRequest: 'coins',
+            nameStore: 'coins',
             nameResponse: 'coins',
             callback: Api.getCoins,
             url: ApiNameSpace.GET_COINS,

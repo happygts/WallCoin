@@ -18,13 +18,13 @@ import update from 'immutability-helper';
  *          totalItem
  *      },
  *  }],
- *  currentRequestIndex: Number
+ *  currentRequestId: Number
  */
 const initialState = {
     loading: false,
     refreshing: false,
     requests: [],
-    currentRequestIndex: -1
+    currentRequestId: -1
 };
 
 function createOneRequestReducer(name) {
@@ -49,16 +49,16 @@ function createOneRequestReducer(name) {
             if (name == namePayload) {
                 var data = action.payload.data.map(element => (element.id));
                 var request = action.payload.request;
-                var requestIndex = action.payload.requestIndex;
+                var requestId = action.payload.requestId;
 
                 return update(state, {
                     requests: {
                         $merge: {
-                            [requestIndex] : request
+                            [requestId] : request
                         }
                     },
                     loading: { $set: false },
-                    currentRequestIndex: { $set : requestIndex }
+                    currentRequestId: { $set : requestId }
                 })
             }
             return state;
@@ -77,12 +77,12 @@ function createOneRequestReducer(name) {
             var namePayload = action.payload.name;
 
             if (name == namePayload) {
-                var requestIndex = action.payload.requestIndex;
+                var requestId = action.payload.requestId;
 
                 return update(state, {
                     $merge: {
                         loading: false,
-                        currentRequestIndex: requestIndex
+                        currentRequestId: requestId
                     }
                 })
             }
@@ -116,6 +116,7 @@ function createOneRequestReducer(name) {
 }
 
 export const coins = createOneRequestReducer("coins");
+export const favorites = createOneRequestReducer("favorites");
 export const portfolios = createOneRequestReducer("portfolios");
 export const myCoins = createOneRequestReducer("myCoins");
 export const operations = createOneRequestReducer("operations");

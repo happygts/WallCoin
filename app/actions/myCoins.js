@@ -7,7 +7,8 @@ export function fetchListDataMyCoins(idPortfolios, page) {
     return {
         type: types.START_LIST_DATA,
         payload: {
-            name: 'myCoins',
+            nameRequest: 'myCoins',
+            nameStore: 'myCoins',
             nameResponse: 'coins',
             callback: Api.getPortfoliosMyCoins,
             url: ApiNameSpace.GET_MYCOINS,
@@ -24,7 +25,8 @@ export function refreshDataMyCoins(idPortfolios) {
     return {
         type: types.START_REFRESH_DATA,
         payload: {
-            name: 'myCoins',
+            nameRequest: 'myCoins',
+            nameStore: 'myCoins',
             nameResponse: 'coins',
             callback: Api.getPortfoliosMyCoins,
             url: ApiNameSpace.GET_MYCOINS,
@@ -40,7 +42,8 @@ export function fetchListDataMyCoinsFavorites(idPortfolios, page) {
     return {
         type: types.START_LIST_DATA,
         payload: {
-            name: 'myCoins',
+            nameRequest: 'favorites',
+            nameStore: 'myCoins',
             nameResponse: 'coins',
             callback: Api.getPortfoliosMyCoinsFavorites,
             url: ApiNameSpace.GET_MYCOINS_FAVORITES,
@@ -57,7 +60,8 @@ export function refreshDataMyCoinsFavorites(idPortfolios) {
     return {
         type: types.START_REFRESH_DATA,
         payload: {
-            name: 'myCoins',
+            nameRequest: 'favorites',
+            nameStore: 'myCoins',
             nameResponse: 'coins',
             callback: Api.getPortfoliosMyCoinsFavorites,
             url: ApiNameSpace.GET_MYCOINS_FAVORITES,
@@ -73,8 +77,7 @@ export function createMyCoin(idPortfolios, coinId, isFavorite) {
     return {
         type: types.START_CREATE_DATA,
         payload: {
-            name: 'myCoins',
-            nameResponse: 'coins',
+            nameStore: 'myCoins',
             callback: Api.createPortfoliosMyCoins,
             url: ApiNameSpace.CREATE_MY_COIN,
             selector: myCoinsSelector,
@@ -90,7 +93,7 @@ export function deleteMyCoin(idPortfolios, myCoinId) {
     return {
         type: types.START_DELETE_DATA,
         payload: {
-            name: 'myCoins',
+            nameStore: 'myCoins',
             callback: Api.deletePortfoliosMyCoins,
             url: ApiNameSpace.DELTE_MY_COIN,
             selector: myCoinsSelector,
@@ -106,8 +109,7 @@ export function modifyFavMyCoin(idPortfolios, myCoinId, isFavorite) {
     return {
         type: types.MODIFY_CREATE_DATA,
         payload: {
-            name: 'myCoins',
-            nameResponse: 'coins',
+            nameStore: 'myCoins',
             callback: Api.editPortfoliosMyCoins,
             url: ApiNameSpace.MODIFY_MY_COIN,
             selector: myCoinsSelector,

@@ -4,6 +4,8 @@ import * as types from '../actions/types'
 import { Api } from '../api/api';
 import * as actions from '../actions';
 
+import {v4 as uuidV4} from 'uuid';
+
 function compareRequestWithNewRequest(requestArray, newRequestArray) {
     if (requestArray.length != newRequestArray.length) {
         return false;
@@ -16,13 +18,14 @@ function compareRequestWithNewRequest(requestArray, newRequestArray) {
     return true;
 }
 
-function getrequestIndexFromRequests(requests, url, userId, params) {
-    var indexToReturn = -1;
+function getrequestIdFromRequests(requests, url, userId, params) {
+    let indexToReturn;
+    let idRequests = Object.keys(requests);
 
-    for (let index = 0; index < requests.length; index++) {
-        const request = requests[index];
+    for (let index = 0; index < idRequests.length; index++) {
+        const request = requests[idRequests[index]];
         if (compareRequestWithNewRequest([request.data.url, request.data.userId, ...request.data.params], [url, userId, ...params])) {
-            indexToReturn = index;
+            indexToReturn = idRequests[index];
             break;
         }
     }
@@ -30,7 +33,7 @@ function getrequestIndexFromRequests(requests, url, userId, params) {
     return indexToReturn;
 }
 
-function getEveryItemAssociatedWithPageAndRequest(store, requestIndex, page) {
+function getEveryItemAssociatedWithPageAndRequest(store, requestId, page) {
     var toReturn = [];
 
     Object.keys(store).forEach((key) => {
@@ -38,7 +41,7 @@ function getEveryItemAssociatedWithPageAndRequest(store, requestIndex, page) {
         for (let index = 0; index < Object.keys(element.contexts).length; index++) {
             const context = element.contexts[index];
 
-            if (context.requestIndex == requestIndex && page == context.page) {
+            if (context.requestId == requestId && page == context.page) {
                 toReturn.push(element);
                 break;
             }
@@ -58,7 +61,7 @@ function compareExpirationDate(items) {
     return nbExpired * 100 / items.length;
 }
 
-function* fetchPage(refresh, callback, url, page, userId, params, requestIndex, name, nameResponse) {
+function* fetchPage(refresh, callback, url, page, userId, params, requestId, nameRequest, nameStore, nameResponse) {
     // call fetch
     var paramsWithoutPage = params;
     yield put(actions.ActionCreators.startFetch(callback, url, params = [page, ...params]));
@@ -78,9 +81,9 @@ function* fetchPage(refresh, callback, url, page, userId, params, requestIndex, 
     yield put({
         type: types.UPDATE_STORE,
         payload: {
-            toUpdate: name,
+            toUpdate: nameStore,
             data: action.payload.data[nameResponse],
-            requestIndex,
+            requestId,
             page
         }
     });
@@ -88,9 +91,9 @@ function* fetchPage(refresh, callback, url, page, userId, params, requestIndex, 
         yield put({
             type: types.SUCCESS_LIST_DATA,
             payload: {
-                name,
+                name: nameRequest,
                 data: action.payload.data[nameResponse],
-                requestIndex,
+                requestId,
                 request: {
                     data: {
                         url,
@@ -105,8 +108,10 @@ function* fetchPage(refresh, callback, url, page, userId, params, requestIndex, 
 }
 
 function* listData({ payload }) {
-    const name = payload.name;
+    const nameRequest = payload.nameRequest;
+    const nameStore = payload.nameStore;
     const nameResponse = payload.nameResponse;
+
     const url = payload.url;
     const params = payload.params;
     const callback = payload.callback;
@@ -116,14 +121,14 @@ function* listData({ payload }) {
     const userSelector = yield select(payload.userSelector);
 
     const userId = userSelector.userId;
-    const storeElement = storeSelector[name];
+    const storeElement = storeSelector[nameStore];
     const requests = sagaSelector ? sagaSelector.requests : [];
-    var requestIndex = getrequestIndexFromRequests(requests, url, userId, params);
+    var requestId = getrequestIdFromRequests(requests, url, userId, params);
 
-    if (requestIndex >= 0) {
-        if (requests[requestIndex].pagination.current * requests[requestIndex].pagination.size < requests[requestIndex].pagination.totalItems) {
-            var page = pageToFetch == -1 ? requests[requestIndex].pagination.current + 1 : pageToFetch;
-            var items = getEveryItemAssociatedWithPageAndRequest(storeElement, requestIndex, page);
+    if (requestId) {
+        if (requests[requestId].pagination.current * requests[requestId].pagination.size < requests[requestId].pagination.totalItems) {
+            var page = pageToFetch == -1 ? requests[requestId].pagination.current + 1 : pageToFetch;
+            var items = getEveryItemAssociatedWithPageAndRequest(storeElement, requestId, page);
 
             if (items.length > 0) {
                 var percentageOutOfDate = compareExpirationDate(items);
@@ -131,7 +136,7 @@ function* listData({ payload }) {
                     console.log("everything uptoDate on this page");
                 }
                 if (percentageOutOfDate > 0) { // > MUST SET TO 10 %
-                    yield fetchPage(false, callback, url, page, userId, params, requestIndex, name, nameResponse);
+                    yield fetchPage(false, callback, url, page, userId, params, requestId, nameRequest, nameStore, nameResponse);
                 }
                 else {
                     // reload every item one by one ONLY THE OUTOFDATE
@@ -142,31 +147,31 @@ function* listData({ payload }) {
                     });
                     yield put({
                         type: types.NO_MORE_LIST_DATA, payload: {
-                            name,
-                            requestIndex
+                            name: nameRequest,
+                            requestId
                         }
                     });
                 }
             }
             else {
-                yield fetchPage(false, callback, url, page, userId, params, requestIndex, name, nameResponse);
+                yield fetchPage(false, callback, url, page, userId, params, requestId, nameRequest, nameStore, nameResponse);
             }
         }
         else {
             yield put({
                 type: types.NO_MORE_LIST_DATA, payload: {
-                    name,
-                    requestIndex
+                    name: nameRequest,
+                    requestId
                 }
             });
         }
     }
     else {
-        yield fetchPage(false, callback, url, 0, userId, params, requests.length, name, nameResponse);
+        yield fetchPage(false, callback, url, 0, userId, params, uuidV4(), nameRequest, nameStore, nameResponse);
     }
 }
 
-function getEveryItemAssociatedWithRequest(storeElement, requestIndex) {
+function getEveryItemAssociatedWithRequest(storeElement, requestId) {
     var toReturn = [];
 
     Object.keys(storeElement).forEach((key) => {
@@ -174,7 +179,7 @@ function getEveryItemAssociatedWithRequest(storeElement, requestIndex) {
         for (let index = 0; index < Object.keys(element.contexts).length; index++) {
             const context = element.contexts[index];
 
-            if (context.requestIndex == requestIndex) {
+            if (context.requestId == requestId) {
                 toReturn.push(element);
                 break;
             }
@@ -217,8 +222,10 @@ export function* listDataFlow() {
 
 
 function* refreshData({ payload }) {
-    const name = payload.name;
+    const nameRequest = payload.nameRequest;
+    const nameStore = payload.nameStore;
     const nameResponse = payload.nameResponse;
+
     const url = payload.url;
     const params = payload.params;
     const callback = payload.callback;
@@ -227,10 +234,10 @@ function* refreshData({ payload }) {
     const storeSelector = yield select(payload.storeSelector);
     const userSelector = yield select(payload.userSelector);
 
-    const storeElement = storeSelector[name];
+    const storeElement = storeSelector[nameStore];
     const userId = userSelector.userId;
 
-    var itemsGroupedPages = groupItemsPerPage(getEveryItemAssociatedWithRequest(storeElement, sagaSelector.currentRequestIndex));
+    var itemsGroupedPages = groupItemsPerPage(getEveryItemAssociatedWithRequest(storeElement, sagaSelector.currentRequestId));
     for (let index = 0; index < itemsGroupedPages.length; index++) {
         const itemsOnePage = itemsGroupedPages[index];
 
@@ -240,7 +247,7 @@ function* refreshData({ payload }) {
         }
         else if (percentageOutOfDate > 0) { // need to set to > 10 once refreshOne will be done
             console.log("refresh Here");
-            yield fetchPage(true, callback, url, itemsOnePage[0].contexts[0].page, userId, params, sagaSelector.currentRequestIndex, name, nameResponse);
+            yield fetchPage(true, callback, url, itemsOnePage[0].contexts[0].page, userId, params, sagaSelector.currentRequestId, nameRequest, nameStore, nameResponse);
 
         }
         else {
@@ -250,7 +257,7 @@ function* refreshData({ payload }) {
 
     yield put({
         type: types.SUCCESS_REFRESH_DATA, payload: {
-            name
+            name: nameRequest
         }
     });
 }
@@ -263,7 +270,9 @@ export function* refreshDataFlow() {
 }
 
 function* createData({ payload }) {
-    const name = payload.name;
+    const nameStore = payload.nameStore;
+    const nameRequest = payload.nameRequest;
+
     const url = payload.url;
     const params = payload.params;
     const callback = payload.callback;
@@ -290,16 +299,17 @@ function* createData({ payload }) {
     yield put({
         type: types.ADD_TO_STORE,
         payload: {
-            toUpdate: name,
+            toUpdate: nameStore,
             data: action.payload.data,
-            requestIndex: sagaSelector.currentRequestIndex,
+            requestId: sagaSelector.currentRequestId,
             page: 999999 // page impossible car non synchronisé
         }
     });
 }
 
 function* deleteData({ payload }) {
-    const name = payload.name;
+    const nameStore = payload.nameStore;
+
     const url = payload.url;
     const params = payload.params;
     const callback = payload.callback;
@@ -327,14 +337,16 @@ function* deleteData({ payload }) {
     yield put({
         type: types.DELETE_TO_STORE,
         payload: {
-            toUpdate: name,
+            toUpdate: nameStore,
             idToDelete
         }
     });
 }
 
 function* modifyData({ payload }) {
-    const name = payload.name;
+    const nameStore = payload.nameStore;
+    const nameRequest = payload.nameRequest;
+    
     const url = payload.url;
     const params = payload.params;
     const callback = payload.callback;
@@ -360,9 +372,9 @@ function* modifyData({ payload }) {
     yield put({
         type: types.UPDATE_STORE,
         payload: {
-            toUpdate: name,
+            toUpdate: nameStore,
             data: [action.payload.data],
-            requestIndex: sagaSelector.currentRequestIndex,
+            requestId: sagaSelector.currentRequestId,
             page
         }
     });

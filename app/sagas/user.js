@@ -57,9 +57,10 @@ function* initStateAppWithUserId(userId) {
 export const successLoginFlow = function* successLoginFlow() {
     while (true) {
         const { payload: { userId } } = yield take('SUCCESS_LOGIN');
+        console.log("SUCCESS_LOGIN ici");
 
         var numberOfCalls = yield initStateAppWithUserId(userId);
-
+        console.log("did send initStateAppWithUserId");
         while (numberOfCalls > 0) {
             const action = yield take(['SUCCESS_LIST_DATA', 'NO_MORE_LIST_DATA', 'ERROR_FETCH_PAGE']);
 
@@ -76,7 +77,7 @@ export const successLoginFlow = function* successLoginFlow() {
         });
         console.log("fetchListDataMyCoins");
         yield put(actions.ActionCreators.fetchListDataMyCoins(idPortfolios = Object.keys(portfolios)[0], page = 0));
-        // yield put(actions.ActionCreators.fetchListDataMyCoins(idPortfolios = Object.keys(portfolios)[0], page = 0));
+        yield put(actions.ActionCreators.fetchListDataMyCoinsFavorites(idPortfolios = Object.keys(portfolios)[0], page = 0));
 
         console.log("success load all ressources");
     }

@@ -7,7 +7,8 @@ export function fetchListDataPortfolios(page) {
     return {
         type: types.START_LIST_DATA,
         payload: {
-            name: 'portfolios',
+            nameRequest: 'portfolios',
+            nameStore: 'portfolios',
             nameResponse: 'portfolios',
             callback: Api.getPortfolios,
             url: ApiNameSpace.GET_PORTFOLIOS,
@@ -24,7 +25,8 @@ export function refreshDataPortfolios() {
     return {
         type: types.START_REFRESH_DATA,
         payload: {
-            name: 'portfolios',
+            nameRequest: 'portfolios',
+            nameStore: 'portfolios',
             nameResponse: 'portfolios',
             callback: Api.getPortfolios,
             url: ApiNameSpace.GET_PORTFOLIOS,

@@ -37,11 +37,21 @@ class Coins extends Component {
   }
 
   handleLoadMore(params) {
-    this.props.fetchListDataCoins();
+    if (this.props.favoritesOnly) {
+      this.props.fetchListDataMyCoinsFavorites()
+    }
+    else {
+      this.props.fetchListDataCoins();
+    }
   }
 
   handleRefresh() {
-    this.props.refreshDataCoins();
+    if (this.props.favoritesOnly) {
+      this.props.refreshDataMyCoinsFavorites()
+    }
+    else {
+      this.props.refreshDataCoins();
+    }
   }
 
   _onSearchTextChanged(newText) {
@@ -153,7 +163,7 @@ const mapStateToProps = (state, ownProps) => {
   return {
     user: state.user,
     coins: state.coins,
-    listCoins: getListItems(state, ownProps, 'coins'),
+    listCoins: ownProps.favoritesOnly ? getListItems(state, ownProps, 'myCoins', 'favorites') : getListItems(state, ownProps, 'coins', 'coins'),
     myCoinsStore: state.store.myCoins,
     asyncInitialState: state.asyncInitialState
   }

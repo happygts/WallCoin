@@ -56,15 +56,18 @@ export const store = createReducer(initialState, {
     [types.UPDATE_STORE](state, action) {
         var data = action.payload.data;
         var toUpdate = action.payload.toUpdate;
-        var requestIndex = action.payload.requestIndex;
+        var requestId = action.payload.requestId;
         var page = action.payload.page;
 
-        console.log("inside Update_store :", data);
-
         data.forEach(element => {
-            var indexContext = [toUpdate][element.id] ? [toUpdate][element.id].find((e) => {
-                return e.req == requestIndex;
-            }) : 0;
+            var indexContext = 0;
+
+            if (state[toUpdate][element.id]) {
+                let findValue = Object.keys(state[toUpdate][element.id].contexts).find((contextId) => {
+                    return state[toUpdate][element.id].contexts[contextId].requestId == requestId;
+                })
+                indexContext = findValue >= 0 ? findValue : Object.keys(state[toUpdate][element.id].contexts).length;
+            }
 
             state = update(state, {
                 [toUpdate]: itemToUpdate => update(itemToUpdate || {}, {
@@ -76,7 +79,7 @@ export const store = createReducer(initialState, {
                         contexts: contexts => update(contexts || {}, {
                             $merge: {
                                 [indexContext]: {
-                                    requestIndex,
+                                    requestId,
                                     page
                                 }
                             }
@@ -90,7 +93,6 @@ export const store = createReducer(initialState, {
     },
     [types.ADD_TO_STORE](state, action) {
         var dataElement = action.payload.data;
-        console.log("dataElement :", dataElement);
         var toUpdate = action.payload.toUpdate;
 
         return update(state, {
@@ -99,7 +101,7 @@ export const store = createReducer(initialState, {
                     $set: {
                         value: dataElement,
                         expirationDate: Date.now(),// + (2 * 60 * 1000),
-                        contexts: { 0: { requestIndex: action.payload.requestIndex, page: action.payload.page } }
+                        contexts: { 0: { requestId: action.payload.requestId, page: action.payload.page } }
                     }
                 }
             })
