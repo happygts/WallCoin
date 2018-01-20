@@ -100,9 +100,9 @@ class Coins extends Component {
     if (!this.props.coins.loading) return null;
 
     return (
-        <FooterActivityIndicator/>
+      <FooterActivityIndicator />
     );
-};
+  };
 
   render() {
     return (
