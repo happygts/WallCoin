@@ -47,7 +47,7 @@ class CardOneOperation extends Component {
                                         }
                                     </Left>
                                     <Body>
-                                        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+                                        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
                                             <Text style={{ fontSize: 12 }}> Quantity : {this.props.operation.quantity}</Text>
                                             {this.props.operation.type == "buy" ?
                                                 <Text style={{ fontSize: 12 }}> Buying price : {this.props.operation.price} $</Text> :
@@ -55,9 +55,6 @@ class CardOneOperation extends Component {
                                             }
                                         </View>
                                     </Body>
-                                    <Right>
-
-                                    </Right>
                                 </CardItem>
                             </Card>
                         </Content>
