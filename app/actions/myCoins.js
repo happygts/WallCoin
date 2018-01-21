@@ -1,5 +1,5 @@
 import * as types from './types'
-import { myCoinsSelector, storeSelector, userSelector } from '../selectors/sagaStateSelectors'
+import { myCoinsSelector, favoritesSelector, storeSelector, userSelector } from '../selectors/sagaStateSelectors'
 
 import { Api, ApiNameSpace } from '../api/api'
 
@@ -112,7 +112,7 @@ export function modifyFavMyCoin(idPortfolios, myCoinId, isFavorite) {
             nameStore: 'myCoins',
             callback: Api.editPortfoliosMyCoins,
             url: ApiNameSpace.MODIFY_MY_COIN,
-            selector: myCoinsSelector,
+            selector: favoritesSelector,
             params: [idPortfolios, myCoinId, isFavorite]
         }
     }
